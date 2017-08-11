@@ -73,7 +73,7 @@ xdescribe('schedule reducer', () => {
 
 })
 
-xdescribe('addBookingToBookings function', () => {
+describe('addBookingToBookings function', () => {
   using([
     { 
       id: 1,
@@ -132,23 +132,20 @@ xdescribe('addBookingToBookings function', () => {
   })
 });
 
-xdescribe('addBookingToDays function', () => {
+describe('addBookingToDays function', () => {
   using([
     {
       id: 1,
       days: [
         {
-          id: 1,
           date: new Date(2017, 9, 9),
           bookingIds: [],
         },
         {
-          id: 2,
           date: new Date(2017, 9, 10),
           bookingIds: [],
         },
         {
-          id: 3,
           date: new Date(2017, 9, 11),
           bookingIds: [],
         }
@@ -171,18 +168,262 @@ xdescribe('addBookingToDays function', () => {
       },
       expected: [
         {
-          id: 1,
           date: new Date(2017, 9, 9),
           bookingIds: [],
         },
         {
-          id: 2,
           date: new Date(2017, 9, 10),
           bookingIds: [1],
         },
         {
-          id: 3,
           date: new Date(2017, 9, 11),
+          bookingIds: [],
+        }
+      ]
+    },
+    {
+      id: 2,
+      days: [
+        {
+          date: new Date(2017, 9, 9),
+          bookingIds: [],
+        },
+        {
+          date: new Date(2017, 9, 10),
+          bookingIds: [1, 2],
+        },
+        {
+          date: new Date(2017, 9, 11),
+          bookingIds: [],
+        }
+      ],
+      bookings: {
+        1: {
+          id: 1,
+          start: new Date(2017, 9, 10, 16, 0),
+          end: new Date(2017, 9, 10, 20, 0)
+        },
+        2: {
+          id: 2,
+          start: new Date(2017, 9, 10, 16, 0),
+          end: new Date(2017, 9, 10, 19, 0)
+        },
+        3: {
+          id: 3,
+          start: new Date(2017, 9, 10, 16, 0),
+          end: new Date(2017, 9, 10, 21, 0)
+        }
+      },
+      action: {
+        type: actionTypes.ADD_BOOKING,
+        id: 3,
+        booking: {
+          id: 3,
+          start: new Date(2017, 9, 10, 16, 0),
+          end: new Date(2017, 9, 10, 21, 0)
+        }
+      },
+      expected: [
+        {
+          date: new Date(2017, 9, 9),
+          bookingIds: [],
+        },
+        {
+          date: new Date(2017, 9, 10),
+          bookingIds: [3,1,2],
+        },
+        {
+          date: new Date(2017, 9, 11),
+          bookingIds: [],
+        }
+      ]
+    },
+    {
+      id: 3,
+      days: [
+        {
+          date: new Date(2017, 9, 9),
+          bookingIds: [],
+        },
+        {
+          date: new Date(2017, 9, 10),
+          bookingIds: [1, 2],
+        },
+        {
+          date: new Date(2017, 9, 11),
+          bookingIds: [],
+        }
+      ],
+      bookings: {
+        1: {
+          id: 1,
+          start: new Date(2017, 9, 10, 16, 0),
+          end: new Date(2017, 9, 10, 20, 0)
+        },
+        2: {
+          id: 2,
+          start: new Date(2017, 9, 10, 16, 0),
+          end: new Date(2017, 9, 10, 19, 0)
+        },
+        3: {
+          id: 3,
+          start: new Date(2017, 9, 9, 16, 0),
+          end: new Date(2017, 9, 11, 21, 0)
+        }
+      },
+      action: {
+        type: actionTypes.ADD_BOOKING,
+        id: 3,
+        booking: {
+          id: 3,
+          start: new Date(2017, 9, 9, 16, 0),
+          end: new Date(2017, 9, 11, 21, 0)
+        }
+      },
+      expected: [
+        {
+          date: new Date(2017, 9, 9),
+          bookingIds: [3],
+        },
+        {
+          date: new Date(2017, 9, 10),
+          bookingIds: [3,1,2],
+        },
+        {
+          date: new Date(2017, 9, 11),
+          bookingIds: [3],
+        }
+      ]
+    },
+    {
+      id: 4,
+      days: [
+        {
+          date: new Date(2017, 9, 8),
+          end: new Date(2017, 9, 9),
+          bookingIds: [],
+        },
+        {
+          date: new Date(2017, 9, 10),
+          bookingIds: [1, 2],
+        },
+        {
+          date: new Date(2017, 9, 11),
+          bookingIds: [],
+        }
+      ],
+      bookings: {
+        1: {
+          id: 1,
+          start: new Date(2017, 9, 10, 16, 0),
+          end: new Date(2017, 9, 10, 20, 0)
+        },
+        2: {
+          id: 2,
+          start: new Date(2017, 9, 10, 16, 0),
+          end: new Date(2017, 9, 10, 19, 0)
+        },
+        3: {
+          id: 3,
+          start: new Date(2017, 9, 9, 16, 0),
+          end: new Date(2017, 9, 11, 21, 0)
+        }
+      },
+      action: {
+        type: actionTypes.ADD_BOOKING,
+        id: 3,
+        booking: {
+          id: 3,
+          start: new Date(2017, 9, 9, 16, 0),
+          end: new Date(2017, 9, 11, 21, 0)
+        }
+      },
+      expected: [
+        {
+          date: new Date(2017, 9, 8),
+          bookingIds: []
+        },
+        {
+          date: new Date(2017, 9, 9),
+          bookingIds: [3],
+        },
+        {
+          date: new Date(2017, 9, 10),
+          bookingIds: [3,1,2],
+        },
+        {
+          date: new Date(2017, 9, 11),
+          bookingIds: [3],
+        }
+      ]
+    },
+    {
+      id: 5,
+      days: [
+        {
+          date: new Date(2017, 9, 9),
+          bookingIds: [],
+        },
+        {
+          date: new Date(2017, 9, 10),
+          bookingIds: [1, 2],
+        },
+        {
+          date: new Date(2017, 9, 11),
+          end: new Date(2017, 9, 20),
+          bookingIds: [],
+        }
+      ],
+      bookings: {
+        1: {
+          id: 1,
+          start: new Date(2017, 9, 10, 16, 0),
+          end: new Date(2017, 9, 10, 20, 0)
+        },
+        2: {
+          id: 2,
+          start: new Date(2017, 9, 10, 16, 0),
+          end: new Date(2017, 9, 10, 19, 0)
+        },
+        3: {
+          id: 3,
+          start: new Date(2017, 9, 8, 16, 0),
+          end: new Date(2017, 9, 12, 21, 0)
+        }
+      },
+      action: {
+        type: actionTypes.ADD_BOOKING,
+        id: 3,
+        booking: {
+          id: 3,
+          start: new Date(2017, 9, 8, 16, 0),
+          end: new Date(2017, 9, 12, 21, 0)
+        }
+      },
+      expected: [
+        {
+          date: new Date(2017, 9, 8),
+          bookingIds: [3]
+        },
+        {
+          date: new Date(2017, 9, 9),
+          bookingIds: [3],
+        },
+        {
+          date: new Date(2017, 9, 10),
+          bookingIds: [3,1,2],
+        },
+        {
+          date: new Date(2017, 9, 11),
+          bookingIds: [3],
+        },
+        {
+          date: new Date(2017, 9, 12),
+          bookingIds: [3],
+        },
+        {
+          date: new Date(2017, 9, 13),
+          end: new Date(2017, 9, 20),
           bookingIds: [],
         }
       ]
@@ -198,7 +439,7 @@ xdescribe('addBookingToDays function', () => {
   })
 })
 
-xdescribe('addBookingToDay ', () => {
+describe('addBookingToDay ', () => {
   using([
     {
       id: 1,
@@ -509,48 +750,167 @@ describe('createDaysIfNotExist', () => {
         }
       ]
     },
-    // {
-    //   id: 6,
-    //   days: [
-    //     {
-    //       date: new Date(2017, 9, 13),
-    //       end: new Date(2017, 9, 14),
-    //     }
-    //   ],
-    //   booking: {
-    //     id: 1,
-    //     start: new Date(2017, 9, 10, 12, 0),
-    //     end: new Date(2017, 9, 15, 13, 0)
-    //   },
-    //   expected: [
-    //     {
-    //       date: new Date(2017, 9, 10),
-    //       bookingIds: []
-    //     },
-    //     {
-    //       date: new Date(2017, 9, 11),
-    //       bookingIds: []
-    //     },
-    //     {
-    //       date: new Date(2017, 9, 12),
-    //       bookingIds: []
-    //     },
-    //     {
-    //       date: new Date(2017, 9, 13),
-    //       bookingIds: []
-    //     },
-    //     {
-    //       date: new Date(2017, 9, 14),
-    //       bookingIds: []
-    //     },
-    //     {
-    //       date: new Date(2017, 9, 15),
-    //       bookingIds: []
-    //     }
-    //   ]
-    // }
+    {
+      id: 6,
+      days: [
+        {
+          date: new Date(2017, 9, 13),
+          end: new Date(2017, 9, 14),
+        }
+      ],
+      booking: {
+        id: 1,
+        start: new Date(2017, 9, 10, 12, 0),
+        end: new Date(2017, 9, 15, 13, 0)
+      },
+      expected: [
+        {
+          date: new Date(2017, 9, 10),
+          bookingIds: []
+        },
+        {
+          date: new Date(2017, 9, 11),
+          bookingIds: []
+        },
+        {
+          date: new Date(2017, 9, 12),
+          bookingIds: []
+        },
+        {
+          date: new Date(2017, 9, 13),
+          bookingIds: []
+        },
+        {
+          date: new Date(2017, 9, 14),
+          bookingIds: []
+        },
+        {
+          date: new Date(2017, 9, 15),
+          bookingIds: []
+        }
+      ]
+    },
+    {
+      id: 7,
+      days: [
+        {
+          date: new Date(2017, 9, 13),
+          end: new Date(2017, 9, 16),
+        }
+      ],
+      booking: {
+        id: 1,
+        start: new Date(2017, 9, 10, 11, 0),
+        end: new Date(2017, 9, 14, 14, 0)
+      },
+      expected: [
+        {
+          date: new Date(2017, 9, 10),
+          bookingIds: []
+        },
+        {
+          date: new Date(2017, 9, 11),
+          bookingIds: []
+        },
+        {
+          date: new Date(2017, 9, 12),
+          bookingIds: []
+        },
+        {
+          date: new Date(2017, 9, 13),
+          bookingIds: []
+        },
+        {
+          date: new Date(2017, 9, 14),
+          bookingIds: []
+        },
+        {
+          date: new Date(2017, 9, 15),
+          end: new Date(2017, 9, 16),
+          bookingIds: []
+        }
+      ]
+    },
+    {
+      id: 8,
+      days: [
+        {
+          date: new Date(2017, 9, 12),
+          end: new Date(2017, 9, 16),
+        }
+      ],
+      booking: {
+        id: 1,
+        start: new Date(2017, 9, 14, 14, 0),
+        end: new Date(2017, 9, 17, 17, 0)
+      },
+      expected: [
+        {
+          date: new Date(2017, 9, 12),
+          end: new Date(2017, 9, 13),
+          bookingIds: []
+        },
+        {
+          date: new Date(2017, 9, 14),
+          bookingIds: []
+        },
+        {
+          date: new Date(2017, 9, 15),
+          bookingIds: []
+        },
+        {
+          date: new Date(2017, 9, 16),
+          bookingIds: []
+        },
+        {
+          date: new Date(2017, 9, 17),
+          bookingIds: []
+        }
+      ]
+    },
+    {
+      id: 9,
+      days: [
+        {
+          date: new Date(2017, 9, 8),
+          end: new Date(2017, 9, 9),
+          bookingIds: [],
+        },
+        {
+          date: new Date(2017, 9, 10),
+          bookingIds: [],
+        },
+        {
+          date: new Date(2017, 9, 11),
+          bookingIds: [],
+        }
+      ],
+      booking: {
+        id: 3,
+        start: new Date(2017, 9, 9, 16, 0),
+        end: new Date(2017, 9, 11, 21, 0)
+      },
+      expected: [
+        {
+          date: new Date(2017, 9, 8),
+          bookingIds: []
+        },
+        {
+          date: new Date(2017, 9, 9),
+          bookingIds: [],
+        },
+        {
+          date: new Date(2017, 9, 10),
+          bookingIds: [],
+        },
+        {
+          date: new Date(2017, 9, 11),
+          bookingIds: [],
+        }
+      ]
+    }
   ], (data) => {
-    fit('createDaysIfNotExist - ' + data.id, () => {
+    it('createDaysIfNotExist - ' + data.id, () => {
       let result = createDaysIfNotExist(data.days, data.booking);
 
       expect(result).toEqual(data.expected);

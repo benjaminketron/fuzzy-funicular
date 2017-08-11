@@ -41,53 +41,47 @@ export const addBookingToBookings = (bookings, action) => {
   return newBookings;
 }
 
+// TODO refactor not as scalable as it could be
+// assuming the booking itself can span multiple days
 export const addBookingToDays = (days, bookings, action) => {
   // if day(s) do not exist for booking create them
-  // if date range exists for booking split range
-  // collect days effected by booking
-  // add booking to each day in chronological order ascending, and duration descending
-
-  // TODO refactor not as scalable as it could be
-  // assuming the booking itself can span multiple days
-  let result = days;
   let booking = action.booking;
+  let result = List(createDaysIfNotExist(days, booking));
   let startDate = booking.start;
-  
   let startDay = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
-
   let endDate = booking.end;
   let endDay = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
 
-  let bookedDays = days.filter((d) => {
+  // collect days effected by booking
+  let bookedDays = result.filter((d) => {
     return startDay <= d.date && d.date <= endDay;
   })
 
-  let updatedDays = [];
+  // add booking to each day in chronological order ascending, and duration descending
+  bookedDays.forEach(function(day) {
+    let bookingIds = List(day.bookingIds || []);
 
-  bookedDays.forEach(function(element) {
-    let day = null;
-    if (!!element.bookingIds) {
-      updatedDays.push({...days, bookingIds: [bookingId]})
+    let index = 0;
+    for (let i = 0; i < bookingIds.size; i++) {
+      let _booking = bookings[bookingIds.get(i)];
+      if (booking.start < _booking.start && (booking.end - booking.start) < (_booking.end - _booking.start)) {
+        index = i;
+      }
     }
-    else 
-    {
-      // rewrite so id is added in order
-      updatedDays.push({...days, bookingIds: List(element.bookingIds).push(booking.id)})
-    }
+
+    bookingIds = bookingIds.insert(index, booking.id);
+
+    let updatedDay = {...day, bookingIds: bookingIds.toJS() };
+
+    // bad idea but resusing for the moment
+    index = result.indexOf(day);
+    result = result.remove(index);
+
+    result = result.insert(index, updatedDay);
+    
   }, this);
 
-  if (updatedDays.length) {
-    result = List(days);
-    result = result.withMutations((list) => {
-      updatedDays.forEach((element) => {
-        // let index = list.findIndex((value) => {
-        //   value.id = 
-        // })
-      })
-    })
-  }
-
-  return result;
+  return result.toJS();
 }
 
 // also splits ranges as necessary
@@ -115,7 +109,7 @@ export const createDaysIfNotExist = (days, booking) => {
       // both booking start and end are before the past date
       // so we may have a range to create in between
       if (booking.end < pastDate) {
-          let days = Math.round(pastDate - booking.start) / (1000*60*60*24);
+          let days = Math.round(booking.end - booking.start) / (1000*60*60*24);
           for (let d = 0; d <= days; d++) {
             result = result.insert(d, {
               date: new Date(booking.start.getFullYear(), booking.start.getMonth(), booking.start.getDate() + d),
@@ -195,11 +189,74 @@ export const createDaysIfNotExist = (days, booking) => {
       }
     }
 
+    let bookingStartDay = new Date(booking.start.getFullYear(), booking.start.getMonth(), booking.start.getDate());
+    let bookingEndDay = new Date(booking.end.getFullYear(), booking.end.getMonth(), booking.end.getDate());
     // if any of the days in between are a range then expand as necessary
     let dateRanges = result.filter((day) => {
-      return !!booking.end && (booking.start <= day.date && day.date <= booking.end ||
-        booking.start <= day.end && day.end <= booking.end);
+      return !!day.end && (bookingStartDay <= day.date && day.date <= bookingEndDay ||
+        bookingStartDay <= day.end && day.end <= bookingEndDay);
     }) 
+
+    dateRanges.forEach((day) => { 
+      // if date range is completely in booking
+      if (bookingStartDay <= day.date && day.date <= bookingEndDay &&
+        bookingStartDay <= day.end && day.end <= bookingEndDay)
+      {
+        let index = result.indexOf(day);
+        result = result.remove(index);
+        let days = Math.round(day.end - day.date) / (1000 * 60 * 60 * 24);
+        for (let d = 0; d <= days; d++) {
+          result = result.insert(index + d, {
+            date: new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDate() + d),
+            bookingIds: []
+          })
+        }
+      }
+      // if left part of date range is in booking
+      else if (bookingStartDay <= day.date && day.date <= bookingEndDay) {
+        let index = result.indexOf(day);
+        result = result.remove(index);
+        let days = Math.round(bookingEndDay - day.date) / (1000 * 60 * 60 * 24);
+        for (let d = 0; d <= days; d++) {
+          result = result.insert(index + d, {
+            date: new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDate() + d),
+            bookingIds: []
+          })
+        }
+
+        // insert missing range
+        result = result.insert(index + days + 1, {
+          date: new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDate() + days + 1),
+          end: day.end,
+          bookingIds: []
+        })
+      }
+      // if right part fo date range is in booking
+      else if (bookingStartDay <= day.end && day.end <= bookingEndDay) {
+        let index = result.indexOf(day);
+        result = result.remove(index);
+        
+        let range = {
+          date: day.date,
+          bookingIds: []
+        };
+
+        let rangeEnd = new Date(bookingStartDay.getFullYear(), bookingStartDay.getMonth(), bookingStartDay.getDate() - 1);
+        if (rangeEnd > day.date) {
+          range.end = rangeEnd;
+        }
+        // insert missing range
+        result = result.insert(index, range);
+
+        let days = Math.round(day.end - bookingStartDay) / (1000 * 60 * 60 * 24);
+        for (let d = 0; d <= days; d++) {
+          result = result.insert(index + d + 1, {
+            date: new Date(bookingStartDay.getFullYear(), bookingStartDay.getMonth(), bookingStartDay.getDate() + d),
+            bookingIds: []
+          })
+        }
+      }
+    });
 
   }
 
