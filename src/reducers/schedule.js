@@ -102,7 +102,34 @@ export const schedule = (state = {}, action) => {
         days: days.toJS()
       }
       break;
-    
+    case actionTypes.SELECT_DAY_BOOKING_CLOSEST_TO:
+      days = List(state.days || []);
+
+      let dayForFocus = days.find((day) => {
+        return day.date >= action.date && !!day.bookingIds  && !!day.bookingIds.length;
+      });
+
+      if (!!dayForFocus) {
+
+        let daysToRemoveFocus = days.filter((day) => {
+          return day.focus;
+        })
+  
+        daysToRemoveFocus.forEach((day) => {
+          let index = days.indexOf(day);
+          days = days.remove(index);
+          days = days.insert(index, {...day, focus: false });
+        })
+
+        let index = days.indexOf(dayForFocus);
+        days = days.remove(index);
+        days = days.insert(index, {...dayForFocus, focus: true });
+      }
+
+      return {...state,
+        days: days.toJS()
+      }
+      break;
     default:
       return state;
   }

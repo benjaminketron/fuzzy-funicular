@@ -401,11 +401,169 @@ fdescribe('schedule reducer', () => {
     })
   })
   
+  using([
+    {
+      id: 1,
+      state: {
+        days: [
+          {
+            date: new Date(2017, 5, 6),
+            bookingIds: [2]
+          },
+          {
+            date: new Date(2017, 6, 6),
+            bookingIds: [3]
+          },
+          {
+            date: new Date(2017, 7, 4),
+            bookingIds: [1]
+          },
+          {
+            date: new Date(2017, 8, 6),
+            bookingIds: [5]
+          }
+        ]
+      },
+      action: {
+        type: actionTypes.SELECT_DAY_BOOKING_CLOSEST_TO,
+        date: new Date(2017, 7, 4)
+      },
+      expected: {
+        days: [
+          {
+            date: new Date(2017, 5, 6),
+            bookingIds: [2]
+          },
+          {
+            date: new Date(2017, 6, 6),
+            bookingIds: [3]
+          },
+          {
+            date: new Date(2017, 7, 4),
+            bookingIds: [1],
+            focus: true
+          },
+          {
+            date: new Date(2017, 8, 6),
+            bookingIds: [5]
+          }
+        ]
+      },
+      immutableCheck: true
+    },
+    {
+      id: 2,
+      state: {
+        days: [
+          {
+            date: new Date(2017, 5, 6),
+            bookingIds: [2],
+            focus: true
+          },
+          {
+            date: new Date(2017, 6, 6),
+            bookingIds: [3]
+          },
+          {
+            date: new Date(2017, 7, 4),
+            bookingIds: [1]
+          },
+          {
+            date: new Date(2017, 8, 6),
+            bookingIds: [5]
+          }
+        ]
+      },
+      action: {
+        type: actionTypes.SELECT_DAY_BOOKING_CLOSEST_TO,
+        date: new Date(2017, 7, 1)
+      },
+      expected: {
+        days: [
+          {
+            date: new Date(2017, 5, 6),
+            bookingIds: [2],
+            focus: false
+          },
+          {
+            date: new Date(2017, 6, 6),
+            bookingIds: [3]
+          },
+          {
+            date: new Date(2017, 7, 4),
+            bookingIds: [1],
+            focus: true
+          },
+          {
+            date: new Date(2017, 8, 6),
+            bookingIds: [5]
+          }
+        ]
+      },
+      immutableCheck: true
+    },
+    {
+      id: 3,
+      state: {
+        days: [
+          {
+            date: new Date(2017, 5, 6),
+            bookingIds: [2]
+          },
+          {
+            date: new Date(2017, 6, 6),
+            bookingIds: [3]
+          },
+          {
+            date: new Date(2017, 7, 4),
+            bookingIds: [1],
+            focus: true
+          },
+          {
+            date: new Date(2017, 8, 6),
+            bookingIds: [5],
+          }
+        ]
+      },
+      action: {
+        type: actionTypes.SELECT_DAY_BOOKING_CLOSEST_TO,
+        date: new Date(2017, 8, 9)
+      },
+      expected: {
+        days: [
+          {
+            date: new Date(2017, 5, 6),
+            bookingIds: [2]
+          },
+          {
+            date: new Date(2017, 6, 6),
+            bookingIds: [3]
+          },
+          {
+            date: new Date(2017, 7, 4),
+            bookingIds: [1],
+            focus: true
+          },
+          {
+            date: new Date(2017, 8, 6),
+            bookingIds: [5]
+          }
+        ]
+      },
+      immutableCheck: false
+    }
+  ], (data) => {
+    it('should handle SELECT_DAY_BOOKING_CLOSEST_TO - ' + data.id, () => {
+      let result = schedule(data.state, data.action);
 
-  xit('should handle SELECT_DAY_BOOKING_CLOSEST_TO', () => {
-      
+      expect(result).toEqual(data.expected);
+
+      // immutability check
+      if (data.immutableCheck) {
+        expect(data.state).not.toEqual(result);
+      }
+    })
   })
-
 })
 
 describe('addBookingToBookings function', () => {
