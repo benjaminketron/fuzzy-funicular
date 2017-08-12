@@ -3,11 +3,11 @@ import * as actionTypes from './indexActionTypes'
 let nextBookingId = 0
 export const addBooking = (booking) => ({
   type: actionTypes.ADD_BOOKING,
-  id: nextBookingId++,
-  booking: booking
+  id: nextBookingId,
+  booking: {...booking, id: nextBookingId++}
 })
 
-export const initializeBookings = (bookings, today) => {
+export const initializeBookings = (bookings, now) => {
   let lastBookingId = 0;
   
   if (!!bookings) {
@@ -24,7 +24,7 @@ export const initializeBookings = (bookings, today) => {
   return {
     type: actionTypes.INITIALIZE_BOOKINGS,
     bookings: bookings,
-    today: today
+    now: now
   }
 };
 
@@ -38,7 +38,7 @@ export const selectDay = (date) => ({
   date: date
 })
 
-export const selectBookingClosestTo = (date) => ({
-  type: actionTypes.SELECT_BOOKING_CLOSEST_TO,
+export const selectDayBookingClosestTo = (date) => ({
+  type: actionTypes.SELECT_DAY_BOOKING_CLOSEST_TO,
   date: date
 })

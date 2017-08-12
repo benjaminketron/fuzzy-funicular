@@ -4,7 +4,7 @@ import * as actionTypes from '../actions/indexActionTypes'
 // sort of weird, but this library really helps keeps things dry
 let using = require('jasmine-data-provider');
 
-xdescribe('schedule reducer', () => {
+fdescribe('schedule reducer', () => {
   it('should handle initial state', () => {
     expect(
         schedule(undefined, {})
@@ -12,62 +12,397 @@ xdescribe('schedule reducer', () => {
   })
 
   it('should handle ADD_BOOKING', () => {
-    var now = new Date(2017, 8, 10, 3, 2, 1);
+    let now = new Date(2017, 8, 10, 3, 2, 1);
 
-    var start = new Date(2017, 8, 9, 5, 0, 0);
-    var end = new Date(2017, 8, 9, 5, 0, 0);
+    let start = new Date(2017, 8, 9, 5, 0, 0);
+    let end = new Date(2017, 8, 9, 7, 0, 0);
 
-    expect(schedule({
+    let state = {
       now: now,
       days: [],
       bookings: {}
-    }, 
-    { 
-        type: actionTypes.ADD_BOOKING,
-        booking: {
-            eventName: 'event1',
-            roomName: 'roomName1',
-            start: start,
-            end: end
+    };
+
+    let action =  { 
+      type: actionTypes.ADD_BOOKING,
+      booking: {
+          id: 1,
+          eventName: 'event1',
+          roomName: 'roomName1',
+          start: start,
+          end: end
+      },
+      id: 1 
+    };
+
+    let expected = {
+      now: now,
+      days: [
+        {
+          date: new Date(2017, 8, 9),
+          bookingIds: [1]
+        }
+      ],
+      bookings: {
+        1: {
+          id: 1,
+          eventName: 'event1',
+          roomName: 'roomName1',
+          start: start,
+          end: end
+        }
+      }
+    }
+
+    let result = schedule(state, action);
+    expect(result).toEqual(expected);
+
+    // immutability test
+    expect(state).not.toEqual(result);
+  })
+
+  it('should handle INITIALIZE_BOOKINGS', () => {
+    let now = new Date(2017, 7, 11, 16, 47);
+
+    let state = {
+
+    }
+
+    let action = {
+      type: actionTypes.INITIALIZE_BOOKINGS,
+      bookings: [
+        {
+          id: 1
         },
-        id: 1 
-    })).toEqual({
-        now: now,
+        {
+          id: 2
+        }
+      ],
+      now: now
+    };
+
+    let expected = {
+      now: now,
+      bookings: {
+        1: {
+          id: 1
+        },
+        2: {
+          id: 2
+        }
+      }
+    };
+
+    let result = schedule(state, action);
+
+    expect(result).toEqual(expected);
+
+    // immutability test
+    expect(result).not.toEqual(state);
+
+  })
+
+  using([
+    {
+      id: 1,
+      state: {
         days: [
           {
-              date: new Date(2017, 9, 9),
-              bookingIds: []
-          },
-          {
-            date: new Date(2017, 8, 10),
-            bookingIds: [1]
+            date: new Date(2017, 6, 4),
+            bookingIds: [2, 3, 1]
           }
         ],
         bookings: {
           1: {
             id: 1,
-            eventName: 'event1',
-            roomName: 'roomName1',
-            start: start,
-            end: end
+            eventName: 'Happy Holiday',
+            roomName: 'The Park',
+            start: new Date(2017, 6, 4, 21, 0, 0),
+            end: new Date(2017, 6, 4, 23, 0, 0)
+          },
+          2: {
+            id: 2,
+            eventName: 'Oboe Tuning',
+            roomName: 'Musical Services',
+            start: new Date(2017, 6, 4, 12, 0, 0),
+            end: new Date(2017, 6, 4, 13, 0, 0)
+          },
+          3: {
+            id: 3,
+            eventName: 'Dinner at Jay\'s',
+            roomName: 'Jas\'s Bistro',
+            start: new Date(2017, 6, 4, 18, 0, 0),
+            end: new Date(2017, 6, 4, 19, 0, 0)
           }
         }
-      })
+      },
+      action: {
+        type: actionTypes.SEARCH_BOOKING,
+        searchText: 'Bistro'
+      },
+      expected: {
+        days: [
+          {
+            date: new Date(2017, 6, 4),
+            bookingIds: [2, 3, 1]
+          }
+        ],
+        bookings: {
+          1: {
+            id: 1,
+            eventName: 'Happy Holiday',
+            roomName: 'The Park',
+            start: new Date(2017, 6, 4, 21, 0, 0),
+            end: new Date(2017, 6, 4, 23, 0, 0),
+            hidden: true
+          },
+          2: {
+            id: 2,
+            eventName: 'Oboe Tuning',
+            roomName: 'Musical Services',
+            start: new Date(2017, 6, 4, 12, 0, 0),
+            end: new Date(2017, 6, 4, 13, 0, 0),
+            hidden: true
+          },
+          3: {
+            id: 3,
+            eventName: 'Dinner at Jay\'s',
+            roomName: 'Jas\'s Bistro',
+            start: new Date(2017, 6, 4, 18, 0, 0),
+            end: new Date(2017, 6, 4, 19, 0, 0),
+            hidden: false
+          }
+        }
+      }
+    },
+    {
+      id: 2,
+      state: {
+        days: [
+          {
+            date: new Date(2017, 6, 4),
+            bookingIds: [2, 3, 1]
+          }
+        ],
+        bookings: {
+          1: {
+            id: 1,
+            eventName: 'Happy Holiday',
+            roomName: 'The Park',
+            start: new Date(2017, 6, 4, 21, 0, 0),
+            end: new Date(2017, 6, 4, 23, 0, 0),
+          },
+          2: {
+            id: 2,
+            eventName: 'Oboe Tuning',
+            roomName: 'Musical Services',
+            start: new Date(2017, 6, 4, 12, 0, 0),
+            end: new Date(2017, 6, 4, 13, 0, 0),
+          },
+          3: {
+            id: 3,
+            eventName: 'Dinner at Jay\'s',
+            roomName: 'Jas\'s Bistro',
+            start: new Date(2017, 6, 4, 18, 0, 0),
+            end: new Date(2017, 6, 4, 19, 0, 0),
+          }
+        }
+      },
+      action: {
+        type: actionTypes.SEARCH_BOOKING,
+        searchText: 'Tun'
+      },
+      expected: {
+        days: [
+          {
+            date: new Date(2017, 6, 4),
+            bookingIds: [2, 3, 1]
+          }
+        ],
+        bookings: {
+          1: {
+            id: 1,
+            eventName: 'Happy Holiday',
+            roomName: 'The Park',
+            start: new Date(2017, 6, 4, 21, 0, 0),
+            end: new Date(2017, 6, 4, 23, 0, 0),
+            hidden: true
+          },
+          2: {
+            id: 2,
+            eventName: 'Oboe Tuning',
+            roomName: 'Musical Services',
+            start: new Date(2017, 6, 4, 12, 0, 0),
+            end: new Date(2017, 6, 4, 13, 0, 0),
+            hidden: false
+          },
+          3: {
+            id: 3,
+            eventName: 'Dinner at Jay\'s',
+            roomName: 'Jas\'s Bistro',
+            start: new Date(2017, 6, 4, 18, 0, 0),
+            end: new Date(2017, 6, 4, 19, 0, 0),
+            hidden: true
+          }
+        }
+      }
+    }
+  ], (data) => {
+    it('should handle SEARCH_BOOKING - ' + data.id, () => {
+      let result = schedule(data.state, data.action);
+      expect(result).toEqual(data.expected);
+
+      // immutability test
+      expect(data.state).not.toEqual(result);
+    })
   })
 
-  it('should handle INITIALIZE_BOOKINGS', () => {
+  using([
+    {
+      id: 1,
+      state: {
+        days: [
+          {
+            date: new Date(2017, 7, 11),
+            bookingIds: []
+          },
+          {
+            date: new Date(2017, 7, 12),
+            bookingIds: []
+          },
+          {
+            date: new Date(2017, 7, 13),
+            bookingIds: []
+          }
+        ]
+      },
+      action: {
+        type: actionTypes.SELECT_DAY,
+        date: new Date(2017, 7, 12)
+      },
+      expected: {
+        days: [
+          {
+            date: new Date(2017, 7, 11),
+            bookingIds: []
+          },
+          {
+            date: new Date(2017, 7, 12),
+            bookingIds: [],
+            focus: true
+          },
+          {
+            date: new Date(2017, 7, 13),
+            bookingIds: []
+          }
+        ]
+      }
+    },
+    {
+      id: 2,
+      state: {
+        days: [
+          {
+            date: new Date(2017, 7, 11),
+            bookingIds: [],
+            focus: true
+          },
+          {
+            date: new Date(2017, 7, 12),
+            bookingIds: []
+          },
+          {
+            date: new Date(2017, 7, 13),
+            bookingIds: []
+          }
+        ]
+      },
+      action: {
+        type: actionTypes.SELECT_DAY,
+        date: new Date(2017, 7, 13)
+      },
+      expected: {
+        days: [
+          {
+            date: new Date(2017, 7, 11),
+            bookingIds: [],
+            focus: false
+          },
+          {
+            date: new Date(2017, 7, 12),
+            bookingIds: [],
+          },
+          {
+            date: new Date(2017, 7, 13),
+            bookingIds: [],
+            focus: true
+          }
+        ]
+      }
+    },
+    {
+      id: 3,
+      state: {
+        days: [
+          {
+            date: new Date(2017, 7, 11),
+            bookingIds: []
+          },
+          {
+            date: new Date(2017, 7, 12),
+            bookingIds: []
+          },
+          {
+            date: new Date(2017, 7, 13),
+            end: new Date(2017, 7, 15),
+            bookingIds: []
+          },
+          {
+            date: new Date(2017, 7, 16),
+            bookingIds: []
+          }
+        ]
+      },
+      action: {
+        type: actionTypes.SELECT_DAY,
+        date: new Date(2017, 7, 14)
+      },
+      expected: {
+        days: [
+          {
+            date: new Date(2017, 7, 11),
+            bookingIds: []
+          },
+          {
+            date: new Date(2017, 7, 12),
+            bookingIds: []
+          },
+          {
+            date: new Date(2017, 7, 13),
+            end: new Date(2017, 7, 15),
+            bookingIds: [],
+            focus: true
+          },
+          {
+            date: new Date(2017, 7, 16),
+            bookingIds: []
+          }
+        ]
+      }
+    }
+  ], (data) => {
+    it('should handle SELECT_DAY - ' + data.id, () => {
+      let result = schedule(data.state, data.action);
 
+      expect(result).toEqual(data.expected);
+
+      // immutability test
+      expect(result).not.toEqual(data.state);
+    })
   })
+  
 
-  it('should handle SEARCH_BOOKING', () => {
-      
-  })
-
-  it('should handle SELECT_DAY', () => {
-      
-  })
-
-  it('should handle SELECT_BOOKING_CLOSEST_TO', () => {
+  xit('should handle SELECT_DAY_BOOKING_CLOSEST_TO', () => {
       
   })
 

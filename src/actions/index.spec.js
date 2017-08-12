@@ -7,17 +7,18 @@ describe('index actions', () => {
       type: actionTypes.ADD_BOOKING,
       id: 0,
       booking: {
+        id: 0,
         eventName: 'event1'
       }
     })
   })
 
   it('initializeBookings should create an INITIALIZE_BOOKING action', () => {
-    var today = new Date(1);
-    expect(actions.initializeBookings([], today)).toEqual({
+    var now = new Date(1);
+    expect(actions.initializeBookings([], now)).toEqual({
       type: actionTypes.INITIALIZE_BOOKINGS,
       bookings: [],
-      today: today
+      now: now
     })
   })
 
@@ -27,6 +28,7 @@ describe('index actions', () => {
       type: actionTypes.ADD_BOOKING,
       id: 2,
       booking: {
+        id: 2,
         eventName: 'event2'
       } 
     })
@@ -47,10 +49,10 @@ describe('index actions', () => {
     })
   })
 
-  it('selectBookingClosestTo should create a SELECT_BOOKING_CLOSEST_TO action', () => {
+  it('selectDayBookingClosestTo should create a SELECT_DAY_BOOKING_CLOSEST_TO action', () => {
     var date = new Date(1);
-    expect(actions.selectBookingClosestTo(date)).toEqual({
-      type: actionTypes.SELECT_BOOKING_CLOSEST_TO,
+    expect(actions.selectDayBookingClosestTo(date)).toEqual({
+      type: actionTypes.SELECT_DAY_BOOKING_CLOSEST_TO,
       date: date
     })
   })

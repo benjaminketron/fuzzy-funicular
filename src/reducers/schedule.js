@@ -1,16 +1,108 @@
 import * as actionTypes from '../actions/indexActionTypes'
 import { List, Map } from 'immutable'
 
+// considered a combine reducer but when adding bookings it is necesary to know about bookings when 
+// calculating the next state for days. it seems moving other parts of the state with a sub reducer is considered
+// an anit-pattern, but might simplify the code a bit and be worth looking into
 export const schedule = (state = {}, action) => {
+  let bookings = null;
+  let days = null;
+
   switch (action.type) {
     case actionTypes.ADD_BOOKING:
-      let bookings = addBookingToBookings(state.bookings, action);
-      let days = addBookingToDays(state.days, state.bookings, action);
+      bookings = addBookingToBookings(state.bookings, action);
+      days = addBookingToDays(state.days, state.bookings, action);
       return { 
         ...state, 
         days: days,
         bookings: bookings
-      }     
+      }    
+      break;
+    case actionTypes.INITIALIZE_BOOKINGS:
+      bookings = {};
+      for (let b = 0; b < action.bookings.length; b++) {
+        let booking = action.bookings[b];
+        bookings[booking.id] = booking
+      }
+      return {
+        ...state,
+        now: action.now,
+        bookings: bookings
+      }
+      break;
+    case actionTypes.SEARCH_BOOKING:
+      let searchText = !!action.searchText ? action.searchText.toLowerCase() : '';
+
+      // rudimentary search. needs to be refactored to a keyword search and collect keyword
+      // information about bookings as they are inserted or initialize
+      // could use a Map or OrderedMap (keyword -> booking id)
+      // algorithm would strip punctionation and tokenize by whitespace discarding empty tokens
+      // the same algorithm could be used to tokenize the search string
+      let bookingsMap = Map(state.bookings);
+      let bookingsToHide = bookingsMap.filter((booking) => {
+        return !(
+          (!!booking.eventName ? booking.eventName.toLowerCase() : '').indexOf(searchText) != -1 ||
+          (!!booking.roomName ? booking.roomName.toLowerCase() : '').indexOf(searchText) != -1
+        );
+      })
+
+      let bookingsToShow = bookingsMap.filter((booking) => {
+        return booking.hidden = true;
+      })
+
+      let updatedBookings = {};
+
+      bookingsToShow.forEach((booking) => {
+        let _booking = {...booking, hidden: false };
+        updatedBookings[booking.id] = _booking;
+      })
+
+      bookingsToHide.forEach((booking) => {
+        let _booking = {...booking, hidden: true };
+        updatedBookings[booking.id] = _booking;
+      })
+
+      return {...state,
+        bookings: Object.assign({}, state.bookings, updatedBookings)
+      }
+      break;
+    case actionTypes.SELECT_DAY:
+      days = List(state.days || []);
+      
+      let daysToUnfocus = days.filter((day) => {
+        return day.focus;
+      });
+
+      let daysToFocus = days.filter((day) => {
+        if (!!day.end) {
+        }
+        return day.date.getTime() == action.date.getTime() || 
+          (!!day.end && day.date.getTime() <= action.date.getTime() && action.date.getTime() <= day.end.getTime());
+      })
+
+      daysToUnfocus.forEach((day) => {
+        let index = days.indexOf(day);
+        days = days.remove(index);
+        
+        let newDay = {...day, focus: false };
+
+        days = days.insert(index, newDay);
+      });
+
+      daysToFocus.forEach((day) => {
+        let index = days.indexOf(day);
+        days = days.remove(index);
+        
+        let newDay = {...day, focus: true };
+
+        days = days.insert(index, newDay);
+      });
+
+      return {...state,
+        days: days.toJS()
+      }
+      break;
+    
     default:
       return state;
   }
