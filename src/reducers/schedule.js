@@ -28,7 +28,7 @@ const schedule = (state = { current: null, calendar: false }, action) => {
       let bookingsMap = Map(state.bookings);
       let bookingsToHide = bookingsMap.filter((booking) => {
         return !(
-          (!!booking.eventName ? booking.eventName.toLowerCase() : '').indexOf(searchText) !== -1 ||
+          (!!booking.eventName ? booking.eventName.toLowerCase() : '').indexOf(searchText) != -1 ||
           (!!booking.roomName ? booking.roomName.toLowerCase() : '').indexOf(searchText) != -1
         );
       })
@@ -62,7 +62,7 @@ const schedule = (state = { current: null, calendar: false }, action) => {
       let daysToFocus = days.filter((day) => {
         if (!!day.end) {
         }
-        return day.date.getTime() === action.date.getTime() || 
+        return day.date.getTime() == action.date.getTime() || 
           (!!day.end && day.date.getTime() <= action.date.getTime() && action.date.getTime() <= day.end.getTime());
       })
 
@@ -139,14 +139,19 @@ const schedule = (state = { current: null, calendar: false }, action) => {
     default:
       if (!!state.bookingsList) {
         bookings = {};
+        days = (state.days || []);
+
         let bookingsList = state.bookingsList;
         for (let b = 0; b < bookingsList.length; b++) {
           let booking = bookingsList[b];
-          bookings[booking.id] = booking
+          bookings[booking.id] = booking;
+          // this could be greatly optimized
+          days = addBookingToDays(days, bookings, { booking: booking });
         }
         return {
           ...state,
           bookings: bookings,
+          days: days,
           bookingsList: null
         }
       }
@@ -175,7 +180,7 @@ export const addBookingToDays = (days, bookings, action) => {
   let bookedDays = result.filter((d) => {
     return startDay <= d.date && d.date <= endDay;
   })
-
+  
   // add booking to each day in chronological order ascending, and duration descending
   bookedDays.forEach(function(day) {
     let bookingIds = List(day.bookingIds || []);
@@ -216,28 +221,29 @@ export const createDaysIfNotExist = (days, booking) => {
         bookingIds: []
       });
     }
-    
   } else {
-    let pastDay = result.get(0)
+    let bookingStartDay = new Date(booking.start.getFullYear(), booking.start.getMonth(), booking.start.getDate());
+    let bookingEndDay = new Date(booking.end.getFullYear(), booking.end.getMonth(), booking.end.getDate());
+    let pastDay = result.get(0);
     let pastDate = pastDay.date;
     let futureDay = result.get(result.size - 1);
     let futureDate = (futureDay.end || futureDay.date)
-
+    
     // we have days to create in the past
-    if (booking.start < pastDate) {
+    if (bookingStartDay < pastDate) {
       // both booking start and end are before the past date
       // so we may have a range to create in between
-      if (booking.end < pastDate) {
+      if (bookingEndDay < pastDate) {
           let days = Math.round(booking.end - booking.start) / (1000*60*60*24);
           for (let d = 0; d <= days; d++) {
             result = result.insert(d, {
-              date: new Date(booking.start.getFullYear(), booking.start.getMonth(), booking.start.getDate() + d),
+              date: new Date(bookingStartDay.getFullYear(), bookingStartDay.getMonth(), bookingStartDay.getDate() + d),
               bookingIds: []
             });
           }
 
           // create range in between booking end and past date if necessary
-          let rangeStart = new Date(booking.end.getFullYear(), booking.end.getMonth(), booking.end.getDate() + 1);
+          let rangeStart = new Date(bookingEndDay.getFullYear(), bookingEndDay.getMonth(), bookingEndDay.getDate() + 1);
           let rangeEnd = new Date(pastDate.getFullYear(), pastDate.getMonth(), pastDate.getDate() - 1);
           if (rangeEnd >= rangeStart) {
             let index = result.indexOf(pastDay);
@@ -255,7 +261,7 @@ export const createDaysIfNotExist = (days, booking) => {
         for (let d = 0; d < days; d++) {
           let date = new Date(booking.start.getFullYear(), booking.start.getMonth(), booking.start.getDate() + d);
           if (!result.contains((day) => {
-            return day.date === date;
+            return day.date == date;
           })) {
             result = result.insert(d, {
               date: date,
@@ -267,10 +273,10 @@ export const createDaysIfNotExist = (days, booking) => {
     }
 
     // we have days to create in the future
-    if (booking.end > futureDate) {
+    if (bookingEndDay > futureDate) {
       let offset = result.indexOf(futureDay) + 1;
       // there may be a range inbetween booking start and future date to be created
-      if (futureDate < booking.start) {
+      if (futureDate < bookingStartDay) {
         let days = Math.round(booking.end - booking.start) / (1000*60*60*24);
         for (let d = 0; d <= days; d++) {
           result = result.insert(offset + d, {
@@ -297,7 +303,7 @@ export const createDaysIfNotExist = (days, booking) => {
         for (let d = 1; d < days; d++) {
           let date = new Date(futureDate.getFullYear(), futureDate.getMonth(), futureDate.getDate() + d);
           if (!result.contains((day) => {
-            return day === date;
+            return day == date;
           })) {
             result = result.insert(offset + d, {
               date: date,
@@ -308,8 +314,6 @@ export const createDaysIfNotExist = (days, booking) => {
       }
     }
 
-    let bookingStartDay = new Date(booking.start.getFullYear(), booking.start.getMonth(), booking.start.getDate());
-    let bookingEndDay = new Date(booking.end.getFullYear(), booking.end.getMonth(), booking.end.getDate());
     // if any of the days in between are a range then expand as necessary
     let dateRanges = result.filter((day) => {
       return !!day.end && (bookingStartDay <= day.date && day.date <= bookingEndDay ||
@@ -401,7 +405,7 @@ export const addBookingToDay = (day, booking, bookings) => {
     }
   });
 
-  if (index === -1) {
+  if (index == -1) {
     bookingIds = bookingIds.push(booking.id);
   }
   else {

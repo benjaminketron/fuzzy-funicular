@@ -25,7 +25,6 @@ const mapDispatchToProps = dispatch => {
             dispatch(actions.setMenuOpen(open))
         },
         toggleAdd: () => {
-            console.log('add')
             dispatch(actions.toggleAdd())
         },
         toggleCalendar: () => {

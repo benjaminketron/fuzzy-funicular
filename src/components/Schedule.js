@@ -4,12 +4,13 @@ import Moment from 'moment';
 import PropTypes from 'prop-types'
 import AppBar from 'material-ui/AppBar';
 import FontIcon from 'material-ui/FontIcon';
-import Calendar from './Calendar';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
-import {List, ListItem} from 'material-ui/List';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
+
+import Calendar from './Calendar';
+import CurrentDayList from '../containers/CurrentDayList';
 
 import * as actionTypes from '../actions/indexActionTypes'
 
@@ -78,9 +79,7 @@ const Schedule = ({muiTheme, calendar, current, search, searchBooking, setCurren
         </AppBar>
         <Paper>
             <Calendar firstDayOfWeek={0} hideCalendarDate={true} open={calendar} onTouchTapDay={setCurrent} initialDate={current}/>
-            <List>
-            <ListItem primaryText="Hi"/>
-            </List>
+            <CurrentDayList muiTheme={muiTheme}/>
         </Paper> 
         <Paper><FlatButton label="Now" style={{width: muiTheme.nowButton.width, color: muiTheme.palette.secondaryTextColor,
              backgroundColor: muiTheme.palette.primary1Color}} onTouchTap={() => setCurrent({}, new Date())}/></Paper>

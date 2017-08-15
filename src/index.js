@@ -8,7 +8,27 @@ import reducer from './reducers'
 // in a real world app this would come from a service
 import bookings from './bookings.json'
 
-const store = createStore(reducer, { schedule: { current: new Date(), calendar: false }})
+let now = new Date();
+
+// convert dates
+for (let b = 0; b < bookings.bookings.length; b++) {
+  let booking = bookings.bookings[b];
+  if (booking.start) 
+    booking.start = new Date(booking.start);
+
+  if (booking.end) 
+    booking.end = new Date(booking.end);
+}
+
+const store = createStore(reducer, { 
+  schedule: { 
+    current: now, 
+    calendar: false, 
+    search: false,
+    bookingsList: bookings.bookings, 
+    days: [{date: new Date(now.getFullYear(), now.getMonth(), now.getDate()), bookingIds: []}] 
+  }
+})
 
 render(
   <Provider store={store}>

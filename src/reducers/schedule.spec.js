@@ -19,10 +19,14 @@ describe('schedule reducer', () => {
     let state = {
       bookingsList: [
         {
-          id: 1
+          id: 1,
+          start: new Date(2017, 8, 14, 16, 0, 0),
+          end: new Date(2017, 8, 14, 18, 0, 0)
         },
         {
-          id: 2
+          id: 2,
+          start: new Date(2017, 8, 14, 12, 0, 0),
+          end: new Date(2017, 8, 14, 13, 0, 0)
         }
       ]
     }
@@ -30,12 +34,22 @@ describe('schedule reducer', () => {
     let expected = {
       bookings: {
         1: {
-          id: 1
+          id: 1,
+          start: new Date(2017, 8, 14, 16, 0, 0),
+          end: new Date(2017, 8, 14, 18, 0, 0)
         },
         2: {
-          id: 2
+          id: 2,
+          start: new Date(2017, 8, 14, 12, 0, 0),
+          end: new Date(2017, 8, 14, 13, 0, 0)
         }
       },
+      days: [
+        {
+          date: new Date(2017, 8, 14, 0, 0, 0),
+          bookingIds: [2, 1]
+        }
+      ],
       bookingsList: null
     };
 
@@ -1533,6 +1547,35 @@ describe('createDaysIfNotExist', () => {
       // immutability test
       expect(result).not.toEqual(data.days);
     })
+  })
+
+  it ('createDaysIfNotExist tolerates bookings on same day when starting with no days', () => {
+    let days = [];
+    let booking1 = {
+      id: 1,
+      start: new Date(2017, 8, 14, 18, 0, 0),
+      end: new Date(2017, 8, 14, 20, 0, 0)
+    }
+    let booking2 = {
+      id: 2,
+      start: new Date(2017, 8, 14, 12, 0, 0),
+      end: new Date(2017, 8, 14, 13, 0, 0)
+    }
+    let result1 = createDaysIfNotExist(days, booking1);
+    expect(result1).toEqual([
+      {
+        date: new Date(2017, 8, 14, 0, 0, 0),
+        bookingIds: []
+      }
+    ])
+
+    let result2 = createDaysIfNotExist(result1, booking2);
+    expect(result2).toEqual([
+      {
+        date: new Date(2017, 8, 14, 0, 0, 0),
+        bookingIds: []
+      }
+    ])
   })
 })
 
