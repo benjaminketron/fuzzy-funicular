@@ -11,7 +11,7 @@ import TextField from 'material-ui/TextField';
 
 import Calendar from './Calendar';
 import CurrentDayList from '../containers/CurrentDayList';
-
+ 
 import * as actionTypes from '../actions/indexActionTypes'
 
 const Schedule = ({muiTheme, calendar, current, search, searchBooking, setCurrent, setMenuOpen, toggleAdd, toggleCalendar, toggleSearch, }) => {
