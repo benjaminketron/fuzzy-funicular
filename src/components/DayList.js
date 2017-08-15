@@ -22,6 +22,8 @@ const DayListItem = ({muiTheme, bookings, days, search, today }) => {
         items = days;
     }
 
+    let nothing = true;
+
     items = items.map((day) => {
         let nestedItems = null;
         let bookingsList = day.bookingIds.map((id) => 
@@ -110,15 +112,15 @@ const DayListItem = ({muiTheme, bookings, days, search, today }) => {
             }
         }
 
-        let result = (
-            <ListItem key="no bookings" primaryText="No bookings." style={{borderTop: '1px', borderStyle:'solid', borderColor: muiTheme.palette.primary3Color}}/>
-        )
+        let result = null;
 
         if (!day.hidden) {
             let primaryText = startText;
             if (!!endText) {
                 primaryText = primaryText + ' - ' + endText;
             }
+
+            nothing = false;
 
             result = (
                 <ListItem key={day.date.getTime().toString()} primaryText={primaryText}
@@ -129,6 +131,13 @@ const DayListItem = ({muiTheme, bookings, days, search, today }) => {
 
         return result;
     })
+
+    if (nothing) {
+        items = [(
+            <ListItem key="no bookings" primaryText="No bookings found." style={{borderWidth: '1px 0px 0px 0px', borderStyle:'solid', borderColor: muiTheme.palette.primary3Color}}/>
+        )]
+    }
+    
     return (
         <List style={{padding: '0px 0px 0px 0px'}}>
             {items}

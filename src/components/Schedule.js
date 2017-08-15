@@ -83,8 +83,7 @@ const Schedule = ({muiTheme, calendar, current, search, searchBooking, setCurren
         </Paper> 
         <Paper>
             <FlatButton label="Now" fullWidth={true} backgroundColor={muiTheme.palette.primary1Color} style={{ color: muiTheme.palette.secondaryTextColor,
-             position: 'fixed', bottom: '0px', borderWidth: '1px 0px 0px 0px', borderStyle:'solid', borderColor: muiTheme.palette.primary3Color,
-             textTransform: 'none'}}
+             position: 'fixed', bottom: '0px', borderWidth: '1px 0px 0px 0px', borderStyle:'solid', borderColor: muiTheme.palette.primary3Color }}
              labelStyle={{textTransform: 'none'}}
              onTouchTap={() => setCurrent({}, new Date())}/></Paper>
     </div>
