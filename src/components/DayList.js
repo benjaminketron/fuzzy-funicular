@@ -36,7 +36,17 @@ const DayListItem = ({muiTheme, bookings, days, search, today }) => {
             nestedItems = bookingsList.map((booking) => {
                 let result = null;
                 if (booking) {
-                    let timeSpan = booking.end - booking.start;
+                    let bookingStart = booking.start;
+                    if (bookingStart < day.date) {
+                        bookingStart = day.date;
+                    }
+
+                    let bookingEnd = booking.end;
+                    if (bookingEnd >= Moment(day.date).add(1, 'days')) {
+                        bookingEnd = Moment(day.date).add(1, 'days').subtract(1, 'seconds')
+                    }
+
+                    let timeSpan = bookingEnd - bookingStart;
                     let timeUnit = ''
                     if (timeSpan < (1000 * 60 * 60)) {
                         timeUnit = 'minutes';
@@ -49,17 +59,25 @@ const DayListItem = ({muiTheme, bookings, days, search, today }) => {
                         timeSpan /= (1000 * 60 * 60 * 24);
                     }
                     
+                    let occurring = bookingStart <= today && today <= bookingEnd;
+
                     result = (
                     <ListItem key={booking.id}>
                         <div className="booking">
                             <span className="booking-times">
-                                <span>{Moment(booking.start).format("hh:mm A")}</span><br/>
-                                <span>{Moment(booking.end).format("hh:mm A")}</span><br/>
+                                <span>{Moment(bookingStart).format("hh:mm A")}</span><br/>
+                                <span>{Moment(bookingEnd).format("hh:mm A")}</span><br/>
                                 <span>{Moment.duration(timeSpan, timeUnit).humanize()}</span><br/>
                             </span>
                             <span className="booking-info">
                                 <span>{booking.eventName}</span><br/>
                                 <span>{booking.roomName}</span><br/>
+                                <span className="booking-info-occuring fa fa-calendar-check-o"></span>
+                                { occurring ? 
+                                    <span>occurring</span>
+                                    :
+                                    null
+                                }
                             </span>
                         </div>
                     </ListItem>    

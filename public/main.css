@@ -17,6 +17,7 @@ body {
 }
 
 .booking {
+    position: relative;
     white-space: nowrap;
 }
 
@@ -31,4 +32,12 @@ body {
     display: inline-block;
     width: 74%;
     vertical-align: top;
+}
+
+.booking-info-occuring {
+    position: absolute;
+    color: rgb(30, 149, 27);
+    font-family: FontAwesome;
+    bottom: 0px;
+    right: 0px;
 }
