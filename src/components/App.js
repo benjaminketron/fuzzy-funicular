@@ -28,13 +28,12 @@ const muiTheme = getMuiTheme({
     primary2Color: blue500,
     primary3Color: blue500,
     textColor: darkBlack,
-    secondaryTextColor: darkBlack,
+    secondaryTextColor: blue500,
     alternateTextColor: darkBlack,
   },
   
   appBar: {
-     height: 50,
-    
+     height: 50
   },
   nowButton: {
     width: '100%'

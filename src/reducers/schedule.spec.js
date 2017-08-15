@@ -15,14 +15,44 @@ describe('schedule reducer', () => {
     })
   })
 
-  it('should handle ADD_BOOKING', () => {
-    let now = new Date(2017, 8, 10, 3, 2, 1);
+  it('should handle initial state with preloaded bookings list', () => {
+    let state = {
+      bookingsList: [
+        {
+          id: 1
+        },
+        {
+          id: 2
+        }
+      ]
+    }
 
+    let expected = {
+      bookings: {
+        1: {
+          id: 1
+        },
+        2: {
+          id: 2
+        }
+      },
+      bookingsList: null
+    };
+
+    let result = schedule(state, {});
+
+    expect(result).toEqual(expected);
+
+    // immutability test
+    expect(result).not.toEqual(state);
+
+  })
+
+  it('should handle ADD_BOOKING', () => {
     let start = new Date(2017, 8, 9, 5, 0, 0);
     let end = new Date(2017, 8, 9, 7, 0, 0);
 
     let state = {
-      now: now,
       days: [],
       bookings: {}
     };
@@ -40,7 +70,6 @@ describe('schedule reducer', () => {
     };
 
     let expected = {
-      now: now,
       days: [
         {
           date: new Date(2017, 8, 9),
@@ -63,47 +92,6 @@ describe('schedule reducer', () => {
 
     // immutability test
     expect(state).not.toEqual(result);
-  })
-
-  it('should handle INITIALIZE_BOOKINGS', () => {
-    let now = new Date(2017, 7, 11, 16, 47);
-
-    let state = {
-
-    }
-
-    let action = {
-      type: actionTypes.INITIALIZE_BOOKINGS,
-      bookings: [
-        {
-          id: 1
-        },
-        {
-          id: 2
-        }
-      ],
-      now: now
-    };
-
-    let expected = {
-      now: now,
-      bookings: {
-        1: {
-          id: 1
-        },
-        2: {
-          id: 2
-        }
-      }
-    };
-
-    let result = schedule(state, action);
-
-    expect(result).toEqual(expected);
-
-    // immutability test
-    expect(result).not.toEqual(state);
-
   })
 
   using([
@@ -583,7 +571,7 @@ describe('schedule reducer', () => {
       }
     },
     {
-      id: 1,
+      id: 2,
       state: {
         calendar: true
       },
@@ -596,6 +584,95 @@ describe('schedule reducer', () => {
     }
   ], (data) => {
     it('should handle TOGGLE_CALENDAR - ' + data.id, () => {
+      let result = schedule(data.state, data.action);
+      
+      expect(result).toEqual(data.expected);
+
+      // immutability check
+      if (data.immutableCheck) {
+        expect(data.state).not.toEqual(result);
+      }
+    })
+  })
+
+  it('should ahndle SET_CALENDAR_CURRENT', () => {
+    let state = { current: null }
+    let date = new Date();
+    let action = { type: actionTypes.SET_CALENDAR_CURRENT, current: date }
+    let result = schedule(state, action);
+    expect(result).toEqual({
+      current: date,
+    })
+
+    // immutability check
+    expect(state).not.toEqual(result);
+  })
+
+  using([
+    {
+      id: 1,
+      state: {
+        search: false
+      },
+      action: {
+        type: actionTypes.TOGGLE_SEARCH
+      },
+      expected: {
+        search: true
+      }
+    },
+    {
+      id: 2,
+      state: {
+        search: true
+      },
+      action: {
+        type: actionTypes.TOGGLE_SEARCH
+      },
+      expected: {
+        search: false
+      }
+    }
+  ], (data) => {
+    it('should handle TOGGLE_SEARCH - ' + data.id, () => {
+      let result = schedule(data.state, data.action);
+      
+      expect(result).toEqual(data.expected);
+
+      // immutability check
+      if (data.immutableCheck) {
+        expect(data.state).not.toEqual(result);
+      }
+    })
+  })
+  
+  using([
+    {
+      id: 1,
+      state: {
+        add: false
+      },
+      action: {
+        type: actionTypes.TOGGLE_ADD
+      },
+      expected: {
+        add: true
+      }
+    },
+    {
+      id: 2,
+      state: {
+        add: true
+      },
+      action: {
+        type: actionTypes.TOGGLE_ADD
+      },
+      expected: {
+        add: false
+      }
+    }
+  ], (data) => {
+    it('should handle TOGGLE_ADD - ' + data.id, () => {
       let result = schedule(data.state, data.action);
       
       expect(result).toEqual(data.expected);

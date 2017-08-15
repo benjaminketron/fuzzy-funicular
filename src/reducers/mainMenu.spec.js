@@ -23,7 +23,7 @@ describe('mainMenu reducer', () => {
             },
             expected: {
                 open: true
-            }
+            } 
         },
         {
             id: 1,

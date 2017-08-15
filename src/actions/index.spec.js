@@ -15,10 +15,9 @@ describe('index actions', () => {
 
   it('initializeBookings should create an INITIALIZE_BOOKING action', () => {
     var now = new Date(1);
-    expect(actions.initializeBookings([], now)).toEqual({
+    expect(actions.initializeBookings([])).toEqual({
       type: actionTypes.INITIALIZE_BOOKINGS,
-      bookings: [],
-      now: now
+      bookings: []
     })
   })
 
@@ -78,9 +77,29 @@ describe('index actions', () => {
     })
   })
 
+  it('setCalendarCurrent should create a SET_CALENDAR_CURRENT aciton', () => {
+    let date = new Date();
+    expect(actions.setCalendarCurrent(date)).toEqual({
+      type: actionTypes.SET_CALENDAR_CURRENT,
+      current: date
+    })
+  })
+
+  it('toggleAdd should create a TOGGLE_ADD action', () => {
+    expect(actions.toggleAdd()).toEqual({
+      type: actionTypes.TOGGLE_ADD
+    })
+  })
+
   it('toggleCalendar should create a TOGGLE_CALENDAR action', () => {
     expect(actions.toggleCalendar()).toEqual({
       type: actionTypes.TOGGLE_CALENDAR
+    })
+  })
+
+  it('toggleSearch should create a TOGGLE_SEARCH action', () => {
+    expect(actions.toggleSearch()).toEqual({
+      type: actionTypes.TOGGLE_SEARCH
     })
   })
 })

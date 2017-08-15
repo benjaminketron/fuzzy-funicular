@@ -5,7 +5,10 @@ import { Provider } from 'react-redux'
 import App from './components/App'
 import reducer from './reducers'
 
-const store = createStore(reducer)
+// in a real world app this would come from a service
+import bookings from './bookings.json'
+
+const store = createStore(reducer, { schedule: { current: new Date(), calendar: false }})
 
 render(
   <Provider store={store}>

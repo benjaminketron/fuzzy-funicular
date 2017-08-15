@@ -16,18 +16,7 @@ const schedule = (state = { current: null, calendar: false }, action) => {
         ...state, 
         days: days,
         bookings: bookings
-      }    
-    case actionTypes.INITIALIZE_BOOKINGS:
-      bookings = {};
-      for (let b = 0; b < action.bookings.length; b++) {
-        let booking = action.bookings[b];
-        bookings[booking.id] = booking
-      }
-      return {
-        ...state,
-        now: action.now,
-        bookings: bookings
-      }
+      }         
     case actionTypes.SEARCH_BOOKING:
       let searchText = !!action.searchText ? action.searchText.toLowerCase() : '';
 
@@ -125,32 +114,39 @@ const schedule = (state = { current: null, calendar: false }, action) => {
       return {...state,
         days: days.toJS()
       }
+    case actionTypes.SET_CALENDAR_CURRENT:
+      return {...state, 
+        current: action.current,
+      }
+    case actionTypes.TOGGLE_ADD:
+      return {...state,
+        add: !state.add
+      }
     case actionTypes.TOGGLE_CALENDAR:
       return {...state,
         calendar: !state.calendar
       }
+
+    case actionTypes.TOGGLE_SEARCH:
+      return {...state,
+        search: !state.search
+      }
     default:
+      if (!!state.bookingsList) {
+        bookings = {};
+        let bookingsList = state.bookingsList;
+        for (let b = 0; b < bookingsList.length; b++) {
+          let booking = bookingsList[b];
+          bookings[booking.id] = booking
+        }
+        return {
+          ...state,
+          bookings: bookings,
+          bookingsList: null
+        }
+      }
       return state;
   }
-  // switch (action.type) {
-  //   case 'ADD_TODO':
-  //     return [
-  //       ...state,
-  //       {
-  //         id: action.id,
-  //         text: action.text,
-  //         completed: false
-  //       }
-  //     ]
-  //   case 'TOGGLE_TODO':
-  //     return state.map(todo =>
-  //       (todo.id === action.id) 
-  //         ? {...todo, completed: !todo.completed}
-  //         : todo
-  //     )
-  //   default:
-  //     return state
-  // }
 }
 
 export const addBookingToBookings = (bookings, action) => {
