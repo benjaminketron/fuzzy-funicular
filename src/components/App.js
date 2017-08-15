@@ -1,11 +1,11 @@
 import React from 'react'
-import { blue500, grey200, grey400, darkBlack } from 'material-ui/styles/colors';
+import { blue500, grey300, grey400, darkBlack } from 'material-ui/styles/colors';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import CurrentSchedule from '../containers/CurrentSchedule'
 import LeftMainMenu from '../containers/LeftMainMenu'
-
+import RightAddBookingDrawer from '../containers/RightAddBookingDrawer'
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 // Needed for onTouchTap
@@ -23,7 +23,7 @@ injectTapEventPlugin();
 // More on Colors: http://www.material-ui.com/#/customization/colors
 const muiTheme = getMuiTheme({
   palette: {
-    primary1Color: grey200,
+    primary1Color: grey300,
     primary2Color: blue500,
     primary3Color: grey400,
     textColor: darkBlack,
@@ -44,6 +44,7 @@ const App = ({dispatch}) => (
     <div>
     <CurrentSchedule muiTheme={muiTheme}/>
     <LeftMainMenu/>
+    <RightAddBookingDrawer muiTheme={muiTheme}/>
     </div>    
     
   </MuiThemeProvider>
