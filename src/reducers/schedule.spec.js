@@ -5,7 +5,7 @@ import * as actionTypes from '../actions/indexActionTypes'
 // sort of weird, but this library really helps keeps things dry
 let using = require('jasmine-data-provider');
 
-describe('schedule reducer', () => {
+fdescribe('schedule reducer', () => {
   it('should handle initial state', () => {
     expect(
         schedule(undefined, {})
@@ -15,51 +15,317 @@ describe('schedule reducer', () => {
     })
   })
 
-  it('should handle initial state with preloaded bookings list', () => {
-    let state = {
-      bookingsList: [
-        {
-          id: 1,
-          start: new Date(2017, 8, 14, 16, 0, 0),
-          end: new Date(2017, 8, 14, 18, 0, 0)
-        },
-        {
-          id: 2,
-          start: new Date(2017, 8, 14, 12, 0, 0),
-          end: new Date(2017, 8, 14, 13, 0, 0)
-        }
-      ]
-    }
-
-    let expected = {
-      bookings: {
-        1: {
-          id: 1,
-          start: new Date(2017, 8, 14, 16, 0, 0),
-          end: new Date(2017, 8, 14, 18, 0, 0)
-        },
-        2: {
-          id: 2,
-          start: new Date(2017, 8, 14, 12, 0, 0),
-          end: new Date(2017, 8, 14, 13, 0, 0)
-        }
+  using([
+    {
+      id: 1,
+      state: {
+        bookingsList: [
+          {
+            id: 1,
+            start: new Date(2017, 8, 14, 16, 0, 0),
+            end: new Date(2017, 8, 14, 18, 0, 0)
+          },
+          {
+            id: 2,
+            start: new Date(2017, 8, 14, 12, 0, 0),
+            end: new Date(2017, 8, 14, 13, 0, 0)
+          }
+        ]
       },
-      days: [
-        {
-          date: new Date(2017, 8, 14, 0, 0, 0),
-          bookingIds: [2, 1]
-        }
-      ],
-      bookingsList: null
-    };
-
-    let result = schedule(state, {});
-
-    expect(result).toEqual(expected);
-
-    // immutability test
-    expect(result).not.toEqual(state);
-
+      expected: {
+        bookings: {
+          1: {
+            id: 1,
+            start: new Date(2017, 8, 14, 16, 0, 0),
+            end: new Date(2017, 8, 14, 18, 0, 0)
+          },
+          2: {
+            id: 2,
+            start: new Date(2017, 8, 14, 12, 0, 0),
+            end: new Date(2017, 8, 14, 13, 0, 0)
+          }
+        },
+        days: [
+          {
+            date: new Date(2017, 8, 14, 0, 0, 0),
+            bookingIds: [2, 1]
+          }
+        ],
+        bookingsList: null
+      }
+    },
+    {
+      id: 2,
+      state: {
+        bookingsList: [
+          {
+              "id": 0,
+              "eventName": "Test Booking 01",
+              "roomName": "Demo Room 01",
+              "start": new Date("2016-11-10T13:00:00.000Z"),
+              "end": new Date("2016-11-10T14:00:00.000Z")
+          },
+          {
+              "id": 1,
+              "eventName": "Test Booking 02",
+              "roomName": "Demo Room 02",
+              "start": new Date("2016-11-10T13:00:00.000Z"),
+              "end": new Date("2016-11-10T14:00:00.000Z")
+          },
+          {
+              "id": 2,
+              "eventName": "Test Booking 03",
+              "roomName": "Demo Room 03",
+              "start": new Date("2016-11-14T13:00:00.000Z"),
+              "end": new Date("2016-11-14T14:00:00.000Z")
+          },
+          {
+              "id": 3,
+              "eventName": "Test Booking 04",
+              "roomName": "Demo Room 04",
+              "start": new Date("2016-11-15T15:00:00.000Z"),
+              "end": new Date("2016-11-15T16:00:00.000Z")
+          },
+          {
+              "id": 4,
+              "eventName": "Test Booking 05",
+              "roomName": "Demo Room 05",
+              "start": new Date("2016-11-15T15:00:00.000Z"),
+              "end": new Date("2016-11-15T16:00:00.000Z")
+          },
+          {
+              "id": 5,
+              "eventName": "Thanksgiving",
+              "roomName": "Conference Room 1",
+              "start": new Date("2016-11-24T00:00:00.000Z"),
+              "end": new Date("2016-11-24T23:59:59.999Z")
+          }
+        ]
+      },
+      expected: {
+        bookings: {
+          0: {
+            "id": 0,
+            "eventName": "Test Booking 01",
+            "roomName": "Demo Room 01",
+            "start": new Date("2016-11-10T13:00:00.000Z"),
+            "end": new Date("2016-11-10T14:00:00.000Z")
+          },
+          1: {
+            "id": 1,
+            "eventName": "Test Booking 02",
+            "roomName": "Demo Room 02",
+            "start": new Date("2016-11-10T13:00:00.000Z"),
+            "end": new Date("2016-11-10T14:00:00.000Z")
+          },
+          2: {
+            "id": 2,
+            "eventName": "Test Booking 03",
+            "roomName": "Demo Room 03",
+            "start": new Date("2016-11-14T13:00:00.000Z"),
+            "end": new Date("2016-11-14T14:00:00.000Z")
+          },
+          3: {
+            "id": 3,
+            "eventName": "Test Booking 04",
+            "roomName": "Demo Room 04",
+            "start": new Date("2016-11-15T15:00:00.000Z"),
+            "end": new Date("2016-11-15T16:00:00.000Z")
+          },
+          4: {
+            "id": 4,
+            "eventName": "Test Booking 05",
+            "roomName": "Demo Room 05",
+            "start": new Date("2016-11-15T15:00:00.000Z"),
+            "end": new Date("2016-11-15T16:00:00.000Z")
+          },
+          5: {
+            "id": 5,
+            "eventName": "Thanksgiving",
+            "roomName": "Conference Room 1",
+            "start": new Date("2016-11-24T00:00:00.000Z"),
+            "end": new Date("2016-11-24T23:59:59.999Z")
+          }
+        
+        },
+        days: [
+          {
+            date: new Date(2016, 10, 10, 0, 0, 0),
+            bookingIds: [1, 0]
+          },
+          {
+            date: new Date(2016, 10, 11, 0, 0, 0),
+            end: new Date(2016, 10, 13, 0, 0, 0),
+            bookingIds: []
+          },
+          {
+            date: new Date(2016, 10, 14, 0, 0, 0),
+            bookingIds: [2]
+          },
+          {
+            date: new Date(2016, 10, 15, 0, 0, 0),
+            bookingIds: [4, 3]
+          },
+          {
+            date: new Date(2016, 10, 16, 0, 0, 0),
+            end: new Date(2016, 10, 22, 0, 0, 0),
+            bookingIds: []
+          },
+          {
+            date: new Date(2016, 10, 23, 0, 0, 0),
+            bookingIds: [5]
+          }
+        ],
+        bookingsList: null
+      }
+    },
+    {
+      id: 3,
+      state: {
+        days: [
+          {
+            date: new Date(2017, 8, 15, 0, 0, 0),
+            bindingIds: []
+          }
+        ],
+        bookingsList: [
+          {
+              "id": 0,
+              "eventName": "Test Booking 01",
+              "roomName": "Demo Room 01",
+              "start": new Date("2016-11-10T13:00:00.000Z"),
+              "end": new Date("2016-11-10T14:00:00.000Z")
+          },
+          {
+              "id": 1,
+              "eventName": "Test Booking 02",
+              "roomName": "Demo Room 02",
+              "start": new Date("2016-11-10T13:00:00.000Z"),
+              "end": new Date("2016-11-10T14:00:00.000Z")
+          },
+          {
+              "id": 2,
+              "eventName": "Test Booking 03",
+              "roomName": "Demo Room 03",
+              "start": new Date("2016-11-14T13:00:00.000Z"),
+              "end": new Date("2016-11-14T14:00:00.000Z")
+          },
+          // {
+          //     "id": 3,
+          //     "eventName": "Test Booking 04",
+          //     "roomName": "Demo Room 04",
+          //     "start": new Date("2016-11-15T15:00:00.000Z"),
+          //     "end": new Date("2016-11-15T16:00:00.000Z")
+          // },
+          // {
+          //     "id": 4,
+          //     "eventName": "Test Booking 05",
+          //     "roomName": "Demo Room 05",
+          //     "start": new Date("2016-11-15T15:00:00.000Z"),
+          //     "end": new Date("2016-11-15T16:00:00.000Z")
+          // },
+          // {
+          //     "id": 5,
+          //     "eventName": "Thanksgiving",
+          //     "roomName": "Conference Room 1",
+          //     "start": new Date("2016-11-24T00:00:00.000Z"),
+          //     "end": new Date("2016-11-24T23:59:59.999Z")
+          // }
+        ]
+      },
+      expected: {
+        bookings: {
+          0: {
+            "id": 0,
+            "eventName": "Test Booking 01",
+            "roomName": "Demo Room 01",
+            "start": new Date("2016-11-10T13:00:00.000Z"),
+            "end": new Date("2016-11-10T14:00:00.000Z")
+          },
+          1: {
+            "id": 1,
+            "eventName": "Test Booking 02",
+            "roomName": "Demo Room 02",
+            "start": new Date("2016-11-10T13:00:00.000Z"),
+            "end": new Date("2016-11-10T14:00:00.000Z")
+          },
+          2: {
+            "id": 2,
+            "eventName": "Test Booking 03",
+            "roomName": "Demo Room 03",
+            "start": new Date("2016-11-14T13:00:00.000Z"),
+            "end": new Date("2016-11-14T14:00:00.000Z")
+          },
+          3: {
+            "id": 3,
+            "eventName": "Test Booking 04",
+            "roomName": "Demo Room 04",
+            "start": new Date("2016-11-15T15:00:00.000Z"),
+            "end": new Date("2016-11-15T16:00:00.000Z")
+          },
+          4: {
+            "id": 4,
+            "eventName": "Test Booking 05",
+            "roomName": "Demo Room 05",
+            "start": new Date("2016-11-15T15:00:00.000Z"),
+            "end": new Date("2016-11-15T16:00:00.000Z")
+          },
+          5: {
+            "id": 5,
+            "eventName": "Thanksgiving",
+            "roomName": "Conference Room 1",
+            "start": new Date("2016-11-24T00:00:00.000Z"),
+            "end": new Date("2016-11-24T23:59:59.999Z")
+          }
+        
+        },
+        days: [
+          {
+            date: new Date(2016, 10, 10, 0, 0, 0),
+            bookingIds: [1, 0]
+          },
+          {
+            date: new Date(2016, 10, 11, 0, 0, 0),
+            end: new Date(2016, 10, 13, 0, 0, 0),
+            bookingIds: []
+          },
+          {
+            date: new Date(2016, 10, 14, 0, 0, 0),
+            bookingIds: [2]
+          },
+          {
+            date: new Date(2016, 10, 15, 0, 0, 0),
+            bookingIds: [4, 3]
+          },
+          {
+            date: new Date(2016, 10, 16, 0, 0, 0),
+            end: new Date(2016, 10, 22, 0, 0, 0),
+            bookingIds: []
+          },
+          {
+            date: new Date(2016, 10, 23, 0, 0, 0),
+            bookingIds: [5]
+          },
+          {
+            start: new Date(2016, 10, 24, 0, 0, 0),
+            end: new Date(2017, 8, 15, 0, 0, 0),
+            bookingIds: []
+          }
+        ],
+        bookingsList: null
+      }
+    }
+  ], (data) => {
+    fit('should handle initial state with preloaded bookings list - ' + data.id, () => {
+      
+        let result = schedule(data.state, {});
+    
+        expect(result).toEqual(data.expected);
+    
+        // immutability test
+        expect(result).not.toEqual(data.state);
+    
+      })
   })
 
   it('should handle ADD_BOOKING', () => {

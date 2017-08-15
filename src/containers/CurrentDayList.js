@@ -6,7 +6,8 @@ const mapStateToProps = state => {
     return {
         bookings: state.schedule.bookings,
         days: state.schedule.days,
-        search: state.schedule.search
+        search: state.schedule.search,
+        today: state.schedule.today
     } 
 }
 

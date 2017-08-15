@@ -148,6 +148,7 @@ const schedule = (state = { current: null, calendar: false }, action) => {
           // this could be greatly optimized
           days = addBookingToDays(days, bookings, { booking: booking });
         }
+
         return {
           ...state,
           bookings: bookings,
@@ -316,9 +317,48 @@ export const createDaysIfNotExist = (days, booking) => {
 
     // if any of the days in between are a range then expand as necessary
     let dateRanges = result.filter((day) => {
-      return !!day.end && (bookingStartDay <= day.date && day.date <= bookingEndDay ||
-        bookingStartDay <= day.end && day.end <= bookingEndDay);
+      return !!day.end && (bookingStartDay.getTime() <= day.date.getTime() && day.date.getTime() <= bookingEndDay.getTime() ||
+        bookingStartDay.getTime() <= day.end.getTime() && day.end.getTime() <= bookingEndDay.getTime() ||
+        (
+          day.date.getTime() <= bookingStartDay.getTime() && bookingStartDay.getTime() <= day.end.getTime() &&
+          day.date.getTime() <= bookingEndDay.getTime() && bookingEndDay.getTime() <= day.end.getTime()
+        ));
     }) 
+
+    console.log(bookingStartDay);
+    console.log(bookingEndDay);
+    console.log(result.toJS())
+    console.log(dateRanges.toJS())
+
+    // collapse any adjacent ranges first
+    dateRanges.forEach((day) => {
+      let index = dateRanges.indexOf(day);
+      if (index != -1) {
+        let previous = null;
+        let next = null;
+        if (index > 0) {
+          previous = dateRanges.get(index - 1);
+        }
+
+        if (index < dateRanges.size - 1) {
+          next = dateRanges.get(index + 1);
+        }
+
+        if (previous) {
+          if (previous.end) {
+            day.date = previous.date;
+            dateRanges = dateRanges.remove(dateRanges.indexOf(previous));
+          }
+        }
+
+        if (next) {
+          if (next.end) {
+            day.end = next.end;
+            dateRanges = dateRanges.remove(dateRanges.indexOf(next));
+          }
+        }
+      }
+    })
 
     dateRanges.forEach((day) => { 
       // if date range is completely in booking
@@ -377,6 +417,39 @@ export const createDaysIfNotExist = (days, booking) => {
             date: new Date(bookingStartDay.getFullYear(), bookingStartDay.getMonth(), bookingStartDay.getDate() + d),
             bookingIds: []
           })
+        }
+      } 
+      // the range encapsulates the booking  
+      else {
+        // get range index
+        let index = result.indexOf(day);
+        // remove range
+        result = result.remove(index);
+        // insert right range if necessary
+        if (day.end.getTime() != bookingEndDay.getTime()) {
+          result = result.insert(index, {
+            date: new Date(bookingEndDay.getFullYear(), bookingEndDay.getMonth(), bookingEndDay.getDate() + 1),
+            end: day.end,
+            bookingIds: []
+          });
+        }
+
+        // insert booking
+        let days = Math.round(bookingEndDay - bookingStartDay) / (1000 * 60 * 60 * 24);
+        for (let d = 0; d <= days; d++) {
+          result = result.insert(index + d + 1, {
+            date: new Date(bookingStartDay.getFullYear(), bookingStartDay.getMonth(), bookingStartDay.getDate() + d),
+            bookingIds: []
+          })
+        }
+
+        // insert left range if necessary
+        if (day.date.getTime() != bookingStartDay.getTime()) {
+          result = result.insert(index, {
+              date: day.date,
+              end: new Date(bookingStartDay.getFullYear(), bookingStartDay.getMonth(), bookingStartDay.getDate() - 1),
+              bookingIds: []
+          });
         }
       }
     });

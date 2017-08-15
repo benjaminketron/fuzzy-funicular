@@ -13,7 +13,7 @@ import TextField from 'material-ui/TextField';
 
 import * as actionTypes from '../actions/indexActionTypes'
 
-const DayListItem = ({muiTheme, bookings, days, search }) => {
+const DayListItem = ({muiTheme, bookings, days, search, today }) => {
     let items = null;
     if (search) {
         items = days.filter((day) => day.bookingIds.length );
@@ -49,14 +49,40 @@ const DayListItem = ({muiTheme, bookings, days, search }) => {
             );
         }
             
-        return !day.hidden ? (
+        let dateFormat ='ddd MMM DD';
+        
+        let todayText = Moment(today).format(dateFormat)        
+        let startText = Moment(day.date).format(dateFormat);
+        if (startText === todayText) {
+            startText = 'Today'
+        }
 
-        <ListItem key={day.date.getTime().toString()} primaryText={day.date.toString()} 
-            nestedItems={nestedItems} autoGenerateNestedIndicator={false} initiallyOpen={true}>
-        </ListItem>
-        ) 
-        :
-        <ListItem key="no bookings" primaryText="No bookings."/>
+        let endText = null;
+        if (day.end) {
+            endText = Moment(day.end).format(dateFormat);
+            if (endText === todayText) {
+                endText = 'Today'
+            }
+        }
+
+        let result = (
+            <ListItem key="no bookings" primaryText="No bookings."/>
+        )
+
+        if (!day.hidden) {
+            let primaryText = startText;
+            if (!!endText) {
+                primaryText = primaryText + ' - ' + endText;
+            }
+
+            result = (
+                <ListItem key={day.date.getTime().toString()} primaryText={primaryText}
+                    nestedItems={nestedItems} autoGenerateNestedIndicator={false} initiallyOpen={true} style={{textTransform: 'uppercase'}}>
+                </ListItem>
+            )
+        }
+
+        return result;
     })
     return (
         <List>

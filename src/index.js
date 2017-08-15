@@ -9,8 +9,10 @@ import reducer from './reducers'
 import bookings from './bookings.json'
 
 let now = new Date();
+let today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-// convert dates
+// convert dates from strings
+// TODO replace with more concise / reusable method
 for (let b = 0; b < bookings.bookings.length; b++) {
   let booking = bookings.bookings[b];
   if (booking.start) 
@@ -22,6 +24,7 @@ for (let b = 0; b < bookings.bookings.length; b++) {
 
 const store = createStore(reducer, { 
   schedule: { 
+    today: today,
     current: now, 
     calendar: false, 
     search: false,
