@@ -124,12 +124,17 @@ const schedule = (state = { current: null, calendar: false }, action) => {
       }
     case actionTypes.TOGGLE_CALENDAR:
       return {...state,
-        calendar: !state.calendar
+        // do not toggle calendar if searching
+        calendar: !state.search ? !state.calendar : false
       }
 
     case actionTypes.TOGGLE_SEARCH:
+      let search = !state.search;
       return {...state,
-        search: !state.search
+        search: search,
+        // do not show calendar while searching
+        calendar: false,
+        searchText: !search ? '' : state.searchText
       }
     default:
       if (!!state.bookingsList) {

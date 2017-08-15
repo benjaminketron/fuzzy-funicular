@@ -13,7 +13,7 @@ import TextField from 'material-ui/TextField';
 
 import * as actionTypes from '../actions/indexActionTypes'
 
-const Schedule = ({muiTheme, calendar, current, search, setCurrent, setMenuOpen, toggleAdd, toggleCalendar, toggleSearch, }) => {
+const Schedule = ({muiTheme, calendar, current, search, searchBooking, setCurrent, setMenuOpen, toggleAdd, toggleCalendar, toggleSearch, }) => {
     
     const iconStyles = {
         fontFamily: 'FontAwesome',
@@ -50,7 +50,7 @@ const Schedule = ({muiTheme, calendar, current, search, setCurrent, setMenuOpen,
                 </span>
                 :
                 <span>
-                    <TextField hintText="Search"/>
+                    <TextField hintText="Search" onChange={searchBooking}/>
                 </span>
             }
         </span>
@@ -90,11 +90,12 @@ const Schedule = ({muiTheme, calendar, current, search, setCurrent, setMenuOpen,
   
 Schedule.propTypes = {
   calendar: PropTypes.bool.isRequired,
+  searchBooking: PropTypes.func.isRequired,
+  setCurrent: PropTypes.func.isRequired,
+  setMenuOpen: PropTypes.func.isRequired,
   toggleAdd: PropTypes.func.isRequired,
   toggleCalendar: PropTypes.func.isRequired,
   toggleSearch: PropTypes.func.isRequired,
-  setCurrent: PropTypes.func.isRequired,
-  setMenuOpen: PropTypes.func.isRequired,
   muiTheme: PropTypes.object.isRequired,
 }
 

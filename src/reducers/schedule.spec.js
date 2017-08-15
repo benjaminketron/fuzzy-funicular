@@ -618,7 +618,8 @@ describe('schedule reducer', () => {
         type: actionTypes.TOGGLE_SEARCH
       },
       expected: {
-        search: true
+        search: true,
+        calendar: false
       }
     },
     {
@@ -630,7 +631,9 @@ describe('schedule reducer', () => {
         type: actionTypes.TOGGLE_SEARCH
       },
       expected: {
-        search: false
+        search: false,
+        calendar: false,
+        searchText: ''
       }
     }
   ], (data) => {

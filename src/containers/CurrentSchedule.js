@@ -8,12 +8,16 @@ const mapStateToProps = state => {
         calendar: state.schedule.calendar,
         current: state.schedule.current,
         open: state.mainMenu.open,
-        search: state.schedule.search
+        search: state.schedule.search,
+        searchText: state.schedule.searchText,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
+        searchBooking: (event, searchText) => {
+            dispatch(actions.searchBooking(searchText))
+        },
         setCurrent: (event, date) => {
             dispatch(actions.setCalendarCurrent(date))
         },
@@ -28,7 +32,6 @@ const mapDispatchToProps = dispatch => {
             dispatch(actions.toggleCalendar())
         },
         toggleSearch: () => {
-            console.log('search')
             dispatch(actions.toggleSearch())
         }
     }
