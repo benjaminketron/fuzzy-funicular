@@ -1,5 +1,10 @@
+import { combineReducers } from 'redux'
 import schedule from './schedule'
+import mainMenu from './mainMenu'
 
-const scheduleApp = schedule
+const scheduleApp = combineReducers({
+    schedule,
+    mainMenu
+})
 
-export default scheduleApp
+export default scheduleApp 

@@ -56,4 +56,31 @@ describe('index actions', () => {
       date: date
     })
   })
+
+  it('openMenu should create a SET_MENU_OPEN action', () => {
+    expect(actions.openMenu()).toEqual({
+      type: actionTypes.SET_MENU_OPEN,
+      open: true
+    })
+  })
+
+  it('closeMenu should create a SET_MENU_OPEN action', () => {
+    expect(actions.closeMenu()).toEqual({
+      type: actionTypes.SET_MENU_OPEN,
+      open: false
+    })
+  })
+
+  it('openMenu should create a MENU_OPEN action', () => {
+    expect(actions.openMenu(true)).toEqual({
+      type: actionTypes.SET_MENU_OPEN,
+      open: true
+    })
+  })
+
+  it('toggleCalendar should create a TOGGLE_CALENDAR action', () => {
+    expect(actions.toggleCalendar()).toEqual({
+      type: actionTypes.TOGGLE_CALENDAR
+    })
+  })
 })

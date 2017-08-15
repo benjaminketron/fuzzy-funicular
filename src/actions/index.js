@@ -42,3 +42,22 @@ export const selectDayBookingClosestTo = (date) => ({
   type: actionTypes.SELECT_DAY_BOOKING_CLOSEST_TO,
   date: date
 })
+
+export const openMenu = () => ({
+  type: actionTypes.SET_MENU_OPEN,
+  open: true
+})
+
+export const closeMenu = () => ({
+  type: actionTypes.SET_MENU_OPEN,
+  open: false
+})
+
+export const setMenuOpen = (open) => ({
+  type: actionTypes.SET_MENU_OPEN,
+  open: open
+})
+
+export const toggleCalendar = () => ({
+  type: actionTypes.TOGGLE_CALENDAR
+})

@@ -4,7 +4,7 @@ import { List, Map } from 'immutable'
 // considered a combine reducer but when adding bookings it is necesary to know about bookings when 
 // calculating the next state for days. it seems moving other parts of the state with a sub reducer is considered
 // an anit-pattern, but might simplify the code a bit and be worth looking into
-export const schedule = (state = {}, action) => {
+const schedule = (state = { current: null, calendar: false }, action) => {
   let bookings = null;
   let days = null;
 
@@ -17,7 +17,6 @@ export const schedule = (state = {}, action) => {
         days: days,
         bookings: bookings
       }    
-      break;
     case actionTypes.INITIALIZE_BOOKINGS:
       bookings = {};
       for (let b = 0; b < action.bookings.length; b++) {
@@ -29,7 +28,6 @@ export const schedule = (state = {}, action) => {
         now: action.now,
         bookings: bookings
       }
-      break;
     case actionTypes.SEARCH_BOOKING:
       let searchText = !!action.searchText ? action.searchText.toLowerCase() : '';
 
@@ -41,7 +39,7 @@ export const schedule = (state = {}, action) => {
       let bookingsMap = Map(state.bookings);
       let bookingsToHide = bookingsMap.filter((booking) => {
         return !(
-          (!!booking.eventName ? booking.eventName.toLowerCase() : '').indexOf(searchText) != -1 ||
+          (!!booking.eventName ? booking.eventName.toLowerCase() : '').indexOf(searchText) !== -1 ||
           (!!booking.roomName ? booking.roomName.toLowerCase() : '').indexOf(searchText) != -1
         );
       })
@@ -65,7 +63,6 @@ export const schedule = (state = {}, action) => {
       return {...state,
         bookings: Object.assign({}, state.bookings, updatedBookings)
       }
-      break;
     case actionTypes.SELECT_DAY:
       days = List(state.days || []);
       
@@ -76,7 +73,7 @@ export const schedule = (state = {}, action) => {
       let daysToFocus = days.filter((day) => {
         if (!!day.end) {
         }
-        return day.date.getTime() == action.date.getTime() || 
+        return day.date.getTime() === action.date.getTime() || 
           (!!day.end && day.date.getTime() <= action.date.getTime() && action.date.getTime() <= day.end.getTime());
       })
 
@@ -101,7 +98,6 @@ export const schedule = (state = {}, action) => {
       return {...state,
         days: days.toJS()
       }
-      break;
     case actionTypes.SELECT_DAY_BOOKING_CLOSEST_TO:
       days = List(state.days || []);
 
@@ -129,7 +125,10 @@ export const schedule = (state = {}, action) => {
       return {...state,
         days: days.toJS()
       }
-      break;
+    case actionTypes.TOGGLE_CALENDAR:
+      return {...state,
+        calendar: !state.calendar
+      }
     default:
       return state;
   }
@@ -255,7 +254,7 @@ export const createDaysIfNotExist = (days, booking) => {
         for (let d = 0; d < days; d++) {
           let date = new Date(booking.start.getFullYear(), booking.start.getMonth(), booking.start.getDate() + d);
           if (!result.contains((day) => {
-            return day.date == date;
+            return day.date === date;
           })) {
             result = result.insert(d, {
               date: date,
@@ -297,7 +296,7 @@ export const createDaysIfNotExist = (days, booking) => {
         for (let d = 1; d < days; d++) {
           let date = new Date(futureDate.getFullYear(), futureDate.getMonth(), futureDate.getDate() + d);
           if (!result.contains((day) => {
-            return day == date;
+            return day === date;
           })) {
             result = result.insert(offset + d, {
               date: date,
@@ -401,7 +400,7 @@ export const addBookingToDay = (day, booking, bookings) => {
     }
   });
 
-  if (index == -1) {
+  if (index === -1) {
     bookingIds = bookingIds.push(booking.id);
   }
   else {
@@ -412,4 +411,4 @@ export const addBookingToDay = (day, booking, bookings) => {
   return result;
 }
 
-
+export default schedule

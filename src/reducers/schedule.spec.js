@@ -1,14 +1,18 @@
-import { schedule, addBookingToBookings, addBookingToDays, addBookingToDay, createDaysIfNotExist } from './schedule'
+import schedule from './schedule'
+import { addBookingToBookings, addBookingToDays, addBookingToDay, createDaysIfNotExist } from './schedule'
 import * as actionTypes from '../actions/indexActionTypes'
 
 // sort of weird, but this library really helps keeps things dry
 let using = require('jasmine-data-provider');
 
-fdescribe('schedule reducer', () => {
+describe('schedule reducer', () => {
   it('should handle initial state', () => {
     expect(
         schedule(undefined, {})
-    ).toEqual({})
+    ).toEqual({ 
+      calendar: false,
+      current: null
+    })
   })
 
   it('should handle ADD_BOOKING', () => {
@@ -556,6 +560,44 @@ fdescribe('schedule reducer', () => {
     it('should handle SELECT_DAY_BOOKING_CLOSEST_TO - ' + data.id, () => {
       let result = schedule(data.state, data.action);
 
+      expect(result).toEqual(data.expected);
+
+      // immutability check
+      if (data.immutableCheck) {
+        expect(data.state).not.toEqual(result);
+      }
+    })
+  })
+
+  using([
+    {
+      id: 1,
+      state: {
+        calendar: false
+      },
+      action: {
+        type: actionTypes.TOGGLE_CALENDAR
+      },
+      expected: {
+        calendar: true
+      }
+    },
+    {
+      id: 1,
+      state: {
+        calendar: true
+      },
+      action: {
+        type: actionTypes.TOGGLE_CALENDAR
+      },
+      expected: {
+        calendar: false
+      }
+    }
+  ], (data) => {
+    it('should handle TOGGLE_CALENDAR - ' + data.id, () => {
+      let result = schedule(data.state, data.action);
+      
       expect(result).toEqual(data.expected);
 
       // immutability check
