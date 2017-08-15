@@ -62,7 +62,7 @@ const DayListItem = ({muiTheme, bookings, days, search, today }) => {
                     let occurring = bookingStart <= today && today <= bookingEnd;
 
                     result = (
-                    <ListItem key={booking.id}>
+                    <ListItem key={booking.id} style={{borderWidth: '1px 0px 0px 0px', borderStyle:'solid', borderColor: muiTheme.palette.primary3Color}}>
                         <div className="booking">
                             <span className="booking-times">
                                 <span>{Moment(bookingStart).format("hh:mm A")}</span><br/>
@@ -90,7 +90,7 @@ const DayListItem = ({muiTheme, bookings, days, search, today }) => {
         else {
             nestedItems = [1].map((empty) => 
             <ListItem key={(day.date.getTime() + empty).toString()} primaryText={!!day.end ? 'You have no bookings for these dates.' : 'You have no bookings for this date.'}
-                nestedLevel={0}/>
+                nestedLevel={0} style={{borderWidth: '1px 0px 0px 0px', borderStyle:'solid', borderColor: muiTheme.palette.primary3Color}}/>
             );
         }
             
@@ -111,7 +111,7 @@ const DayListItem = ({muiTheme, bookings, days, search, today }) => {
         }
 
         let result = (
-            <ListItem key="no bookings" primaryText="No bookings."/>
+            <ListItem key="no bookings" primaryText="No bookings." style={{borderTop: '1px', borderStyle:'solid', borderColor: muiTheme.palette.primary3Color}}/>
         )
 
         if (!day.hidden) {
@@ -122,7 +122,7 @@ const DayListItem = ({muiTheme, bookings, days, search, today }) => {
 
             result = (
                 <ListItem key={day.date.getTime().toString()} primaryText={primaryText}
-                    nestedItems={nestedItems} autoGenerateNestedIndicator={false} initiallyOpen={true} style={{textTransform: 'uppercase'}}>
+                    nestedItems={nestedItems} nestedListStyle={{padding: '0px 0px 0px 0px'}} autoGenerateNestedIndicator={false} initiallyOpen={true} style={{textTransform: 'uppercase', backgroundColor: muiTheme.palette.primary1Color, borderWidth: '1px 0px 0px 0px', borderStyle:'solid', borderColor: muiTheme.palette.primary3Color}}>
                 </ListItem>
             )
         }
@@ -130,7 +130,7 @@ const DayListItem = ({muiTheme, bookings, days, search, today }) => {
         return result;
     })
     return (
-        <List>
+        <List style={{padding: '0px 0px 0px 0px'}}>
             {items}
         </List>
     );

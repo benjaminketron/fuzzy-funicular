@@ -1,5 +1,5 @@
 import React from 'react'
-import { blue500, grey200, darkBlack } from 'material-ui/styles/colors';
+import { blue500, grey200, grey400, darkBlack } from 'material-ui/styles/colors';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -25,7 +25,7 @@ const muiTheme = getMuiTheme({
   palette: {
     primary1Color: grey200,
     primary2Color: blue500,
-    primary3Color: blue500,
+    primary3Color: grey400,
     textColor: darkBlack,
     secondaryTextColor: blue500,
     alternateTextColor: darkBlack,

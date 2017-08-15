@@ -8,14 +8,6 @@ body {
     margin: 0;
 }
 
-.visible { 
-    display: block;
-}
-
-.invisible { 
-    display: none;
-}
-
 .booking {
     position: relative;
     white-space: nowrap;

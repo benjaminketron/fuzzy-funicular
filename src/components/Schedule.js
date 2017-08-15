@@ -59,11 +59,11 @@ const Schedule = ({muiTheme, calendar, current, search, searchBooking, setCurren
     return (
     <div>
         <AppBar 
-            className={!search ? 'visible' : 'invisible'}
             title={ appBarTitle }
             iconElementLeft={ appBarMenu }
             onTitleTouchTap={toggleCalendar} 
-            onLeftIconButtonTouchTap={() => setMenuOpen(true)}>
+            onLeftIconButtonTouchTap={() => setMenuOpen(true)}
+            style={{position: 'fixed', top: '0px'}}>
         <div>
         <FontIcon
         className="fa-search"
@@ -77,12 +77,16 @@ const Schedule = ({muiTheme, calendar, current, search, searchBooking, setCurren
         />
         </div>
         </AppBar>
-        <Paper>
+        <Paper style={{marginBottom: '36px', marginTop: '51px'}}>
             <Calendar firstDayOfWeek={0} hideCalendarDate={true} open={calendar} onTouchTapDay={setCurrent} initialDate={current}/>
             <CurrentDayList muiTheme={muiTheme}/>
         </Paper> 
-        <Paper><FlatButton label="Now" style={{width: muiTheme.nowButton.width, color: muiTheme.palette.secondaryTextColor,
-             backgroundColor: muiTheme.palette.primary1Color}} onTouchTap={() => setCurrent({}, new Date())}/></Paper>
+        <Paper>
+            <FlatButton label="Now" fullWidth={true} backgroundColor={muiTheme.palette.primary1Color} style={{ color: muiTheme.palette.secondaryTextColor,
+             position: 'fixed', bottom: '0px', borderWidth: '1px 0px 0px 0px', borderStyle:'solid', borderColor: muiTheme.palette.primary3Color,
+             textTransform: 'none'}}
+             labelStyle={{textTransform: 'none'}}
+             onTouchTap={() => setCurrent({}, new Date())}/></Paper>
     </div>
     )
 }
