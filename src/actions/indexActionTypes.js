@@ -8,5 +8,10 @@ export const SET_MENU_OPEN = 'SET_MENU_OPEN';
 export const TOGGLE_ADD = 'TOGGLE_ADD'
 export const TOGGLE_CALENDAR = 'TOGGLE_CALENDAR';
 export const TOGGLE_SEARCH = 'TOGGLE_SEARCH';
-
+export const SET_ADD_EVENT_NAME = 'SET_ADD_EVENT_NAME';
+export const SET_ADD_ROOM_NAME = 'SET_ADD_ROOM_NAME';
+export const SET_ADD_START_DATE = 'SET_ADD_START_DATE';
+export const SET_ADD_START_TIME = 'SET_ADD_START_TIME';
+export const SET_ADD_END_DATE = 'SET_ADD_END_DATE';
+export const SET_ADD_END_TIME = 'SET_ADD_END_TIME';
 

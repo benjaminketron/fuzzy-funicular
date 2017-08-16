@@ -12,27 +12,7 @@ describe('index actions', () => {
       }
     })
   })
-
-  it('initializeBookings should create an INITIALIZE_BOOKING action', () => {
-    var now = new Date(1);
-    expect(actions.initializeBookings([])).toEqual({
-      type: actionTypes.INITIALIZE_BOOKINGS,
-      bookings: []
-    })
-  })
-
-  it('initializeBookings should set nextBookingId', () => {
-    actions.initializeBookings([ { id: 1 } ]);
-    expect(actions.addBooking({ eventName: 'event2' })).toEqual({
-      type: actionTypes.ADD_BOOKING,
-      id: 2,
-      booking: {
-        id: 2,
-        eventName: 'event2'
-      } 
-    })
-  })
-
+  
   it('searchBooking should create a SEARCH_BOOKING action', () => {
     expect(actions.searchBooking('event2')).toEqual({
       type: actionTypes.SEARCH_BOOKING,
@@ -102,4 +82,46 @@ describe('index actions', () => {
       type: actionTypes.TOGGLE_SEARCH
     })
   })
+
+  it('setAddEventName should create a SET_ADD_EVENT_NAME action', () => {
+    expect(actions.setAddEventName('event')).toEqual({
+      type: actionTypes.SET_ADD_EVENT_NAME,
+      eventName: 'event'
+    })
+  })
+
+  it('setAddRoomName should create a SET_ADD_ROOM_NAME action', () => {
+    expect(actions.setAddRoomName('room')).toEqual({
+      type: actionTypes.SET_ADD_ROOM_NAME,
+      roomName: 'room'
+    })
+  })
+  
+  it('setAddStartDate should create a SET_ADD_START_DATE action', () => {
+    expect(actions.setAddStartDate('August 8, 2017')).toEqual({
+      type: actionTypes.SET_ADD_START_DATE,
+      startDate: 'August 8, 2017'
+    })
+  })
+
+  it('setAddStartTime should create a SET_ADD_START_TIME action', () => {
+    expect(actions.setAddStartTime('11:11 am')).toEqual({
+      type: actionTypes.SET_ADD_START_TIME,
+      startTime: '11:11 am'
+    })
+  })
+
+  it('setAddEndDate should create a SET_ADD_END_DATE action', () => {
+    expect(actions.setAddEndDate('August 9, 2017')).toEqual({
+      type: actionTypes.SET_ADD_END_DATE,
+      endDate: 'August 9, 2017'
+    })
+  })
+
+  it('setAddEndTime should create a SET_ADD_END_TIME action', () => {
+    expect(actions.setAddEndTime('11:11 pm')).toEqual({
+      type: actionTypes.SET_ADD_END_TIME,
+      endTime: '11:11 pm'
+    })
+  })  
 })

@@ -33,3 +33,10 @@ body {
     bottom: 0px;
     right: 0px;
 }
+
+.date-time-combo .date-picker,
+.date-time-combo .time-picker {
+    display: inline-block;
+    width: 49%;
+    vertical-align: top;
+}

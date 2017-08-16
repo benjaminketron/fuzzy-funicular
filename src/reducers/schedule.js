@@ -10,13 +10,16 @@ const schedule = (state = { current: null, calendar: false }, action) => {
 
   switch (action.type) {
     case actionTypes.ADD_BOOKING:
-      bookings = addBookingToBookings(state.bookings, action);
-      days = addBookingToDays(state.days, state.bookings, action);
-      return { 
-        ...state, 
-        days: days,
-        bookings: bookings
-      }         
+      if (isBookingComplete(action.booking)) {
+        return {...state,
+          bookings: addBookingToBookings(state.bookings, action),
+          days: addBookingToDays(state.days, state.bookings, action)
+        }
+      }
+      else {
+        return state;
+      }
+      break;       
     case actionTypes.SEARCH_BOOKING:
       let searchText = !!action.searchText ? action.searchText.toLowerCase() : '';
 
@@ -158,6 +161,13 @@ const schedule = (state = { current: null, calendar: false }, action) => {
       }
       return state;
   }
+}
+
+export const isBookingComplete = (booking) => {
+  console.log(booking);
+  return booking.eventName &&
+    booking.start &&
+    booking.end 
 }
 
 export const addBookingToBookings = (bookings, action) => {
@@ -323,12 +333,7 @@ export const createDaysIfNotExist = (days, booking) => {
           day.date.getTime() <= bookingStartDay.getTime() && bookingStartDay.getTime() <= day.end.getTime() &&
           day.date.getTime() <= bookingEndDay.getTime() && bookingEndDay.getTime() <= day.end.getTime()
         ));
-    }) 
-
-    console.log(bookingStartDay);
-    console.log(bookingEndDay);
-    console.log(result.toJS())
-    console.log(dateRanges.toJS())
+    })
 
     // collapse any adjacent ranges first
     dateRanges.forEach((day) => {

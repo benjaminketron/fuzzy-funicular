@@ -30,6 +30,9 @@ const store = createStore(reducer, {
     search: false,
     bookingsList: bookings.bookings, 
     days: [{date: new Date(now.getFullYear(), now.getMonth(), now.getDate()), bookingIds: []}] 
+  },
+  addBooking: {
+    
   }
 })
 

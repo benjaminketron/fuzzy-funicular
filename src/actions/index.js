@@ -7,26 +7,6 @@ export const addBooking = (booking) => ({
   booking: {...booking, id: nextBookingId++}
 })
 
-export const initializeBookings = (bookings) => {
-  let lastBookingId = 0;
-  
-  if (!!bookings) {
-    bookings.forEach(function(element) {
-      if (!!element) {
-        if (element.id > lastBookingId) {
-          lastBookingId = element.id
-        }
-      }
-    }, this);
-    
-    nextBookingId = lastBookingId + 1; 
-  }
-  return {
-    type: actionTypes.INITIALIZE_BOOKINGS,
-    bookings: bookings
-  }
-};
-
 export const searchBooking = (searchText) => ({
   type: actionTypes.SEARCH_BOOKING,
   searchText: searchText
@@ -73,3 +53,33 @@ export const toggleCalendar = () => ({
 export const toggleSearch = () => ({
   type: actionTypes.TOGGLE_SEARCH
 })
+
+export const setAddEventName = (eventName) => ({
+  type: actionTypes.SET_ADD_EVENT_NAME,
+  eventName: eventName
+}); 
+
+export const setAddRoomName = (roomName) => ({
+  type: actionTypes.SET_ADD_ROOM_NAME,
+  roomName: roomName
+}); 
+
+export const setAddStartDate = (startDate) => ({
+  type: actionTypes.SET_ADD_START_DATE,
+  startDate: startDate
+}); 
+
+export const setAddStartTime = (startTime) => ({
+  type: actionTypes.SET_ADD_START_TIME,
+  startTime: startTime
+}); 
+
+export const setAddEndDate = (endDate) => ({
+  type: actionTypes.SET_ADD_END_DATE,
+  endDate: endDate
+}); 
+
+export const setAddEndTime = (endTime) => ({
+  type: actionTypes.SET_ADD_END_TIME,
+  endTime: endTime
+}); 

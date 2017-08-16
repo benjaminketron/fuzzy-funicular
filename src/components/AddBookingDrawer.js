@@ -1,5 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
+import Moment from 'moment';
 import AppBar from 'material-ui/AppBar';
 import DatePicker from 'material-ui/DatePicker';
 import Drawer from 'material-ui/Drawer';
@@ -10,7 +11,7 @@ import TextField from 'material-ui/TextField';
  
 import * as actionTypes from '../actions/indexActionTypes'
 
-const AddBookingDrawer = ({muiTheme, add, toggleAdd}) => {
+const AddBookingDrawer = ({muiTheme, add, booking, toggleAdd, addBooking, changeEventName, changeRoomName, changeStartDate, changeStartTime, changeEndDate, changeEndTime }) => {
     return (
         <Drawer 
           docked={false}
@@ -22,24 +23,55 @@ const AddBookingDrawer = ({muiTheme, add, toggleAdd}) => {
             title="Add Booking"
             iconStyleLeft={{ display: 'none'}}
             iconStyleRight={{ display: 'none'}} />
-            <Paper style={{padding: '0px 30px 0px 30px'}}>
-                <TextField hintText="Event name" /><br/>
-                <TextField hintText="Room Name"/>
-                <DatePicker container="inline" hideCalendarDate={true} hintText="Start Date" />
-                <DatePicker container="inline" hideCalendarDate={true} hintText="Start Time" />
-                <TimePicker hintText="End Date" />
-                <TimePicker hintText="End Time" />
+            <Paper style={{padding: '0px 30px 30px 30px'}}>
+                <div className="date-time-combo">
+                    <span className="date-picker">
+                        <TextField hintText="Event name" errorText={booking.eventNameError} onChange={changeEventName} value={booking.eventName} />
+                    </span>
+                    <span className="time-picker">
+                        <TextField hintText="Room Name" errorText={booking.roomNameError}
+                            onChange={changeRoomName} value={booking.roomName}
+                        />
+                    </span>
+                </div>
+                
+                <div className="date-time-combo">
+                    <span className="date-picker">
+                        <DatePicker autoOk={true} container="inline" hideCalendarDate={true} hintText="Start Date" formatDate={ (date) => Moment(date).format('MMMM D, YYYY') }
+                            errorText={booking.startDateError} onChange={changeStartDate} value={booking.startDate} maxDate={booking.end}
+                            />
+                    </span>
+                    <span className="time-picker">
+                        <TimePicker autoOk={true} hintText="Start Time"
+                            errorText={booking.startTimeError} onChange={changeStartTime} value={booking.end}
+                         />
+                    </span>
+                </div>
+
+                <div className="date-time-combo">
+                    <span className="date-picker">
+                        <DatePicker autoOk={true} container="inline" hideCalendarDate={true} hintText="End Date" formatDate={ (date) => Moment(date).format('MMMM D, YYYY') } 
+                            errorText={booking.endDateError} onChange={changeEndDate} value={booking.endDate} minDate={booking.start}
+                            />
+                    </span>
+                    <span className="time-picker">
+                        <TimePicker autoOk={true} hintText="End Time" 
+                            errorText={booking.endTimeError} onChange={changeEndTime} value={booking.endTime}
+                            />
+                    </span>
+                </div>
             </Paper>
             <FlatButton label="Add" fullWidth={true} style={{ color: muiTheme.palette.secondaryTextColor,
              borderWidth: '1px 0px 1px 0px', borderStyle:'solid', borderColor: muiTheme.palette.primary3Color, backgroundColor: muiTheme.palette.primary1Color }}
              labelStyle={{textTransform: 'none'}}
-             onTouchTap={() => console.log('submit form')}/>
+             onTouchTap={() => addBooking(booking)}/>
         </Drawer>
     )
 }
 
 AddBookingDrawer.propTypes = {
-    toggleAdd: PropTypes.func.isRequired
+    toggleAdd: PropTypes.func.isRequired,
+    addBooking: PropTypes.func.isRequired
   }
  
 export default AddBookingDrawer;
