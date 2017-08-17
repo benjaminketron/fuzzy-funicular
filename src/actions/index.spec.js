@@ -13,19 +13,21 @@ describe('index actions', () => {
     })
   })
 
-  it('focus should create a FOCUS action', () => {
-    let element = {};
-    expect(actions.focus(element)).toEqual({
-      type: actionTypes.FOCUS,
-      element: element
-    })
-  })
-
   it('addBooking should create INITIALIZE_BOOKINGS action', () => {
     let bookings = [];
     expect(actions.initializeBookings(bookings)).toEqual({
       type: actionTypes.INITIALIZE_BOOKINGS,
       bookings: bookings
+    })
+  })
+
+  it('focus should create a REGISTER_DAY_FOR_FOCUS action', () => {
+    let element = {};
+    let day = {};
+    expect(actions.registerDayForFocus(day, element)).toEqual({
+      type: actionTypes.REGISTER_DAY_FOR_FOCUS,
+      day: day,
+      element: element
     })
   })
   

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-
+import * as actions from '../actions/index';
 import DayList from '../components/DayList'
 
 const mapStateToProps = state => {
@@ -13,10 +13,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        focus = ((day, element) => {
-            if (day.focus) {
-                dispatch(action.focus(element));                
-            }
+        registerDayForFocus: ((day, element) => {
+            console.log(day, element);
+            dispatch(actions.registerDayForFocus(day, element));                
         })
     }
 }

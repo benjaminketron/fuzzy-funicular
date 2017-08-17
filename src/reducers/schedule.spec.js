@@ -5,7 +5,7 @@ import * as actionTypes from '../actions/indexActionTypes'
 // sort of weird, but this library really helps keeps things dry
 let using = require('jasmine-data-provider');
 
-describe('schedule reducer', () => {
+fdescribe('schedule reducer', () => {
   it('should handle initial state', () => {
     expect(
         schedule(undefined, {})
@@ -346,47 +346,36 @@ describe('schedule reducer', () => {
     {
       id: 1,
       state: {
-
+        days: [
+          {
+            date: new Date(2017, 8, 17)
+          }
+        ]
       },
       action: {
-        type: actionTypes.FOCUS,
+        type: actionTypes.REGISTER_DAY_FOR_FOCUS,
         element: {},
         day: {
-          focus: true
+          date: new Date(2017, 8, 17)
         } 
       },
       expected: {
-        focusedElement: {}
+        days: [
+          {
+            date: new Date(2017, 8, 17),
+            element: {}
+          }
+        ]
       },
       testImmutability: true
-    },
-    {
-      id: 2,
-      state: {
-
-      },
-      action: {
-        type: actionTypes.FOCUS,
-        element: {},
-        day: {
-          focus: false
-        } 
-      },
-      expected: {
-        
-      },
-      testImmutability: false
     }
   ], (data) => {
-    it('should handle FOCUS - ' + data.id, () => {
+    it('should handle REGISTER_DAY_FOR_FOCUS - ' + data.id, () => {
       let result = schedule(data.state, data.action);
 
       expect(result).toEqual(data.expected);
 
-       // immutability test
-       if (data.testImmutability) {
-        expect(result).not.toEqual(data.state);        
-       }
+      expect(result).not.toEqual(data.state);        
     })
   })
 
@@ -974,17 +963,53 @@ describe('schedule reducer', () => {
     })
   })
 
-  it('should handle SET_CALENDAR_CURRENT', () => {
-    let state = { current: null }
-    let date = new Date();
-    let action = { type: actionTypes.SET_CALENDAR_CURRENT, current: date }
-    let result = schedule(state, action);
-    expect(result).toEqual({
-      current: date,
+  using([
+    {
+      id: 1,
+      state: {
+        current: null,
+        days: [
+          {
+            date: new Date(2017, 8, 16),
+            focus: true
+          },
+          {
+            date: new Date(2017, 8, 17)
+          },
+          {
+            date: new Date(2017, 8, 18)
+          }
+        ]
+      },
+      action: {
+        type: actionTypes.SET_CALENDAR_CURRENT,
+        current: new Date(2017, 8, 17)
+      },
+      expected: {
+        current: new Date(2017, 8, 17),
+        days: [
+          {
+            date: new Date(2017, 8, 16),
+            focus: false
+          },
+          {
+            date: new Date(2017, 8, 17),
+            focus: true
+          },
+          {
+            date: new Date(2017, 8, 18)
+          }
+        ]
+      }
+    }
+  ], (data) => {
+    fit('should handle SET_CALENDAR_CURRENT - ' + data.id, () => {
+      let result = schedule(data.state, data.action);
+      expect(result).toEqual(data.expected)
+  
+      // immutability check
+      expect(data.state).not.toEqual(result);
     })
-
-    // immutability check
-    expect(state).not.toEqual(result);
   })
 
   it('should handle SET_TODAY', () => {

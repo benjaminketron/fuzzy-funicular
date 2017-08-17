@@ -24,15 +24,6 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
         return state;
       }
       break;    
-    case actionTypes.FOCUS:
-      if (action.day.focus) {
-        return {...state,
-          focusedElement: action.element
-        }
-      } else {
-        return state;
-      }
-      break;
     case actionTypes.INITIALIZE_BOOKINGS:
       bookings = {};
       days = (state.days || []);
@@ -49,6 +40,10 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
         bookings: bookings,
         days: days,
       }
+    case actionTypes.REGISTER_DAY_FOR_FOCUS:
+      let dayElements = {...(state.dayElements || {})};
+      dayElements[action.day.date] = action.element;
+      return {...state, dayElements: dayElements };
     case actionTypes.SEARCH_BOOKING:
       let searchText = !!action.searchText ? action.searchText.toLowerCase() : '';
 
@@ -147,8 +142,25 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
         days: days.toJS()
       }
     case actionTypes.SET_CALENDAR_CURRENT:
+      days = List(state.days);
+      for (let d = 0; d < days.size; d++) {
+        let day = days.get(d);
+        if (day.date.getFullYear() == action.current.getFullYear() &&
+          day.date.getMonth() == action.current.getMonth() &&
+          day.date.getDate() == action.current.getDate()) {
+            let index = days.indexOf(day);
+            days = days.remove(index);  
+            days = days.insert(index, {...day, focus: true })
+          }
+          else if (day.focus) {
+            let index = days.indexOf(day);
+            days = days.remove(index);
+            days = days.insert(index, {...day, focus: false })
+          }
+      }
       return {...state, 
         current: action.current,
+        days: days.toJS()
       }
     case actionTypes.SET_TODAY:
       return {...state,

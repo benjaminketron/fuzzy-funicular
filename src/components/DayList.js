@@ -13,7 +13,7 @@ import TextField from 'material-ui/TextField';
 
 import * as actionTypes from '../actions/indexActionTypes'
 
-const DayListItem = ({muiTheme, bookings, days, search, today }) => {
+const DayListItem = ({muiTheme, bookings, days, registerDayForFocus, search, today }) => {
     let items = null;
     if (search) {
         items = days.filter((day) => day.bookingIds.length );
@@ -123,9 +123,11 @@ const DayListItem = ({muiTheme, bookings, days, search, today }) => {
             nothing = false;
 
             result = (
-                <ListItem key={day.date.getTime().toString()} primaryText={primaryText}
-                    nestedItems={nestedItems} nestedListStyle={{padding: '0px 0px 0px 0px'}} autoGenerateNestedIndicator={false} initiallyOpen={true} style={{textTransform: 'uppercase', backgroundColor: muiTheme.palette.primary1Color, borderWidth: '1px 0px 0px 0px', borderStyle:'solid', borderColor: muiTheme.palette.primary3Color}}>
-                </ListItem>
+                <div key={day.date.getTime().toString()} ref={(element) => registerDayForFocus(day, element) }>
+                    <ListItem primaryText={primaryText}
+                        nestedItems={nestedItems} nestedListStyle={{padding: '0px 0px 0px 0px'}} autoGenerateNestedIndicator={false} initiallyOpen={true} style={{textTransform: 'uppercase', backgroundColor: muiTheme.palette.primary1Color, borderWidth: '1px 0px 0px 0px', borderStyle:'solid', borderColor: muiTheme.palette.primary3Color}}>
+                    </ListItem>
+                </div>
             )
         }
 
@@ -134,7 +136,7 @@ const DayListItem = ({muiTheme, bookings, days, search, today }) => {
 
     if (nothing) {
         items = [(
-            <ListItem key="no bookings" primaryText="No bookings found." style={{borderWidth: '1px 0px 0px 0px', borderStyle:'solid', borderColor: muiTheme.palette.primary3Color}}/>
+            <ListItem key="no bookings" primaryText="No bookings found." style={{borderWidth: '1px 0px 0px 0px', borderStyle:'solid', borderColor: muiTheme.palette.primary3Color}}/>    
         )]
     }
     

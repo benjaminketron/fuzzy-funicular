@@ -38,12 +38,15 @@ store.dispatch(actions.initializeBookings(bookings.bookings))
 
 // subscribe to state changes so we can look for focused elements to scroll to
 store.subscribe(() => {
-  //let state = store.getState();
   // perhaps we could set focus class on focused elements
   // then here we can search for the first element with focus for a class name
   // determine the offset top
   // and scrollTo offsetTop + 50 in order to put it at the top of the app
-
+  let state = store.getState();
+  console.log(state);
+  if (state.focusedElement) {
+    console.log(state);
+  }
 })
 
 // update today every minute

@@ -7,11 +7,6 @@ export const addBooking = (booking) => ({
   booking: {...booking, id: nextBookingId++}
 })
 
-export const focus = (element) => ({
-  type: actionTypes.FOCUS,
-  element: element
-})
-
 export const initializeBookings = (bookings) => {
   // calculate nextBookingId
   for(let b = 0; b < bookings.length; b++) {
@@ -26,6 +21,12 @@ export const initializeBookings = (bookings) => {
     bookings: bookings
   }
 }
+
+export const registerDayForFocus = (day, element) => ({
+  type: actionTypes.REGISTER_DAY_FOR_FOCUS,
+  day: day,
+  element: element
+})
 
 export const searchBooking = (searchText) => ({
   type: actionTypes.SEARCH_BOOKING,
