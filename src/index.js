@@ -37,7 +37,7 @@ const store = createStore(reducer, {
 store.dispatch(actions.initializeBookings(bookings.bookings))
 
 // subscribe to state changes so we can look for focused elements to scroll to
-store.subscribe(() => {
+const scrollToElementInFocus = () => {
   // perhaps we could set focus class on focused elements
   // then here we can search for the first element with focus for a class name
   // determine the offset top
@@ -53,7 +53,9 @@ store.subscribe(() => {
       window.scroll(scrollLeft, offsetTop);
     }
   } 
-})
+}
+
+store.subscribe(scrollToElementInFocus)
 
 // update today every minute
 setInterval(() => {
