@@ -14,4 +14,4 @@ export const SET_ADD_START_DATE = 'SET_ADD_START_DATE';
 export const SET_ADD_START_TIME = 'SET_ADD_START_TIME';
 export const SET_ADD_END_DATE = 'SET_ADD_END_DATE';
 export const SET_ADD_END_TIME = 'SET_ADD_END_TIME';
-
+export const SET_TODAY = 'SET_TODAY';

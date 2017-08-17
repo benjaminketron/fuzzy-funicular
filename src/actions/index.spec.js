@@ -124,4 +124,12 @@ describe('index actions', () => {
       endTime: '11:11 pm'
     })
   })  
+
+  it('setToday should create a SET_TODAY action', () => {
+    let today = new Date();
+    expect(actions.setToday(today)).toEqual({
+      type: actionTypes.SET_TODAY,
+      today: today
+    })
+  })
 })

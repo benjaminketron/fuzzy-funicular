@@ -124,6 +124,10 @@ const schedule = (state = { current: null, calendar: false }, action) => {
       return {...state, 
         current: action.current,
       }
+    case actionTypes.SET_TODAY:
+      return {...state,
+        today: action.today
+      }
     case actionTypes.TOGGLE_ADD:
       return {...state,
         add: !state.add

@@ -875,13 +875,26 @@ describe('schedule reducer', () => {
     })
   })
 
-  it('should ahndle SET_CALENDAR_CURRENT', () => {
+  it('should handle SET_CALENDAR_CURRENT', () => {
     let state = { current: null }
     let date = new Date();
     let action = { type: actionTypes.SET_CALENDAR_CURRENT, current: date }
     let result = schedule(state, action);
     expect(result).toEqual({
       current: date,
+    })
+
+    // immutability check
+    expect(state).not.toEqual(result);
+  })
+
+  it('should handle SET_TODAY', () => {
+    let state = { today: null }
+    let today = new Date();
+    let action = {type: actionTypes.SET_TODAY, today: today }
+    let result = schedule(state, action);
+    expect(result).toEqual({
+      today: today
     })
 
     // immutability check

@@ -83,3 +83,8 @@ export const setAddEndTime = (endTime) => ({
   type: actionTypes.SET_ADD_END_TIME,
   endTime: endTime
 }); 
+
+export const setToday = (today) => ({
+  type: actionTypes.SET_TODAY,
+  today: today
+})
