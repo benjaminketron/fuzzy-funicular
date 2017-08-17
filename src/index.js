@@ -14,7 +14,7 @@ let today = now;
 
 // convert dates from strings
 // TODO replace with more concise / reusable method
-for (let b = 0; b < bookings.bookings.length; b++) {
+for (let b = 0; b < bookings.bookings.length; b++) {  
   let booking = bookings.bookings[b];
   if (booking.start) 
     booking.start = new Date(booking.start);
@@ -34,6 +34,16 @@ const store = createStore(reducer, {
 })
 
 store.dispatch(actions.initializeBookings(bookings.bookings))
+
+// subscribe to state changes so we can look for focused elements to scroll to
+store.subscribe(() => {
+  //let state = store.getState();
+  // perhaps we could set focus class on focused elements
+  // then here we can search for the first element with focus for a class name
+  // determine the offset top
+  // and scrollTo offsetTop + 50 in order to put it at the top of the app
+  
+})
 
 // update today every minute
 setInterval(() => {

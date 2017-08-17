@@ -1,5 +1,4 @@
 import * as actionTypes from '../actions/indexActionTypes'
-import { List, Map } from 'immutable'
 
 // considered a combine reducer but when adding bookings it is necesary to know about bookings when 
 // calculating the next state for days. it seems moving other parts of the state with a sub reducer is considered

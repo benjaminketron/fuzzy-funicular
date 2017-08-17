@@ -41,6 +41,48 @@
             "roomName": "Conference Room 1",
             "start": "2016-11-24T00:00:00.000Z",
             "end": "2016-11-24T23:59:59.999Z"
+        },
+        {
+            "id": 6,
+            "eventName": "Birthday",
+            "roomName": "Jay's Bistro",
+            "start": "2017-02-10T20:00:00.000Z",
+            "end": "2017-02-10T22:00:00.000Z"
+        },
+        {
+            "id": 7,
+            "eventName": "Eat donuts for National Donut Day",
+            "roomName": "La Mar's",
+            "start": "2017-06-02T17:00:00.000Z",
+            "end": "2017-06-02T18:30:00.000Z"
+        },
+        {
+            "id": 8,
+            "eventName": "Eat donuts for National Donut Day",
+            "roomName": "La Mar's",
+            "start": "2018-06-01T17:00:00.000Z",
+            "end": "2018-06-01T18:30:00.000Z"
+        },
+        {
+            "id": 8,
+            "eventName": "Visit parents for thanksgiving",
+            "roomName": "Home",
+            "start": "2017-11-23T17:08:00.000Z",
+            "end": "2017-11-26T08:00:00.000Z"
+        },
+        {
+            "id": 9,
+            "eventName": "Hairdo",
+            "roomName": "Semion",
+            "start": "2018-01-23T17:18:00.000Z",
+            "end": "2018-01-23T18:30:00.000Z"
+        },
+        {
+            "id": 10,
+            "eventName": "Borromeo String Quartet",
+            "roomName": "Lincoln Center",
+            "start": "2018-03-24T01:30:00.000Z",
+            "end": "2018-03-24T03:30:00.000Z"
         }
     ]
 }
