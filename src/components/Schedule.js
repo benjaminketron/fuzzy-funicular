@@ -38,6 +38,11 @@ const Schedule = ({muiTheme, calendar, current, search, searchBooking, setCurren
         style={menuIconStyles}
         />
 
+    const focusTextField = ref => {
+        if (ref)
+            ref.input.focus();
+    };
+
     const appBarTitle =
         <span>
             { !search ?
@@ -52,7 +57,7 @@ const Schedule = ({muiTheme, calendar, current, search, searchBooking, setCurren
                 :
                 <span>
                     { /* TODO focus in input of TextField when it appears */ }
-                    <TextField hintText="Search" onChange={searchBooking}/>
+                    <TextField hintText="Search" onChange={searchBooking} ref={focusTextField} />
                 </span>
             }
         </span>
