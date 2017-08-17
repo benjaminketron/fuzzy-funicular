@@ -110,6 +110,36 @@ describe('addBooking reducer', () => {
                 endTime: new Date(2017, 8, 18, 20, 10, 0),
                 end: null
             }
+        },
+        {
+            id: 8,
+            state: {
+                endDate: new Date(2017, 8, 19)
+            },
+            action: {
+                type: actionTypes.SET_ADD_END_TIME,
+                endTime: new Date(2017, 8, 18, 20, 10, 0)
+            },
+            expected: {
+                endDate: new Date(2017, 8, 19),                
+                endTime: new Date(2017, 8, 18, 20, 10, 0),
+                end: new Date(2017, 8, 19, 20, 10, 0)
+            }
+        },
+        {
+            id: 9,
+            state: {
+                startDate: new Date(2017, 8, 19)
+            },
+            action: {
+                type: actionTypes.SET_ADD_START_TIME,
+                startTime: new Date(2017, 8, 18, 20, 10, 0)
+            },
+            expected: {
+                startDate: new Date(2017, 8, 19),                
+                startTime: new Date(2017, 8, 18, 20, 10, 0),
+                start: new Date(2017, 8, 19, 20, 10, 0)
+            }
         }
     ], (data) => {
         it('should handle various actions - ' + data.id, () => {
