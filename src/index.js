@@ -2,6 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
+import {scroller} from 'react-scroll'; //Imports scroller mixin, can use as scroller.scrollTo()
 import App from './components/App'
 import reducer from './reducers'
 import * as actions from './actions/index.js'
@@ -36,8 +37,9 @@ const scrollToElementInFocus = () => {
   // and scrollTo offsetTop + 50 in order to put it at the top of the app
   let state = store.getState();
   if (state.schedule.focusedElement) {
-    console.log('focused', state);
-    
+    // console.log('focused', state);
+
+    // find an npm package to do this
     let scrollLeft = document.body.scrollLeft;
     let scrollTop = document.body.scrollTop;
     let offsetTop = state.schedule.focusedElement.offsetTop - 50;
