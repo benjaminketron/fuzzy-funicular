@@ -10,6 +10,7 @@ const mapStateToProps = state => {
         open: state.mainMenu.open,
         search: state.schedule.search,
         searchText: state.schedule.searchText,
+        today: state.schedule.today
     }
 }
 

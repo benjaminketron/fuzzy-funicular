@@ -34,13 +34,13 @@ const store = createStore(reducer, {
   }
 })
 
-// update today periodically
+// update today every minute
 setInterval(() => {
   store.dispatch({
     type: actionTypes.SET_TODAY,
     today: new Date()
   })
-}, 1000)
+}, 60000)
 
 render(
   <Provider store={store}>

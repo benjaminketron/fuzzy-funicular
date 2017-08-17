@@ -14,7 +14,7 @@ import CurrentDayList from '../containers/CurrentDayList';
  
 import * as actionTypes from '../actions/indexActionTypes'
 
-const Schedule = ({muiTheme, calendar, current, search, searchBooking, setCurrent, setMenuOpen, toggleAdd, toggleCalendar, toggleSearch, }) => {
+const Schedule = ({muiTheme, calendar, current, search, searchBooking, setCurrent, setMenuOpen, today, toggleAdd, toggleCalendar, toggleSearch, }) => {
     
     const iconStyles = {
         fontFamily: 'FontAwesome',
@@ -65,16 +65,16 @@ const Schedule = ({muiTheme, calendar, current, search, searchBooking, setCurren
             onLeftIconButtonTouchTap={() => setMenuOpen(true)}
             style={{position: 'fixed', top: '0px'}}>
         <div>
-        <FontIcon
-        className="fa-search"
-        style={iconStyles}
-        onTouchTap={toggleSearch}
-        />
-        <FontIcon
-        className="fa-plus"
-        style={iconStyles}
-        onTouchTap={toggleAdd}
-        />
+            <FontIcon
+            className="fa-search"
+            style={iconStyles}
+            onTouchTap={toggleSearch}
+            />
+            <FontIcon
+            className="fa-plus"
+            style={iconStyles}
+            onTouchTap={toggleAdd}
+            />
         </div>
         </AppBar>
         <Paper style={{marginBottom: '36px', marginTop: '51px'}}>
