@@ -7,6 +7,7 @@ import App from './components/App'
 import reducer from './reducers'
 import * as actions from './actions/index.js'
 import bookingsJsonDateParser from './json/bookingsJsonDateParser';
+import scrollTo from 'scroll-to';
 
 // in a real world app this would come from a service
 import bookings from './bookings.json'
@@ -27,7 +28,11 @@ const store = createStore(reducer, {
   }
 })
 
+// load bookings
 store.dispatch(actions.initializeBookings(bookings.bookings))
+
+// navigate to today
+store.dispatch(actions.setCalendarCurrent(now))
 
 // subscribe to state changes so we can look for focused elements to scroll to
 const scrollToElementInFocus = () => {
@@ -39,13 +44,18 @@ const scrollToElementInFocus = () => {
   if (state.schedule.focusedElement) {
     // console.log('focused', state);
 
+    console.log(state.schedule.focusedElement.offsetTop);
+    scrollTo(0, state.schedule.focusedElement.offsetTop - 50, {
+      duration: 500
+    });
+    
     // find an npm package to do this
-    let scrollLeft = document.body.scrollLeft;
-    let scrollTop = document.body.scrollTop;
-    let offsetTop = state.schedule.focusedElement.offsetTop - 50;
-    if (offsetTop != scrollTop) {
-      window.scroll(scrollLeft, offsetTop);
-    }
+    // let scrollLeft = document.body.scrollLeft;
+    // let scrollTop = document.body.scrollTop;
+    // let offsetTop = state.schedule.focusedElement.offsetTop - 50;
+    // if (offsetTop != scrollTop) {
+    //   window.scroll(scrollLeft, offsetTop);
+    // }
   } 
 }
 
