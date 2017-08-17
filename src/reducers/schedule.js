@@ -10,6 +10,8 @@ const schedule = (state = { current: null, calendar: false }, action) => {
 
   switch (action.type) {
     case actionTypes.ADD_BOOKING:
+      console.log(action.booking)
+      console.log(state)
       if (isBookingComplete(action.booking)) {
         return {...state,
           add: false,

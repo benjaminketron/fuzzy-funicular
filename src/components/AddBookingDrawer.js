@@ -42,15 +42,15 @@ const AddBookingDrawer = ({muiTheme, add, booking, toggleAdd, addBooking, change
                             />
                     </span>
                     <span className="time-picker">
-                        <TimePicker autoOk={true} hintText="Start Time"
-                            errorText={booking.startTimeError} onChange={changeStartTime} value={booking.end}
+                        <TimePicker hintText="Start Time"
+                            errorText={booking.startTimeError} onChange={changeStartTime} value={booking.startTime} 
                          />
                     </span>
                 </div>
 
                 <div className="date-time-combo">
                     <span className="date-picker">
-                        <DatePicker container="inline" hideCalendarDate={true} hintText="End Date" formatDate={ (date) => Moment(date).format('MMMM D, YYYY') } 
+                        <DatePicker autoOk={true} container="inline" hideCalendarDate={true} hintText="End Date" formatDate={ (date) => Moment(date).format('MMMM D, YYYY') } 
                             errorText={booking.endDateError} onChange={changeEndDate} value={booking.endDate} minDate={booking.start}
                             />
                     </span>

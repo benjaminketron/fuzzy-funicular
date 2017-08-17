@@ -12,12 +12,6 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
 
-// 87, 141, 233
-// #578DE9
-
-// import AddTodo from '../containers/AddTodo'
-// import VisibleTodoList from '../containers/VisibleTodoList'
-
 // This replaces the textColor value on the palette
 // and then update the keys for each component that depends on it.
 // More on Colors: http://www.material-ui.com/#/customization/colors
@@ -56,13 +50,5 @@ const App = ({dispatch}) => (
     
   </MuiThemeProvider>
 );
-
-// const App = () => (
-//   <div>
-//     <AddTodo />
-//     <VisibleTodoList />
-//     <Footer />
-//   </div>
-// )
 
 export default App
