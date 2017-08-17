@@ -13,9 +13,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        registerDayForFocus: ((day, element) => {
-            console.log(day, element);
-            dispatch(actions.registerDayForFocus(day, element));                
+        focus: ((day, element) => {
+            dispatch(actions.focus(day, element));                
         })
     }
 }

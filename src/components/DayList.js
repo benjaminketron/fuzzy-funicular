@@ -13,7 +13,7 @@ import TextField from 'material-ui/TextField';
 
 import * as actionTypes from '../actions/indexActionTypes'
 
-const DayListItem = ({muiTheme, bookings, days, registerDayForFocus, search, today }) => {
+const DayListItem = ({muiTheme, bookings, days, focus, search, today }) => {
     let items = null;
     if (search) {
         items = days.filter((day) => day.bookingIds.length );
@@ -123,7 +123,7 @@ const DayListItem = ({muiTheme, bookings, days, registerDayForFocus, search, tod
             nothing = false;
 
             result = (
-                <div key={day.date.getTime().toString()} ref={(element) => registerDayForFocus(day, element) }>
+                <div key={day.date.getTime().toString()} ref={(element) => focus(day, element) }>
                     <ListItem primaryText={primaryText}
                         nestedItems={nestedItems} nestedListStyle={{padding: '0px 0px 0px 0px'}} autoGenerateNestedIndicator={false} initiallyOpen={true} style={{textTransform: 'uppercase', backgroundColor: muiTheme.palette.primary1Color, borderWidth: '1px 0px 0px 0px', borderStyle:'solid', borderColor: muiTheme.palette.primary3Color}}>
                     </ListItem>

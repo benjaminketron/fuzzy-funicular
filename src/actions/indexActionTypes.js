@@ -1,4 +1,5 @@
 export const ADD_BOOKING = 'ADD_BOOKING';
+export const FOCUS = 'FOCUS';
 export const INITIALIZE_BOOKINGS = 'INITIALIZE_BOOKINGS';
 export const SEARCH_BOOKING = 'SEARCH_BOOKING';
 export const SELECT_DAY = 'SELECT_DAY';
@@ -8,7 +9,6 @@ export const SET_MENU_OPEN = 'SET_MENU_OPEN';
 export const TOGGLE_ADD = 'TOGGLE_ADD'
 export const TOGGLE_CALENDAR = 'TOGGLE_CALENDAR';
 export const TOGGLE_SEARCH = 'TOGGLE_SEARCH';
-export const REGISTER_DAY_FOR_FOCUS = 'REGISTER_DAY_FOR_FOCUS';
 export const SET_ADD_EVENT_NAME = 'SET_ADD_EVENT_NAME';
 export const SET_ADD_ROOM_NAME = 'SET_ADD_ROOM_NAME';
 export const SET_ADD_START_DATE = 'SET_ADD_START_DATE';

@@ -346,26 +346,13 @@ fdescribe('schedule reducer', () => {
     {
       id: 1,
       state: {
-        days: [
-          {
-            date: new Date(2017, 8, 17)
-          }
-        ]
       },
       action: {
-        type: actionTypes.REGISTER_DAY_FOR_FOCUS,
-        element: {},
-        day: {
-          date: new Date(2017, 8, 17)
-        } 
+        type: actionTypes.FOCUS,
+        element: {}
       },
       expected: {
-        days: [
-          {
-            date: new Date(2017, 8, 17),
-            element: {}
-          }
-        ]
+        focusedElement: {}
       },
       testImmutability: true
     }

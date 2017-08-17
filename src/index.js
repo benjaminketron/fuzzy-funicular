@@ -43,10 +43,16 @@ store.subscribe(() => {
   // determine the offset top
   // and scrollTo offsetTop + 50 in order to put it at the top of the app
   let state = store.getState();
-  console.log(state);
-  if (state.focusedElement) {
-    console.log(state);
-  }
+  if (state.schedule.focusedElement) {
+    console.log('focused', state);
+    
+    let scrollLeft = document.body.scrollLeft;
+    let scrollTop = document.body.scrollTop;
+    let offsetTop = state.schedule.focusedElement.offsetTop - 50;
+    if (offsetTop != scrollTop) {
+      window.scroll(scrollLeft, offsetTop);
+    }
+  } 
 })
 
 // update today every minute

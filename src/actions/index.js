@@ -22,8 +22,8 @@ export const initializeBookings = (bookings) => {
   }
 }
 
-export const registerDayForFocus = (day, element) => ({
-  type: actionTypes.REGISTER_DAY_FOR_FOCUS,
+export const focus = (day, element) => ({
+  type: actionTypes.FOCUS,
   day: day,
   element: element
 })

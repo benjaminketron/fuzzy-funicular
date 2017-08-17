@@ -21,11 +21,11 @@ describe('index actions', () => {
     })
   })
 
-  it('focus should create a REGISTER_DAY_FOR_FOCUS action', () => {
+  it('focus should create a FOCUS action', () => {
     let element = {};
     let day = {};
-    expect(actions.registerDayForFocus(day, element)).toEqual({
-      type: actionTypes.REGISTER_DAY_FOR_FOCUS,
+    expect(actions.focus(day, element)).toEqual({
+      type: actionTypes.FOCUS,
       day: day,
       element: element
     })

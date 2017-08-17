@@ -40,10 +40,13 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
         bookings: bookings,
         days: days,
       }
-    case actionTypes.REGISTER_DAY_FOR_FOCUS:
-      let dayElements = {...(state.dayElements || {})};
-      dayElements[action.day.date] = action.element;
-      return {...state, dayElements: dayElements };
+    case actionTypes.FOCUS:
+      if (action.day.focus) {
+        return {...state, focusedElement: action.element}    
+      }
+      else {
+        return state;
+      }      
     case actionTypes.SEARCH_BOOKING:
       let searchText = !!action.searchText ? action.searchText.toLowerCase() : '';
 

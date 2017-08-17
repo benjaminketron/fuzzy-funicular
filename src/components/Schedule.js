@@ -79,7 +79,9 @@ const Schedule = ({muiTheme, calendar, current, search, searchBooking, setCurren
         </div>
         </AppBar>
         <Paper style={{marginBottom: '36px', marginTop: '51px'}}>
-            <Calendar firstDayOfWeek={0} hideCalendarDate={true} open={calendar} onTouchTapDay={setCurrent} initialDate={current}/>
+            <div style={{position: 'fixed', top: '51px', width: '100%', backgroundColor: 'inherit', zIndex: '11'}}>
+                <Calendar firstDayOfWeek={0} hideCalendarDate={true} open={calendar} onTouchTapDay={setCurrent} initialDate={current}/>
+            </div>
             <CurrentDayList muiTheme={muiTheme}/>
         </Paper> 
         <Paper>
