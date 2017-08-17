@@ -23,7 +23,16 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
       else {
         return state;
       }
-      break;       
+      break;    
+    case actionTypes.FOCUS:
+      if (action.day.focus) {
+        return {...state,
+          focusedElement: action.element
+        }
+      } else {
+        return state;
+      }
+      break;
     case actionTypes.INITIALIZE_BOOKINGS:
       bookings = {};
       days = (state.days || []);

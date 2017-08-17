@@ -13,7 +13,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        
+        focus = ((day, element) => {
+            if (day.focus) {
+                dispatch(action.focus(element));                
+            }
+        })
     }
 }
 

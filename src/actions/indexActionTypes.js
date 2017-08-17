@@ -1,4 +1,5 @@
 export const ADD_BOOKING = 'ADD_BOOKING';
+export const FOCUS = 'FOCUS';
 export const INITIALIZE_BOOKINGS = 'INITIALIZE_BOOKINGS';
 export const SEARCH_BOOKING = 'SEARCH_BOOKING';
 export const SELECT_DAY = 'SELECT_DAY';

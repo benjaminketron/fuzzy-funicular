@@ -1,10 +1,11 @@
 import React from 'react'
-import { render } from 'react-dom'
+import { render, findDOMNode } from 'react-dom'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import App from './components/App'
 import reducer from './reducers'
 import * as actions from './actions/index.js'
+
 
 // in a real world app this would come from a service
 import bookings from './bookings.json'
@@ -42,7 +43,7 @@ store.subscribe(() => {
   // then here we can search for the first element with focus for a class name
   // determine the offset top
   // and scrollTo offsetTop + 50 in order to put it at the top of the app
-  
+
 })
 
 // update today every minute

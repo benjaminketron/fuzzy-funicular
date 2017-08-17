@@ -5,7 +5,7 @@ import * as actionTypes from '../actions/indexActionTypes'
 // sort of weird, but this library really helps keeps things dry
 let using = require('jasmine-data-provider');
 
-fdescribe('schedule reducer', () => {
+describe('schedule reducer', () => {
   it('should handle initial state', () => {
     expect(
         schedule(undefined, {})
@@ -346,6 +346,54 @@ fdescribe('schedule reducer', () => {
     {
       id: 1,
       state: {
+
+      },
+      action: {
+        type: actionTypes.FOCUS,
+        element: {},
+        day: {
+          focus: true
+        } 
+      },
+      expected: {
+        focusedElement: {}
+      },
+      testImmutability: true
+    },
+    {
+      id: 2,
+      state: {
+
+      },
+      action: {
+        type: actionTypes.FOCUS,
+        element: {},
+        day: {
+          focus: false
+        } 
+      },
+      expected: {
+        
+      },
+      testImmutability: false
+    }
+  ], (data) => {
+    it('should handle FOCUS - ' + data.id, () => {
+      let result = schedule(data.state, data.action);
+
+      expect(result).toEqual(data.expected);
+
+       // immutability test
+       if (data.testImmutability) {
+        expect(result).not.toEqual(data.state);        
+       }
+    })
+  })
+
+  using([
+    {
+      id: 1,
+      state: {
         days: [],
         bookings: {}
       },
@@ -416,7 +464,7 @@ fdescribe('schedule reducer', () => {
       }
     }
   ], (data) => {
-    fit('should handle ADD_BOOKING - ' + data.id, () => {  
+    it('should handle ADD_BOOKING - ' + data.id, () => {  
       let result = schedule(data.state, data.action);
       expect(result).toEqual(data.expected);
   

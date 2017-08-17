@@ -7,6 +7,11 @@ export const addBooking = (booking) => ({
   booking: {...booking, id: nextBookingId++}
 })
 
+export const focus = (element) => ({
+  type: actionTypes.FOCUS,
+  element: element
+})
+
 export const initializeBookings = (bookings) => {
   // calculate nextBookingId
   for(let b = 0; b < bookings.length; b++) {

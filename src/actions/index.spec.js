@@ -13,6 +13,14 @@ describe('index actions', () => {
     })
   })
 
+  it('focus should create a FOCUS action', () => {
+    let element = {};
+    expect(actions.focus(element)).toEqual({
+      type: actionTypes.FOCUS,
+      element: element
+    })
+  })
+
   it('addBooking should create INITIALIZE_BOOKINGS action', () => {
     let bookings = [];
     expect(actions.initializeBookings(bookings)).toEqual({

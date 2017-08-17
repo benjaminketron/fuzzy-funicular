@@ -51,6 +51,7 @@ const Schedule = ({muiTheme, calendar, current, search, searchBooking, setCurren
                 </span>
                 :
                 <span>
+                    { /* TODO focus in input of TextField when it appears */ }
                     <TextField hintText="Search" onChange={searchBooking}/>
                 </span>
             }
