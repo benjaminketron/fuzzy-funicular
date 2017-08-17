@@ -4,7 +4,7 @@ import { List, Map } from 'immutable'
 // considered a combine reducer but when adding bookings it is necesary to know about bookings when 
 // calculating the next state for days. it seems moving other parts of the state with a sub reducer is considered
 // an anit-pattern, but might simplify the code a bit and be worth looking into
-const schedule = (state = { current: null, calendar: false }, action) => {
+const schedule = (state = { current: null, calendar: false  }, action) => {
   let bookings = null;
   let days = null;
 
@@ -12,6 +12,7 @@ const schedule = (state = { current: null, calendar: false }, action) => {
     case actionTypes.ADD_BOOKING:
       console.log(action.booking)
       console.log(state)
+
       if (isBookingComplete(action.booking)) {
         return {...state,
           add: false,
@@ -23,6 +24,22 @@ const schedule = (state = { current: null, calendar: false }, action) => {
         return state;
       }
       break;       
+    case actionTypes.INITIALIZE_BOOKINGS:
+      bookings = {};
+      console.log(action.bookings)
+      days = (state.days || []);
+      for (let b = 0; b < action.bookings.length; b++) {
+        let booking = action.bookings[b];
+        bookings[booking.id] = booking;
+        // this could be greatly optimized
+        days = addBookingToDays(days, bookings, { booking: booking });
+      }
+      
+      return {
+        ...state,
+        bookings: bookings,
+        days: days,
+      }
     case actionTypes.SEARCH_BOOKING:
       let searchText = !!action.searchText ? action.searchText.toLowerCase() : '';
 
@@ -147,25 +164,9 @@ const schedule = (state = { current: null, calendar: false }, action) => {
         searchText: !search ? '' : state.searchText
       }
     default:
-      if (!!state.bookingsList) {
-        bookings = {};
-        days = (state.days || []);
-
-        let bookingsList = state.bookingsList;
-        for (let b = 0; b < bookingsList.length; b++) {
-          let booking = bookingsList[b];
-          bookings[booking.id] = booking;
-          // this could be greatly optimized
-          days = addBookingToDays(days, bookings, { booking: booking });
-        }
-
-        return {
-          ...state,
-          bookings: bookings,
-          days: days,
-          bookingsList: null
-        }
+      return {...state
       }
+      
       return state;
   }
 }

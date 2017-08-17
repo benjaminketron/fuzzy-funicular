@@ -19,7 +19,10 @@ describe('schedule reducer', () => {
     {
       id: 1,
       state: {
-        bookingsList: [
+      },
+      action: {
+        type: actionTypes.INITIALIZE_BOOKINGS,
+        bookings:  [
           {
             id: 1,
             start: new Date(2017, 8, 14, 16, 0, 0),
@@ -51,13 +54,15 @@ describe('schedule reducer', () => {
             bookingIds: [2, 1]
           }
         ],
-        bookingsList: null
       }
     },
     {
       id: 2,
       state: {
-        bookingsList: [
+      },
+      action: {
+        type: actionTypes.INITIALIZE_BOOKINGS,
+        bookings: [
           {
               "id": 0,
               "eventName": "Test Booking 01",
@@ -187,8 +192,11 @@ describe('schedule reducer', () => {
             date: new Date(2017, 8, 15, 0, 0, 0),
             bindingIds: []
           }
-        ],
-        bookingsList: [
+        ]
+      },
+      action: {
+        type: actionTypes.INITIALIZE_BOOKINGS,
+        bookings: [
           {
               "id": 0,
               "eventName": "Test Booking 01",
@@ -312,13 +320,12 @@ describe('schedule reducer', () => {
             bookingIds: []
           }
         ],
-        bookingsList: null
       }
     }
   ], (data) => {
-    it('should handle initial state with preloaded bookings list - ' + data.id, () => {
+    it('should handle INITIALIZE_BOOKINGS action - ' + data.id, () => {
       
-        let result = schedule(data.state, {});
+        let result = schedule(data.state, data.action);
     
         expect(result).toEqual(data.expected);
     

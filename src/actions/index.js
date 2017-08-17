@@ -7,6 +7,21 @@ export const addBooking = (booking) => ({
   booking: {...booking, id: nextBookingId++}
 })
 
+export const initializeBookings = (bookings) => {
+  // calculate nextBookingId
+  for(let b = 0; b < bookings.length; b++) {
+    let booking = bookings[b];
+    if (nextBookingId <= booking.id) {
+      nextBookingId = booking.id + 1;
+    }
+  }
+
+  return {
+    type: actionTypes.INITIALIZE_BOOKINGS,
+    bookings: bookings
+  }
+}
+
 export const searchBooking = (searchText) => ({
   type: actionTypes.SEARCH_BOOKING,
   searchText: searchText

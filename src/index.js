@@ -29,9 +29,13 @@ const store = createStore(reducer, {
     current: now, 
     calendar: false, 
     search: false,
-    bookingsList: bookings.bookings, 
     days: [{date: new Date(now.getFullYear(), now.getMonth(), now.getDate()), bookingIds: []}] 
   }
+})
+
+store.dispatch({
+  type: actionTypes.INITIALIZE_BOOKINGS,
+  bookings: bookings.bookings
 })
 
 // update today every minute

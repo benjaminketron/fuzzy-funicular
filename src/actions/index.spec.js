@@ -12,6 +12,14 @@ describe('index actions', () => {
       }
     })
   })
+
+  it('addBooking should create INITIALIZE_BOOKINGS action', () => {
+    let bookings = [];
+    expect(actions.initializeBookings(bookings)).toEqual({
+      type: actionTypes.INITIALIZE_BOOKINGS,
+      bookings: bookings
+    })
+  })
   
   it('searchBooking should create a SEARCH_BOOKING action', () => {
     expect(actions.searchBooking('event2')).toEqual({
