@@ -5,7 +5,7 @@ import * as actionTypes from '../actions/indexActionTypes'
 // sort of weird, but this library really helps keeps things dry
 let using = require('jasmine-data-provider');
 
-fdescribe('schedule reducer', () => {
+describe('schedule reducer', () => {
   it('should handle initial state', () => {
     expect(
         schedule(undefined, {})
@@ -189,7 +189,7 @@ fdescribe('schedule reducer', () => {
         days: [
           {
             date: new Date(2017, 8, 15, 0, 0, 0),
-            bindingIds: []
+            bookingIds: []
           }
         ]
       },
@@ -217,27 +217,27 @@ fdescribe('schedule reducer', () => {
               "start": new Date("2016-11-14T13:00:00.000Z"),
               "end": new Date("2016-11-14T14:00:00.000Z")
           },
-          // {
-          //     "id": 3,
-          //     "eventName": "Test Booking 04",
-          //     "roomName": "Demo Room 04",
-          //     "start": new Date("2016-11-15T15:00:00.000Z"),
-          //     "end": new Date("2016-11-15T16:00:00.000Z")
-          // },
-          // {
-          //     "id": 4,
-          //     "eventName": "Test Booking 05",
-          //     "roomName": "Demo Room 05",
-          //     "start": new Date("2016-11-15T15:00:00.000Z"),
-          //     "end": new Date("2016-11-15T16:00:00.000Z")
-          // },
-          // {
-          //     "id": 5,
-          //     "eventName": "Thanksgiving",
-          //     "roomName": "Conference Room 1",
-          //     "start": new Date("2016-11-24T00:00:00.000Z"),
-          //     "end": new Date("2016-11-24T23:59:59.999Z")
-          // }
+          {
+              "id": 3,
+              "eventName": "Test Booking 04",
+              "roomName": "Demo Room 04",
+              "start": new Date("2016-11-15T15:00:00.000Z"),
+              "end": new Date("2016-11-15T16:00:00.000Z")
+          },
+          {
+              "id": 4,
+              "eventName": "Test Booking 05",
+              "roomName": "Demo Room 05",
+              "start": new Date("2016-11-15T15:00:00.000Z"),
+              "end": new Date("2016-11-15T16:00:00.000Z")
+          },
+          {
+              "id": 5,
+              "eventName": "Thanksgiving",
+              "roomName": "Conference Room 1",
+              "start": new Date("2016-11-24T00:00:00.000Z"),
+              "end": new Date("2016-11-24T23:59:59.999Z")
+          }
         ]
       },
       expected: {
@@ -304,7 +304,7 @@ fdescribe('schedule reducer', () => {
             date: new Date(2016, 10, 15, 0, 0, 0),
             bookingIds: [4, 3]
           },
-          {
+          { 
             date: new Date(2016, 10, 16, 0, 0, 0),
             end: new Date(2016, 10, 22, 0, 0, 0),
             bookingIds: []
@@ -314,15 +314,23 @@ fdescribe('schedule reducer', () => {
             bookingIds: [5]
           },
           {
-            start: new Date(2016, 10, 24, 0, 0, 0),
-            end: new Date(2017, 8, 15, 0, 0, 0),
+            date: new Date(2016, 10, 24, 0, 0, 0),
+            bookingIds: [5]
+          },
+          { 
+            date: new Date(2016, 10, 25, 0, 0, 0),
+            end: new Date(2017, 8, 14, 0, 0, 0),
+            bookingIds: []
+          },
+          {
+            date: new Date(2017, 8, 15, 0, 0, 0),
             bookingIds: []
           }
         ],
       }
     }
   ], (data) => {
-    fit('should handle INITIALIZE_BOOKINGS action - ' + data.id, () => {
+    it('should handle INITIALIZE_BOOKINGS action - ' + data.id, () => {
       
         let result = schedule(data.state, data.action);
     
@@ -356,6 +364,7 @@ fdescribe('schedule reducer', () => {
     };
 
     let expected = {
+      add: false,
       days: [
         {
           date: new Date(2017, 8, 9),

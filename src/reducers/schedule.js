@@ -437,6 +437,7 @@ export const createDaysIfNotExist = (days, booking) => {
         let index = result.indexOf(day);
         // remove range
         result = result.remove(index);
+
         // insert right range if necessary
         if (day.end.getTime() != bookingEndDay.getTime()) {
           result = result.insert(index, {
@@ -449,7 +450,7 @@ export const createDaysIfNotExist = (days, booking) => {
         // insert booking
         let days = Math.round(bookingEndDay - bookingStartDay) / (1000 * 60 * 60 * 24);
         for (let d = 0; d <= days; d++) {
-          result = result.insert(index + d + 1, {
+          result = result.insert(index + d, {
             date: new Date(bookingStartDay.getFullYear(), bookingStartDay.getMonth(), bookingStartDay.getDate() + d),
             bookingIds: []
           })
@@ -462,7 +463,8 @@ export const createDaysIfNotExist = (days, booking) => {
               end: new Date(bookingStartDay.getFullYear(), bookingStartDay.getMonth(), bookingStartDay.getDate() - 1),
               bookingIds: []
           });
-        }
+        }     
+
       }
     });
 
