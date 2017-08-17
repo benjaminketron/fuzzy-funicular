@@ -26,8 +26,8 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
       break;       
     case actionTypes.INITIALIZE_BOOKINGS:
       bookings = {};
-      console.log(action.bookings)
       days = (state.days || []);
+      
       for (let b = 0; b < action.bookings.length; b++) {
         let booking = action.bookings[b];
         bookings[booking.id] = booking;

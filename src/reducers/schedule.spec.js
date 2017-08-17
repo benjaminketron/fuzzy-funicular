@@ -5,7 +5,7 @@ import * as actionTypes from '../actions/indexActionTypes'
 // sort of weird, but this library really helps keeps things dry
 let using = require('jasmine-data-provider');
 
-describe('schedule reducer', () => {
+fdescribe('schedule reducer', () => {
   it('should handle initial state', () => {
     expect(
         schedule(undefined, {})
@@ -180,8 +180,7 @@ describe('schedule reducer', () => {
             date: new Date(2016, 10, 23, 0, 0, 0),
             bookingIds: [5]
           }
-        ],
-        bookingsList: null
+        ]
       }
     },
     {
@@ -323,7 +322,7 @@ describe('schedule reducer', () => {
       }
     }
   ], (data) => {
-    it('should handle INITIALIZE_BOOKINGS action - ' + data.id, () => {
+    fit('should handle INITIALIZE_BOOKINGS action - ' + data.id, () => {
       
         let result = schedule(data.state, data.action);
     
