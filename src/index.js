@@ -9,7 +9,7 @@ import reducer from './reducers'
 import bookings from './bookings.json'
 
 let now = new Date();
-let today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+let today = now;
 
 // convert dates from strings
 // TODO replace with more concise / reusable method

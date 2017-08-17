@@ -74,9 +74,8 @@ const DayListItem = ({muiTheme, bookings, days, search, today }) => {
                             <span className="booking-info">
                                 <span>{booking.eventName}</span><br/>
                                 <span>{booking.roomName}</span><br/>
-                                <span className="booking-info-occuring fa fa-calendar-check-o"></span>
                                 { occurring ? 
-                                    <span>occurring</span>
+                                    <span className="booking-info-occuring fa fa-calendar-check-o"></span>
                                     :
                                     null
                                 }
@@ -91,7 +90,8 @@ const DayListItem = ({muiTheme, bookings, days, search, today }) => {
         }
         else {
             nestedItems = [1].map((empty) => 
-            <ListItem key={(day.date.getTime() + empty).toString()} primaryText={!!day.end ? 'You have no bookings for these dates.' : 'You have no bookings for this date.'}
+            <ListItem key={(day.date.getTime() + empty).toString()} 
+                primaryText={!!day.end ? 'You have no bookings for these dates.' : 'You have no bookings for this date.'}
                 nestedLevel={0} style={{borderWidth: '1px 0px 0px 0px', borderStyle:'solid', borderColor: muiTheme.palette.primary3Color}}/>
             );
         }

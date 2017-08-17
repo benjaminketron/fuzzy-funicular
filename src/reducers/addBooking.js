@@ -12,7 +12,6 @@ const addBooking = (state =
 
   switch(action.type) {
     case actionTypes.TOGGLE_ADD:
-    console.log(state);
         return {
             eventName: '',
             roomName: ''
