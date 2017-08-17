@@ -4,7 +4,7 @@ import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import App from './components/App'
 import reducer from './reducers'
-import * as actionTypes from './actions/indexActionTypes.js'
+import * as actions from './actions/index.js'
 
 // in a real world app this would come from a service
 import bookings from './bookings.json'
@@ -33,17 +33,11 @@ const store = createStore(reducer, {
   }
 })
 
-store.dispatch({
-  type: actionTypes.INITIALIZE_BOOKINGS,
-  bookings: bookings.bookings
-})
+store.dispatch(actions.initializeBookings(bookings.bookings))
 
 // update today every minute
 setInterval(() => {
-  store.dispatch({
-    type: actionTypes.SET_TODAY,
-    today: new Date()
-  })
+  store.dispatch(actions.setToday(new Date))
 }, 60000)
 
 render(

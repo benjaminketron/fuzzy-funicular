@@ -5,7 +5,7 @@ import * as actionTypes from '../actions/indexActionTypes'
 // sort of weird, but this library really helps keeps things dry
 let using = require('jasmine-data-provider');
 
-describe('schedule reducer', () => {
+fdescribe('schedule reducer', () => {
   it('should handle initial state', () => {
     expect(
         schedule(undefined, {})
@@ -342,51 +342,87 @@ describe('schedule reducer', () => {
       })
   })
 
-  it('should handle ADD_BOOKING', () => {
-    let start = new Date(2017, 8, 9, 5, 0, 0);
-    let end = new Date(2017, 8, 9, 7, 0, 0);
-
-    let state = {
-      days: [],
-      bookings: {}
-    };
-
-    let action =  { 
-      type: actionTypes.ADD_BOOKING,
-      booking: {
-          id: 1,
-          eventName: 'event1',
-          roomName: 'roomName1',
-          start: start,
-          end: end
+  using([
+    {
+      id: 1,
+      state: {
+        days: [],
+        bookings: {}
       },
-      id: 1 
-    };
-
-    let expected = {
-      add: false,
-      days: [
-        {
-          date: new Date(2017, 8, 9),
-          bookingIds: [1]
+      action: {
+        type: actionTypes.ADD_BOOKING,
+        booking: {
+            id: 1,
+            eventName: 'event1',
+            roomName: 'roomName1',
+            start: new Date(2017, 8, 9, 5, 0, 0),
+            end: new Date(2017, 8, 9, 7, 0, 0)
+        },
+        id: 1 
+      },
+      expected: {
+        add: false,
+        days: [
+          {
+            date: new Date(2017, 8, 9),
+            bookingIds: [1]
+          }
+        ],
+        bookings: {
+          1: {
+            id: 1,
+            eventName: 'event1',
+            roomName: 'roomName1',
+            start: new Date(2017, 8, 9, 5, 0, 0),
+            end: new Date(2017, 8, 9, 7, 0, 0)
+          }
         }
-      ],
-      bookings: {
-        1: {
-          id: 1,
-          eventName: 'event1',
-          roomName: 'roomName1',
-          start: start,
-          end: end
+      }
+    },
+    {
+      id: 2,
+      state: {
+        days: [],
+        bookings: {}
+      },
+      action: {
+        type: actionTypes.ADD_BOOKING,
+        booking: {
+            id: 1,
+            eventName: 'event1',
+            roomName: 'roomName1',
+            start: new Date(2017, 8, 9, 5, 0, 0),
+            end: new Date(2017, 8, 9, 7, 0, 0)
+        },
+        id: 1 
+      },
+      expected: {
+        add: false,
+        days: [
+          {
+            date: new Date(2017, 8, 9),
+            bookingIds: [1]
+          }
+        ],
+        bookings: {
+          1: {
+            id: 1,
+            eventName: 'event1',
+            roomName: 'roomName1',
+            start: new Date(2017, 8, 9, 5, 0, 0),
+            end: new Date(2017, 8, 9, 7, 0, 0)
+          }
         }
       }
     }
-
-    let result = schedule(state, action);
-    expect(result).toEqual(expected);
-
-    // immutability test
-    expect(state).not.toEqual(result);
+  ], (data) => {
+    fit('should handle ADD_BOOKING - ' + data.id, () => {  
+      let result = schedule(data.state, data.action);
+      expect(result).toEqual(data.expected);
+  
+      // immutability test
+      expect(data.state).not.toEqual(result);
+    })
   })
 
   using([

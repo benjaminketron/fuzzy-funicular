@@ -10,14 +10,14 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
 
   switch (action.type) {
     case actionTypes.ADD_BOOKING:
-      console.log(action.booking)
-      console.log(state)
 
       if (isBookingComplete(action.booking)) {
+        bookings = addBookingToBookings(state.bookings, action)
+        days = addBookingToDays(state.days, bookings, action)
         return {...state,
           add: false,
-          bookings: addBookingToBookings(state.bookings, action),
-          days: addBookingToDays(state.days, state.bookings, action)
+          bookings: bookings,
+          days: days
         }
       }
       else {
