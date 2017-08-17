@@ -4,11 +4,18 @@ import { List, Map } from 'immutable'
 // considered a combine reducer but when adding bookings it is necesary to know about bookings when 
 // calculating the next state for days. it seems moving other parts of the state with a sub reducer is considered
 // an anit-pattern, but might simplify the code a bit and be worth looking into
-const addBooking = (state = { }, action) => {
+const addBooking = (state = 
+    {
+      eventName: '',
+      roomName: ''
+    }, action) => {
 
   switch(action.type) {
     case actionTypes.TOGGLE_ADD:
+    console.log(state);
         return {
+            eventName: '',
+            roomName: ''
         }
     case actionTypes.SET_ADD_EVENT_NAME: 
         return {...state,

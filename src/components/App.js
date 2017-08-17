@@ -36,7 +36,14 @@ const muiTheme = getMuiTheme({
   },
   nowButton: {
     width: '100%'
-  }
+  }, 
+  timePicker: {
+    accentColor: blue500,
+    headerColor: grey400,
+  },
+  flatButton: {
+    primaryTextColor: darkBlack,
+  },
 });
 
 const App = ({dispatch}) => (

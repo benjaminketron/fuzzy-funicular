@@ -12,6 +12,7 @@ const schedule = (state = { current: null, calendar: false }, action) => {
     case actionTypes.ADD_BOOKING:
       if (isBookingComplete(action.booking)) {
         return {...state,
+          add: false,
           bookings: addBookingToBookings(state.bookings, action),
           days: addBookingToDays(state.days, state.bookings, action)
         }
@@ -164,7 +165,6 @@ const schedule = (state = { current: null, calendar: false }, action) => {
 }
 
 export const isBookingComplete = (booking) => {
-  console.log(booking);
   return booking.eventName &&
     booking.start &&
     booking.end 
