@@ -31,7 +31,8 @@ describe('addBooking reducer', () => {
                 type: actionTypes.TOGGLE_ADD
             },
             expected: {
-
+                eventName: '',
+                roomName: ''
             }
         },
         {
@@ -64,10 +65,11 @@ describe('addBooking reducer', () => {
             },
             action: {
                 type: actionTypes.SET_ADD_START_DATE,
-                startDate: 'startDate'
+                startDate: new Date(2017, 8, 17)
             },
             expected: {
-                startDate: 'startDate'
+                startDate: new Date(2017, 8, 17),
+                start:  new Date(2017, 8, 17)
             }
         },
         {
@@ -76,10 +78,11 @@ describe('addBooking reducer', () => {
             },
             action: {
                 type: actionTypes.SET_ADD_START_TIME,
-                startTime: 'startTime'
+                startTime: new Date(2017, 8, 17, 12, 13, 0)
             },
             expected: {
-                startTime: 'startTime'
+                startTime: new Date(2017, 8, 17, 12, 13, 0),
+                start: null
             }
         },
         {
@@ -88,10 +91,11 @@ describe('addBooking reducer', () => {
             },
             action: {
                 type: actionTypes.SET_ADD_END_DATE,
-                endDate: 'endDate'
+                endDate: new Date(2017, 8, 18)
             },
             expected: {
-                endDate: 'endDate'
+                endDate: new Date(2017, 8, 18),
+                end: new Date(2017, 8, 18)
             }
         },
         {
@@ -100,10 +104,11 @@ describe('addBooking reducer', () => {
             },
             action: {
                 type: actionTypes.SET_ADD_END_TIME,
-                endTime: 'endTime'
+                endTime: new Date(2017, 8, 18, 20, 10, 0)
             },
             expected: {
-                endTime: 'endTime'
+                endTime: new Date(2017, 8, 18, 20, 10, 0),
+                end: null
             }
         }
     ], (data) => {
