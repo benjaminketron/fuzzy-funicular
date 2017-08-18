@@ -41,10 +41,14 @@ const scrollToElementInFocus = () => {
   // determine the offset top
   // and scrollTo offsetTop + 50 in order to put it at the top of the app
   let state = store.getState();
+
   if (state.schedule.focusedElement) {
+    
     scrollTo(0, state.schedule.focusedElement.offsetTop - 50, {
       duration: 500
     });
+
+    store.dispatch(actions.unfocus())
   } 
 }
 

@@ -5,7 +5,7 @@ import * as actionTypes from '../actions/indexActionTypes'
 // sort of weird, but this library really helps keeps things dry
 let using = require('jasmine-data-provider');
 
-fdescribe('schedule reducer', () => {
+describe('schedule reducer', () => {
   it('should handle initial state', () => {
     expect(
         schedule(undefined, {})
@@ -349,7 +349,10 @@ fdescribe('schedule reducer', () => {
       },
       action: {
         type: actionTypes.FOCUS,
-        element: {}
+        element: {},
+        day: {
+          focus: true
+        }
       },
       expected: {
         focusedElement: {}
@@ -357,13 +360,31 @@ fdescribe('schedule reducer', () => {
       testImmutability: true
     }
   ], (data) => {
-    it('should handle REGISTER_DAY_FOR_FOCUS - ' + data.id, () => {
+    it('should handle FOCUS - ' + data.id, () => {
       let result = schedule(data.state, data.action);
 
       expect(result).toEqual(data.expected);
 
+      // immutability test
       expect(result).not.toEqual(data.state);        
     })
+  })
+
+  it('should handle UNFOCUS', () => {
+    let state = {
+      focusedElement: {}
+    };
+    let action = {
+      type: actionTypes.UNFOCUS
+    };
+    let expected = {
+      focusedElement: null
+    }
+    let result = schedule(state, action);
+    expect(result).toEqual(expected);
+
+    // immutability test
+    expect(result).not.toEqual(state);
   })
 
   using([
@@ -988,9 +1009,52 @@ fdescribe('schedule reducer', () => {
           }
         ]
       }
+    },
+    {
+      id: 2,
+      state: {
+        days: [
+          {
+            date: new Date(2017, 8, 17),
+            bookingIds: []
+          },
+          {
+            date: new Date(2017, 8, 18),
+            end: new Date(2017, 10, 22),
+            bookingIds: []
+          },
+          {
+            date: new Date(2017, 10, 23),
+            bookingIds: []
+          }
+        ]
+      },
+      action: {
+        type: actionTypes.SET_CALENDAR_CURRENT,
+        current: new Date(2017, 8, 31)
+      },
+      expected: {
+        current: new Date(2017, 8, 31),
+        days: [
+          {
+            date: new Date(2017, 8, 17),
+            bookingIds: []
+          },
+          {
+            date: new Date(2017, 8, 18),
+            end: new Date(2017, 10, 22),
+            bookingIds: [],
+            focus: true
+          },
+          {
+            date: new Date(2017, 10, 23),
+            bookingIds: []
+          }
+        ]
+      }
     }
   ], (data) => {
-    fit('should handle SET_CALENDAR_CURRENT - ' + data.id, () => {
+    it('should handle SET_CALENDAR_CURRENT - ' + data.id, () => {
       let result = schedule(data.state, data.action);
       expect(result).toEqual(data.expected)
   

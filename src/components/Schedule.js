@@ -39,7 +39,7 @@ const Schedule = ({muiTheme, calendar, current, search, searchBooking, setCurren
         />
 
     const focusTextField = ref => {
-        if (ref)
+        if (ref) 
             ref.input.focus();
     };
 

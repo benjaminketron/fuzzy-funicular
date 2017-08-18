@@ -30,6 +30,14 @@ describe('index actions', () => {
       element: element
     })
   })
+
+  it('focus should create an UNFOCUS action', () => {
+    let element = {};
+    let day = {};
+    expect(actions.unfocus()).toEqual({
+      type: actionTypes.UNFOCUS
+    })
+  })
   
   it('searchBooking should create a SEARCH_BOOKING action', () => {
     expect(actions.searchBooking('event2')).toEqual({

@@ -28,6 +28,10 @@ export const focus = (day, element) => ({
   element: element
 })
 
+export const unfocus = () => ({
+  type: actionTypes.UNFOCUS
+})
+
 export const searchBooking = (searchText) => ({
   type: actionTypes.SEARCH_BOOKING,
   searchText: searchText

@@ -46,7 +46,14 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
       }
       else {
         return state;
-      }      
+      }
+    case actionTypes.UNFOCUS:
+      if (state.focusedElement) {
+        return {...state, focusedElement: null}
+      }
+      else {
+        return state;
+      }     
     case actionTypes.SEARCH_BOOKING:
       let searchText = !!action.searchText ? action.searchText.toLowerCase() : '';
 
@@ -148,18 +155,25 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
       days = List(state.days);
       for (let d = 0; d < days.size; d++) {
         let day = days.get(d);
-        if (day.date.getFullYear() == action.current.getFullYear() &&
+        let isDayMatch = day.date.getFullYear() == action.current.getFullYear() &&
           day.date.getMonth() == action.current.getMonth() &&
-          day.date.getDate() == action.current.getDate()) {
-            let index = days.indexOf(day);
-            days = days.remove(index);  
-            days = days.insert(index, {...day, focus: true })
-          }
-          else if (day.focus) {
-            let index = days.indexOf(day);
-            days = days.remove(index);
-            days = days.insert(index, {...day, focus: false })
-          }
+          day.date.getDate() == action.current.getDate();
+
+        let isInRange = day.end &&
+          day.date.getTime() <= action.current.getTime() &&
+          action.current.getTime() <= day.end.getTime();
+
+        if (isDayMatch || isInRange)    
+        {
+          let index = days.indexOf(day);
+          days = days.remove(index);  
+          days = days.insert(index, {...day, focus: true })
+        }
+        else if (day.focus) {
+          let index = days.indexOf(day);
+          days = days.remove(index);
+          days = days.insert(index, {...day, focus: false })
+        }
       }
       return {...state, 
         current: action.current,
