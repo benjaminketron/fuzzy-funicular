@@ -389,7 +389,7 @@ export const createDaysIfNotExist = (days, booking) => {
     // we have days to create in the future
     if (bookingEndDay > futureDate) {
       let offset = result.indexOf(futureDay) + 1;
-      // there may be a range inbetween booking start and future date to be created
+      // there may be a range in between booking start and future date to be created
       if (futureDate < bookingStartDay) {
         let days = Math.round(booking.end - booking.start) / (1000*60*60*24);
         for (let d = 0; d <= days; d++) {
@@ -438,36 +438,6 @@ export const createDaysIfNotExist = (days, booking) => {
           day.date.getTime() <= bookingEndDay.getTime() && bookingEndDay.getTime() <= day.end.getTime()
         )
       );
-    })
-
-    // collapse any adjacent ranges first
-    dateRanges.forEach((day) => {
-      let index = dateRanges.indexOf(day);
-      if (index !== -1) {
-        let previous = null;
-        let next = null;
-        if (index > 0) {
-          previous = dateRanges.get(index - 1);
-        }
-
-        if (index < dateRanges.size - 1) {
-          next = dateRanges.get(index + 1);
-        }
-
-        if (previous) {
-          if (previous.end) {
-            day.date = previous.date;
-            dateRanges = dateRanges.remove(dateRanges.indexOf(previous));
-          }
-        }
-
-        if (next) {
-          if (next.end) {
-            day.end = next.end;
-            dateRanges = dateRanges.remove(dateRanges.indexOf(next));
-          }
-        }
-      }
     })
 
     dateRanges.forEach((day) => { 
