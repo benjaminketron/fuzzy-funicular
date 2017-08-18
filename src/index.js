@@ -2,6 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
+import { List } from 'immutable'
 import App from './components/App'
 import reducer from './reducers'
 import * as actions from './actions/index.js'
@@ -19,7 +20,7 @@ const store = createStore(reducer, {
     current: now, 
     calendar: false, 
     search: false,
-    days: [{date: new Date(now.getFullYear(), now.getMonth(), now.getDate()), bookingIds: []}] 
+    days: List([{date: new Date(now.getFullYear(), now.getMonth(), now.getDate()), bookingIds: []}]),
   }
 })
 

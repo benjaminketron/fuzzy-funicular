@@ -6,7 +6,6 @@ import { List, Map } from 'immutable'
 // an anit-pattern, but might simplify the code a bit and be worth looking into
 const schedule = (state = { current: null, calendar: false  }, action) => {
   let bookings = null;
-  let updatedBookings = null;
   let days = null;
 
   switch (action.type) {
@@ -26,24 +25,27 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
       }
       break; // eslint-disable-line 
     case actionTypes.INITIALIZE_BOOKINGS:
-      bookings = {};
-      days = (state.days || []);
+      bookings = Map();
+      days = (state.days || List([]));
 
-      for (let b = 0; b < action.bookings.length; b++) {
-        let booking = action.bookings[b];
-
-        if (typeof(booking.start) === 'string') {
-          booking.start = new Date(booking.start);
+      bookings = bookings.withMutations((map) => {
+        for (let b = 0; b < action.bookings.length; b++) {
+          let booking = action.bookings[b];
+  
+          if (typeof(booking.start) === 'string') {
+            booking.start = new Date(booking.start);
+          }
+  
+          if (typeof(booking.end) === 'string') {
+            booking.end = new Date(booking.end);
+          }
+          
+          map.set(booking.id, booking);
+  
+          // this could be greatly optimized
+          days = addBookingToDays(days, map, { booking: booking });
         }
-
-        if (typeof(booking.end) === 'string') {
-          booking.end = new Date(booking.end);
-        }
-        
-        bookings[booking.id] = booking;
-        // this could be greatly optimized
-        days = addBookingToDays(days, bookings, { booking: booking });
-      }
+      })
       
       return {
         ...state,
@@ -61,23 +63,20 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
       break; // eslint-disable-line 
     case actionTypes.UNFOCUS:
       if (state.focusedElement) {
-        days = List(state.days);
+        days = state.days;
         let focusedDays = days.filter((day) => 
          day.focus 
         );
 
-        if (focusedDays.size) {
-          focusedDays.forEach((day) => {
-            let index = days.indexOf(day);
-            days = days.remove(index);
-            days = days.insert(index, {...day, focus: false});
-          })
-          days = days.toJS();
-        }
-        else 
-        {
-          days = state.days
-        }
+        days = days.withMutations((list) => {
+          if (focusedDays.size) {
+            focusedDays.forEach((day) => {
+              let index = list.indexOf(day);
+              list.set(index, {...day, focus: false});
+            })
+          }
+        })
+        
         return {...state, focusedElement: null, days: days}
       }
       else {
@@ -85,6 +84,8 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
       }     
       break; // eslint-disable-line 
     case actionTypes.SEARCH_BOOKING:
+      bookings = state.bookings;
+
       let searchText = !!action.searchText ? action.searchText.toLowerCase() : '';
 
       // rudimentary search. needs to be refactored to a keyword search and collect keyword
@@ -92,36 +93,33 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
       // could use a Map or OrderedMap (keyword -> booking id)
       // algorithm would strip punctionation and tokenize by whitespace discarding empty tokens
       // the same algorithm could be used to tokenize the search string
-      let bookingsMap = Map(state.bookings);
-      let bookingsToHide = bookingsMap.filter((booking) => {
+      let bookingsToHide = bookings.filter((booking) => {
         return !(
           (!!booking.eventName ? booking.eventName.toLowerCase() : '').indexOf(searchText) !== -1 ||
           (!!booking.roomName ? booking.roomName.toLowerCase() : '').indexOf(searchText) !== -1
         );
       })
 
-      let bookingsToShow = bookingsMap.filter((booking) => {
+      let bookingsToShow = bookings.filter((booking) => {
         return booking.hidden = true;
       })
 
-      updatedBookings = {};
-
-      bookingsToShow.forEach((booking) => {
-        let _booking = {...booking, hidden: false };
-        updatedBookings[booking.id] = _booking;
-      })
-
-      bookingsToHide.forEach((booking) => {
-        let _booking = {...booking, hidden: true };
-        updatedBookings[booking.id] = _booking;
+      bookings = bookings.withMutations((map) => {
+        bookingsToShow.forEach((booking) => {
+          map.set(booking.id, {...booking, hidden: false });
+        })
+  
+        bookingsToHide.forEach((booking) => {
+          map.set(booking.id, {...booking, hidden: true });
+        })
       })
 
       return {...state,
-        bookings: Object.assign({}, state.bookings, updatedBookings)
+        bookings: bookings
       }
       break; // eslint-disable-line 
     case actionTypes.SELECT_DAY:
-      days = List(state.days || []);
+      days = (state.days || List([]));
       
       let daysToUnfocus = days.filter((day) => {
         return day.focus;
@@ -134,83 +132,78 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
           (!!day.end && day.date.getTime() <= action.date.getTime() && action.date.getTime() <= day.end.getTime());
       })
 
-      daysToUnfocus.forEach((day) => {
-        let index = days.indexOf(day);
-        days = days.remove(index);
-        
-        let newDay = {...day, focus: false };
-
-        days = days.insert(index, newDay);
-      });
-
-      daysToFocus.forEach((day) => {
-        let index = days.indexOf(day);
-        days = days.remove(index);
-        
-        let newDay = {...day, focus: true };
-
-        days = days.insert(index, newDay);
-      });
+      days = days.withMutations((list) => {
+        daysToUnfocus.forEach((day) => {
+          let index = list.indexOf(day);
+          list.set(index, {...day, focus: false });
+        });
+  
+        daysToFocus.forEach((day) => {
+          let index = list.indexOf(day);
+          list.set(index, {...day, focus: true });
+        });
+      })   
 
       return {...state,
-        days: days.toJS()
+        days: days
       }
       break; // eslint-disable-line 
     case actionTypes.SELECT_DAY_BOOKING_CLOSEST_TO:
-      days = List(state.days || []);
+      days = (state.days || List([]));
 
       let dayForFocus = days.find((day) => {
         return day.date >= action.date && !!day.bookingIds  && !!day.bookingIds.length;
       });
 
       if (!!dayForFocus) {
-
         let daysToRemoveFocus = days.filter((day) => {
           return day.focus;
         })
-  
-        daysToRemoveFocus.forEach((day) => {
-          let index = days.indexOf(day);
-          days = days.remove(index);
-          days = days.insert(index, {...day, focus: false });
-        })
 
-        let index = days.indexOf(dayForFocus);
-        days = days.remove(index);
-        days = days.insert(index, {...dayForFocus, focus: true });
+        days = days.withMutations((list) => {   
+          daysToRemoveFocus.forEach((day) => {
+            let index = list.indexOf(day);
+            list.set(index, {...day, focus: false });
+          })
+  
+          let index = days.indexOf(dayForFocus);
+          list.set(index, {...dayForFocus, focus: true });
+        })
       }
 
       return {...state,
-        days: days.toJS()
+        days: days
       }
       break; // eslint-disable-line 
     case actionTypes.SET_CALENDAR_CURRENT:
-      days = List(state.days);
-      for (let d = 0; d < days.size; d++) {
-        let day = days.get(d);
-        let isDayMatch = day.date.getFullYear() === action.current.getFullYear() &&
-          day.date.getMonth() === action.current.getMonth() &&
-          day.date.getDate() === action.current.getDate();
+      days = state.days;
 
-        let isInRange = day.end &&
-          day.date.getTime() <= action.current.getTime() &&
-          action.current.getTime() <= day.end.getTime();
-
-        if (isDayMatch || isInRange)    
-        {
-          let index = days.indexOf(day);
-          days = days.remove(index);  
-          days = days.insert(index, {...day, focus: true })
+      days = days.withMutations((list) => {
+        for (let d = 0; d < days.size; d++) {
+          let day = days.get(d);
+          let isDayMatch = day.date.getFullYear() === action.current.getFullYear() &&
+            day.date.getMonth() === action.current.getMonth() &&
+            day.date.getDate() === action.current.getDate();
+  
+          let isInRange = day.end &&
+            day.date.getTime() <= action.current.getTime() &&
+            action.current.getTime() <= day.end.getTime();
+  
+          if (isDayMatch || isInRange)    
+          {
+            let index = days.indexOf(day);
+            list.set(index, {...day, focus: true });  
+          }
+          else if (day.focus) {
+            let index = days.indexOf(day);
+            list.set(index, {...day, focus: false });
+          }
         }
-        else if (day.focus) {
-          let index = days.indexOf(day);
-          days = days.remove(index);
-          days = days.insert(index, {...day, focus: false })
-        }
-      }
+      })
+      
       return {...state, 
         current: action.current,
-        days: days.toJS()
+        days: days
       }
       break; // eslint-disable-line 
     case actionTypes.SET_TODAY:
@@ -232,25 +225,17 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
     case actionTypes.TOGGLE_SEARCH:
       let search = !state.search;
 
-      bookings = state.bookings;
+      bookings = (state.bookings || Map());
 
-      updatedBookings = null;
-      for (let key in bookings) {
-        if (key) {
-          let booking = bookings[key];
-          if (booking.hidden) {
-            if (!updatedBookings) {
-              updatedBookings = {}
-            }
+      let hiddenBookings = bookings.filter((booking) => {
+        return booking.hidden
+      })
 
-            updatedBookings[key] = {...booking, hidden: false }
-          }
-        }
-      }
-
-      if (updatedBookings) {
-        bookings = Object.assign({}, bookings, updatedBookings)
-      }
+      bookings = bookings.withMutations((list) => {
+        hiddenBookings.forEach((booking, id) =>{
+          list.set(id, {...booking, hidden: false })
+        })
+      })
 
       return {...state,
         search: search,
@@ -274,9 +259,7 @@ export const isBookingComplete = (booking) => {
 }
 
 export const addBookingToBookings = (bookings, action) => {
-  let newBookings = { ...bookings };
-  newBookings[action.id] = { ...action.booking, id: action.id};
-  return newBookings;
+  return bookings.set(action.id, { ...action.booking, id: action.id})
 }
 
 // TODO refactor not as scalable as it could be
@@ -284,12 +267,12 @@ export const addBookingToBookings = (bookings, action) => {
 export const addBookingToDays = (days, bookings, action) => {
   // if day(s) do not exist for booking create them
   let booking = action.booking;
-  let result = List(createDaysIfNotExist(days, booking));
+  let result = createDaysIfNotExist(days, booking);
   let startDate = booking.start;
   let startDay = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
   let endDate = booking.end;
   let endDay = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
-
+  
   // collect days effected by booking
   let bookedDays = result.filter((d) => {
     return startDay <= d.date && d.date <= endDay;
@@ -301,7 +284,7 @@ export const addBookingToDays = (days, bookings, action) => {
 
     let index = 0;
     for (let i = 0; i < bookingIds.size; i++) {
-      let _booking = bookings[bookingIds.get(i)];
+      let _booking = bookings.get(bookingIds.get(i));
       if (booking.start < _booking.start && (booking.end - booking.start) < (_booking.end - _booking.start)) {
         index = i;
       }
@@ -319,13 +302,13 @@ export const addBookingToDays = (days, bookings, action) => {
     
   }, this);
 
-  return result.toJS();
+  return result;
 }
 
 // also splits ranges as necessary
 // TODO needs a bit of cleanup / segmentation into smaller bits
 export const createDaysIfNotExist = (days, booking) => {
-  let result = List(days || []);
+  let result = (days || List([]))
   // just add days if nothing exists
   if (!result.size) {
     let days = booking.end.getDate() - booking.start.getDate();
@@ -538,7 +521,7 @@ export const createDaysIfNotExist = (days, booking) => {
 
   }
 
-  return result.toJS();
+  return result;
 }
 
 export const addBookingToDay = (day, booking, bookings) => {

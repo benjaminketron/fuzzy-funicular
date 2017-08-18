@@ -1,6 +1,7 @@
-import schedule from './schedule'
-import { addBookingToBookings, addBookingToDays, addBookingToDay, createDaysIfNotExist } from './schedule'
-import * as actionTypes from '../actions/indexActionTypes'
+import {List, Map} from 'immutable';
+import schedule from './schedule';
+import { addBookingToBookings, addBookingToDays, addBookingToDay, createDaysIfNotExist } from './schedule';
+import * as actionTypes from '../actions/indexActionTypes';
 
 // sort of weird, but this library really helps keeps things dry
 let using = require('jasmine-data-provider');
@@ -22,7 +23,7 @@ describe('schedule reducer', () => {
       },
       action: {
         type: actionTypes.INITIALIZE_BOOKINGS,
-        bookings:  [
+        bookings: [
           {
             id: 1,
             start: new Date(2017, 8, 14, 16, 0, 0),
@@ -33,27 +34,27 @@ describe('schedule reducer', () => {
             start: new Date(2017, 8, 14, 12, 0, 0),
             end: new Date(2017, 8, 14, 13, 0, 0)
           }
-        ]
+        ],
       },
       expected: {
-        bookings: {
-          1: {
+        bookings: Map().withMutations((map) => {
+          map.set(1, {
             id: 1,
             start: new Date(2017, 8, 14, 16, 0, 0),
             end: new Date(2017, 8, 14, 18, 0, 0)
-          },
-          2: {
+          })
+          .set(2, {
             id: 2,
             start: new Date(2017, 8, 14, 12, 0, 0),
             end: new Date(2017, 8, 14, 13, 0, 0)
-          }
-        },
-        days: [
+          })
+        }),
+        days: List([
           {
             date: new Date(2017, 8, 14, 0, 0, 0),
             bookingIds: [2, 1]
           }
-        ],
+        ]),
       }
     },
     {
@@ -64,96 +65,95 @@ describe('schedule reducer', () => {
         type: actionTypes.INITIALIZE_BOOKINGS,
         bookings: [
           {
-              "id": 0,
-              "eventName": "Test Booking 01",
-              "roomName": "Demo Room 01",
-              "start": new Date("2016-11-10T13:00:00.000Z"),
-              "end": new Date("2016-11-10T14:00:00.000Z")
-          },
-          {
-              "id": 1,
-              "eventName": "Test Booking 02",
-              "roomName": "Demo Room 02",
-              "start": new Date("2016-11-10T13:00:00.000Z"),
-              "end": new Date("2016-11-10T14:00:00.000Z")
-          },
-          {
-              "id": 2,
-              "eventName": "Test Booking 03",
-              "roomName": "Demo Room 03",
-              "start": new Date("2016-11-14T13:00:00.000Z"),
-              "end": new Date("2016-11-14T14:00:00.000Z")
-          },
-          {
-              "id": 3,
-              "eventName": "Test Booking 04",
-              "roomName": "Demo Room 04",
-              "start": new Date("2016-11-15T15:00:00.000Z"),
-              "end": new Date("2016-11-15T16:00:00.000Z")
-          },
-          {
-              "id": 4,
-              "eventName": "Test Booking 05",
-              "roomName": "Demo Room 05",
-              "start": new Date("2016-11-15T15:00:00.000Z"),
-              "end": new Date("2016-11-15T16:00:00.000Z")
-          },
-          {
-              "id": 5,
-              "eventName": "Thanksgiving",
-              "roomName": "Conference Room 1",
-              "start": new Date("2016-11-24T00:00:00.000Z"),
-              "end": new Date("2016-11-24T23:59:59.999Z")
-          }
-        ]
-      },
-      expected: {
-        bookings: {
-          0: {
             "id": 0,
             "eventName": "Test Booking 01",
             "roomName": "Demo Room 01",
             "start": new Date("2016-11-10T13:00:00.000Z"),
             "end": new Date("2016-11-10T14:00:00.000Z")
           },
-          1: {
+          {
             "id": 1,
             "eventName": "Test Booking 02",
             "roomName": "Demo Room 02",
             "start": new Date("2016-11-10T13:00:00.000Z"),
             "end": new Date("2016-11-10T14:00:00.000Z")
           },
-          2: {
+          {
             "id": 2,
             "eventName": "Test Booking 03",
             "roomName": "Demo Room 03",
             "start": new Date("2016-11-14T13:00:00.000Z"),
             "end": new Date("2016-11-14T14:00:00.000Z")
           },
-          3: {
+          {
             "id": 3,
             "eventName": "Test Booking 04",
             "roomName": "Demo Room 04",
             "start": new Date("2016-11-15T15:00:00.000Z"),
             "end": new Date("2016-11-15T16:00:00.000Z")
           },
-          4: {
+          {
             "id": 4,
             "eventName": "Test Booking 05",
             "roomName": "Demo Room 05",
             "start": new Date("2016-11-15T15:00:00.000Z"),
             "end": new Date("2016-11-15T16:00:00.000Z")
           },
-          5: {
+          {
             "id": 5,
             "eventName": "Thanksgiving",
             "roomName": "Conference Room 1",
             "start": new Date("2016-11-24T00:00:00.000Z"),
             "end": new Date("2016-11-24T23:59:59.999Z")
           }
-        
-        },
-        days: [
+        ],
+      },
+      expected: {
+        bookings: Map().withMutations((map) => {
+          map.set(0, {
+            "id": 0,
+            "eventName": "Test Booking 01",
+            "roomName": "Demo Room 01",
+            "start": new Date("2016-11-10T13:00:00.000Z"),
+            "end": new Date("2016-11-10T14:00:00.000Z")
+          })
+          .set(1, {
+            "id": 1,
+            "eventName": "Test Booking 02",
+            "roomName": "Demo Room 02",
+            "start": new Date("2016-11-10T13:00:00.000Z"),
+            "end": new Date("2016-11-10T14:00:00.000Z")
+          })
+          .set(2, {
+            "id": 2,
+            "eventName": "Test Booking 03",
+            "roomName": "Demo Room 03",
+            "start": new Date("2016-11-14T13:00:00.000Z"),
+            "end": new Date("2016-11-14T14:00:00.000Z")
+          })
+          .set(3, {
+            "id": 3,
+            "eventName": "Test Booking 04",
+            "roomName": "Demo Room 04",
+            "start": new Date("2016-11-15T15:00:00.000Z"),
+            "end": new Date("2016-11-15T16:00:00.000Z")
+          })
+          .set(4, {
+            "id": 4,
+            "eventName": "Test Booking 05",
+            "roomName": "Demo Room 05",
+            "start": new Date("2016-11-15T15:00:00.000Z"),
+            "end": new Date("2016-11-15T16:00:00.000Z")
+          })
+          .set(5, {
+            "id": 5,
+            "eventName": "Thanksgiving",
+            "roomName": "Conference Room 1",
+            "start": new Date("2016-11-24T00:00:00.000Z"),
+            "end": new Date("2016-11-24T23:59:59.999Z")
+          })
+        }),
+        days: List([
           {
             date: new Date(2016, 10, 10),
             bookingIds: [1, 0]
@@ -180,18 +180,18 @@ describe('schedule reducer', () => {
             date: new Date(2016, 10, 23),
             bookingIds: [5]
           }
-        ]
+        ])
       }
     },
     {
       id: 3,
       state: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 8, 15),
             bookingIds: []
           }
-        ]
+        ])
       },
       action: {
         type: actionTypes.INITIALIZE_BOOKINGS,
@@ -241,52 +241,51 @@ describe('schedule reducer', () => {
         ]
       },
       expected: {
-        bookings: {
-          0: {
+        bookings: Map().withMutations((map) => {
+          map.set(0, {
             "id": 0,
             "eventName": "Test Booking 01",
             "roomName": "Demo Room 01",
             "start": new Date("2016-11-10T13:00:00.000Z"),
             "end": new Date("2016-11-10T14:00:00.000Z")
-          },
-          1: {
+          })
+          .set(1, {
             "id": 1,
             "eventName": "Test Booking 02",
             "roomName": "Demo Room 02",
             "start": new Date("2016-11-10T13:00:00.000Z"),
             "end": new Date("2016-11-10T14:00:00.000Z")
-          },
-          2: {
+          })
+          .set(2, {
             "id": 2,
             "eventName": "Test Booking 03",
             "roomName": "Demo Room 03",
             "start": new Date("2016-11-14T13:00:00.000Z"),
             "end": new Date("2016-11-14T14:00:00.000Z")
-          },
-          3: {
+          })
+          .set(3, {
             "id": 3,
             "eventName": "Test Booking 04",
             "roomName": "Demo Room 04",
             "start": new Date("2016-11-15T15:00:00.000Z"),
             "end": new Date("2016-11-15T16:00:00.000Z")
-          },
-          4: {
+          })
+          .set(4, {
             "id": 4,
             "eventName": "Test Booking 05",
             "roomName": "Demo Room 05",
             "start": new Date("2016-11-15T15:00:00.000Z"),
             "end": new Date("2016-11-15T16:00:00.000Z")
-          },
-          5: {
+          })
+          .set(5, {
             "id": 5,
             "eventName": "Thanksgiving",
             "roomName": "Conference Room 1",
             "start": new Date("2016-11-24T00:00:00.000Z"),
             "end": new Date("2016-11-24T23:59:59.999Z")
-          }
-        
-        },
-        days: [
+          })
+        }),
+        days: List([
           {
             date: new Date(2016, 10, 10),
             bookingIds: [1, 0]
@@ -326,7 +325,7 @@ describe('schedule reducer', () => {
             date: new Date(2017, 8, 15),
             bookingIds: []
           }
-        ],
+        ]),
       }
     }
   ], (data) => {
@@ -372,7 +371,7 @@ describe('schedule reducer', () => {
 
   it('should handle UNFOCUS', () => {
     let state = {
-      days: [
+      days: List([
         {
           date: new Date(2017, 8, 17),
           focus: true
@@ -380,14 +379,14 @@ describe('schedule reducer', () => {
         {
           date: new Date(2017, 8, 18)
         }
-      ],
+      ]),
       focusedElement: {}
     };
     let action = {
       type: actionTypes.UNFOCUS
     };
     let expected = {
-      days: [
+      days: List([
         {
           date: new Date(2017, 8, 17),
           focus: false
@@ -395,7 +394,7 @@ describe('schedule reducer', () => {
         {
           date: new Date(2017, 8, 18)
         }
-      ],
+      ]),
       focusedElement: null
     }
     let result = schedule(state, action);
@@ -409,8 +408,8 @@ describe('schedule reducer', () => {
     {
       id: 1,
       state: {
-        days: [],
-        bookings: {}
+        days: List([]),
+        bookings: Map()
       },
       action: {
         type: actionTypes.ADD_BOOKING,
@@ -425,28 +424,28 @@ describe('schedule reducer', () => {
       },
       expected: {
         add: false,
-        days: [
+        days: List([
           {
             date: new Date(2017, 8, 9),
             bookingIds: [1]
           }
-        ],
-        bookings: {
-          1: {
+        ]),
+        bookings: Map().withMutations((map) => {
+          map.set(1, {
             id: 1,
             eventName: 'event1',
             roomName: 'roomName1',
             start: new Date(2017, 8, 9, 5, 0, 0),
             end: new Date(2017, 8, 9, 7, 0, 0)
-          }
-        }
+          })
+        })
       }
     },
     {
       id: 2,
       state: {
-        days: [],
-        bookings: {}
+        days: List([]),
+        bookings: Map()
       },
       action: {
         type: actionTypes.ADD_BOOKING,
@@ -461,21 +460,21 @@ describe('schedule reducer', () => {
       },
       expected: {
         add: false,
-        days: [
+        days: List([
           {
             date: new Date(2017, 8, 9),
             bookingIds: [1]
           }
-        ],
-        bookings: {
-          1: {
+        ]),
+        bookings: Map().withMutations((map) => {
+          map.set(1, {
             id: 1,
             eventName: 'event1',
             roomName: 'roomName1',
             start: new Date(2017, 8, 9, 5, 0, 0),
             end: new Date(2017, 8, 9, 7, 0, 0)
-          }
-        }
+          })
+        })
       }
     }
   ], (data) => {
@@ -492,145 +491,145 @@ describe('schedule reducer', () => {
     {
       id: 1,
       state: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 6, 4),
             bookingIds: [2, 3, 1]
           }
-        ],
-        bookings: {
-          1: {
+        ]),
+        bookings: Map().withMutations((map) => {
+          map.set(1, {
             id: 1,
             eventName: 'Happy Holiday',
             roomName: 'The Park',
             start: new Date(2017, 6, 4, 21, 0, 0),
             end: new Date(2017, 6, 4, 23, 0, 0)
-          },
-          2: {
+          })
+          .set(2, {
             id: 2,
             eventName: 'Oboe Tuning',
             roomName: 'Musical Services',
             start: new Date(2017, 6, 4, 12, 0, 0),
             end: new Date(2017, 6, 4, 13, 0, 0)
-          },
-          3: {
+          })
+          .set(3, {
             id: 3,
             eventName: 'Dinner at Jay\'s',
-            roomName: 'Jas\'s Bistro',
+            roomName: 'Jay\'s Bistro',
             start: new Date(2017, 6, 4, 18, 0, 0),
             end: new Date(2017, 6, 4, 19, 0, 0)
-          }
-        }
+          })
+        })
       },
       action: {
         type: actionTypes.SEARCH_BOOKING,
         searchText: 'Bistro'
       },
       expected: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 6, 4),
             bookingIds: [2, 3, 1]
           }
-        ],
-        bookings: {
-          1: {
+        ]),
+        bookings: Map().withMutations((map) => {
+          map.set(1, {
             id: 1,
             eventName: 'Happy Holiday',
             roomName: 'The Park',
             start: new Date(2017, 6, 4, 21, 0, 0),
             end: new Date(2017, 6, 4, 23, 0, 0),
             hidden: true
-          },
-          2: {
+          })
+          .set(2, {
             id: 2,
             eventName: 'Oboe Tuning',
             roomName: 'Musical Services',
             start: new Date(2017, 6, 4, 12, 0, 0),
             end: new Date(2017, 6, 4, 13, 0, 0),
             hidden: true
-          },
-          3: {
+          })
+          .set(3, {
             id: 3,
             eventName: 'Dinner at Jay\'s',
-            roomName: 'Jas\'s Bistro',
+            roomName: 'Jay\'s Bistro',
             start: new Date(2017, 6, 4, 18, 0, 0),
             end: new Date(2017, 6, 4, 19, 0, 0),
             hidden: false
-          }
-        }
+          })
+        })
       }
     },
     {
       id: 2,
       state: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 6, 4),
             bookingIds: [2, 3, 1]
           }
-        ],
-        bookings: {
-          1: {
+        ]),
+        bookings: Map().withMutations((map) => {
+          map.set(1, {
             id: 1,
             eventName: 'Happy Holiday',
             roomName: 'The Park',
             start: new Date(2017, 6, 4, 21, 0, 0),
             end: new Date(2017, 6, 4, 23, 0, 0),
-          },
-          2: {
+          })
+          .set(2, {
             id: 2,
             eventName: 'Oboe Tuning',
             roomName: 'Musical Services',
             start: new Date(2017, 6, 4, 12, 0, 0),
             end: new Date(2017, 6, 4, 13, 0, 0),
-          },
-          3: {
+          })
+          .set(3, {
             id: 3,
             eventName: 'Dinner at Jay\'s',
-            roomName: 'Jas\'s Bistro',
+            roomName: 'Jay\'s Bistro',
             start: new Date(2017, 6, 4, 18, 0, 0),
             end: new Date(2017, 6, 4, 19, 0, 0),
-          }
-        }
+          })
+        })
       },
       action: {
         type: actionTypes.SEARCH_BOOKING,
         searchText: 'Tun'
       },
       expected: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 6, 4),
             bookingIds: [2, 3, 1]
           }
-        ],
-        bookings: {
-          1: {
+        ]),
+        bookings: Map().withMutations((map) => {
+          map.set(1, {
             id: 1,
             eventName: 'Happy Holiday',
             roomName: 'The Park',
             start: new Date(2017, 6, 4, 21, 0, 0),
             end: new Date(2017, 6, 4, 23, 0, 0),
             hidden: true
-          },
-          2: {
+          })
+          .set(2, {
             id: 2,
             eventName: 'Oboe Tuning',
             roomName: 'Musical Services',
             start: new Date(2017, 6, 4, 12, 0, 0),
             end: new Date(2017, 6, 4, 13, 0, 0),
             hidden: false
-          },
-          3: {
+          })
+          .set(3, {
             id: 3,
             eventName: 'Dinner at Jay\'s',
-            roomName: 'Jas\'s Bistro',
+            roomName: 'Jay\'s Bistro',
             start: new Date(2017, 6, 4, 18, 0, 0),
             end: new Date(2017, 6, 4, 19, 0, 0),
             hidden: true
-          }
-        }
+          })
+        })
       }
     }
   ], (data) => {
@@ -647,7 +646,7 @@ describe('schedule reducer', () => {
     {
       id: 1,
       state: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 7, 11),
             bookingIds: []
@@ -660,14 +659,14 @@ describe('schedule reducer', () => {
             date: new Date(2017, 7, 13),
             bookingIds: []
           }
-        ]
+        ])
       },
       action: {
         type: actionTypes.SELECT_DAY,
         date: new Date(2017, 7, 12)
       },
       expected: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 7, 11),
             bookingIds: []
@@ -681,13 +680,13 @@ describe('schedule reducer', () => {
             date: new Date(2017, 7, 13),
             bookingIds: []
           }
-        ]
+        ])
       }
     },
     {
       id: 2,
       state: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 7, 11),
             bookingIds: [],
@@ -701,14 +700,14 @@ describe('schedule reducer', () => {
             date: new Date(2017, 7, 13),
             bookingIds: []
           }
-        ]
+        ])
       },
       action: {
         type: actionTypes.SELECT_DAY,
         date: new Date(2017, 7, 13)
       },
       expected: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 7, 11),
             bookingIds: [],
@@ -723,13 +722,13 @@ describe('schedule reducer', () => {
             bookingIds: [],
             focus: true
           }
-        ]
+        ])
       }
     },
     {
       id: 3,
       state: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 7, 11),
             bookingIds: []
@@ -747,14 +746,14 @@ describe('schedule reducer', () => {
             date: new Date(2017, 7, 16),
             bookingIds: []
           }
-        ]
+        ])
       },
       action: {
         type: actionTypes.SELECT_DAY,
         date: new Date(2017, 7, 14)
       },
       expected: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 7, 11),
             bookingIds: []
@@ -773,7 +772,7 @@ describe('schedule reducer', () => {
             date: new Date(2017, 7, 16),
             bookingIds: []
           }
-        ]
+        ])
       }
     }
   ], (data) => {
@@ -791,7 +790,7 @@ describe('schedule reducer', () => {
     {
       id: 1,
       state: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 5, 6),
             bookingIds: [2]
@@ -808,14 +807,14 @@ describe('schedule reducer', () => {
             date: new Date(2017, 8, 6),
             bookingIds: [5]
           }
-        ]
+        ])
       },
       action: {
         type: actionTypes.SELECT_DAY_BOOKING_CLOSEST_TO,
         date: new Date(2017, 7, 4)
       },
       expected: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 5, 6),
             bookingIds: [2]
@@ -833,14 +832,14 @@ describe('schedule reducer', () => {
             date: new Date(2017, 8, 6),
             bookingIds: [5]
           }
-        ]
+        ])
       },
       immutableCheck: true
     },
     {
       id: 2,
       state: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 5, 6),
             bookingIds: [2],
@@ -858,14 +857,14 @@ describe('schedule reducer', () => {
             date: new Date(2017, 8, 6),
             bookingIds: [5]
           }
-        ]
+        ])
       },
       action: {
         type: actionTypes.SELECT_DAY_BOOKING_CLOSEST_TO,
         date: new Date(2017, 7, 1)
       },
       expected: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 5, 6),
             bookingIds: [2],
@@ -884,14 +883,14 @@ describe('schedule reducer', () => {
             date: new Date(2017, 8, 6),
             bookingIds: [5]
           }
-        ]
+        ])
       },
       immutableCheck: true
     },
     {
       id: 3,
       state: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 5, 6),
             bookingIds: [2]
@@ -909,14 +908,14 @@ describe('schedule reducer', () => {
             date: new Date(2017, 8, 6),
             bookingIds: [5],
           }
-        ]
+        ])
       },
       action: {
         type: actionTypes.SELECT_DAY_BOOKING_CLOSEST_TO,
         date: new Date(2017, 8, 9)
       },
       expected: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 5, 6),
             bookingIds: [2]
@@ -934,7 +933,7 @@ describe('schedule reducer', () => {
             date: new Date(2017, 8, 6),
             bookingIds: [5]
           }
-        ]
+        ])
       },
       immutableCheck: false
     }
@@ -994,7 +993,7 @@ describe('schedule reducer', () => {
       id: 1,
       state: {
         current: null,
-        days: [
+        days: List([
           {
             date: new Date(2017, 8, 16),
             focus: true
@@ -1005,7 +1004,7 @@ describe('schedule reducer', () => {
           {
             date: new Date(2017, 8, 18)
           }
-        ]
+        ])
       },
       action: {
         type: actionTypes.SET_CALENDAR_CURRENT,
@@ -1013,7 +1012,7 @@ describe('schedule reducer', () => {
       },
       expected: {
         current: new Date(2017, 8, 17),
-        days: [
+        days: List([
           {
             date: new Date(2017, 8, 16),
             focus: false
@@ -1025,13 +1024,13 @@ describe('schedule reducer', () => {
           {
             date: new Date(2017, 8, 18)
           }
-        ]
+        ])
       }
     },
     {
       id: 2,
       state: {
-        days: [
+        days: List([
           {
             date: new Date(2017, 8, 17),
             bookingIds: []
@@ -1045,7 +1044,7 @@ describe('schedule reducer', () => {
             date: new Date(2017, 10, 23),
             bookingIds: []
           }
-        ]
+        ])
       },
       action: {
         type: actionTypes.SET_CALENDAR_CURRENT,
@@ -1053,7 +1052,7 @@ describe('schedule reducer', () => {
       },
       expected: {
         current: new Date(2017, 8, 31),
-        days: [
+        days: List([
           {
             date: new Date(2017, 8, 17),
             bookingIds: []
@@ -1068,7 +1067,7 @@ describe('schedule reducer', () => {
             date: new Date(2017, 10, 23),
             bookingIds: []
           }
-        ]
+        ])
       }
     }
   ], (data) => {
@@ -1104,6 +1103,7 @@ describe('schedule reducer', () => {
         type: actionTypes.TOGGLE_SEARCH
       },
       expected: {
+        bookings: Map(),
         search: true,
         calendar: false
       }
@@ -1111,28 +1111,28 @@ describe('schedule reducer', () => {
     {
       id: 2,
       state: {
-        bookings: {
-          1: {
+        bookings: Map().withMutations((map) => {
+          map.set(1, {
             hidden: true
-          },
-          2: {
+          })
+          .set(2, {
 
-          }
-        },
+          })
+        }),
         search: true
       },
       action: {
         type: actionTypes.TOGGLE_SEARCH
       },
       expected: {
-        bookings: {
-          1: {
+        bookings: Map().withMutations((map) => {
+          map.set(1, {
             hidden: false
-          },
-          2: {
+          })
+          .set(2, {
 
-          }
-        },
+          })
+        }),
         search: false,
         calendar: false,
         searchText: ''
@@ -1194,50 +1194,50 @@ describe('addBookingToBookings function', () => {
   using([
     { 
       id: 1,
-      bookings: {},
+      bookings: Map(),
       action: { type: actionTypes.ADD_BOOKING, id: 1, booking: { eventName: 'event1' }},
-      expected: {
-        1: {
+      expected: Map().withMutations((map) => {
+        map.set(1, {
           id: 1,
           eventName: 'event1'
-        }
-      }
+        })
+      })
     },
     {
       id: 2,
-      bookings: {
-        1: {
+      bookings: Map().withMutations((map) => {
+        map.set(1, {
           id: 1,
           eventName: 'event1'
-        }
-      },
+        })
+      }),
       action: { type: actionTypes.ADD_BOOKING, id: 1, booking: {eventName: 'modifiedEvent1'}},
-      expected: {
-        1: {
+      expected: Map().withMutations((map) => {
+        map.set(1, {
           id: 1,
           eventName: 'modifiedEvent1'
-        }
-      }
+        })
+      })
     },
     {
       id: 3,
-      bookings: {
-        1: {
+      bookings: Map().withMutations((map) => {
+        map.set(1, {
           id: 1,
           eventName: 'event1'
-        }
-      },
+        })
+      }),
       action: { type: actionTypes.ADD_BOOKING, id: 2, booking: {eventName: 'event2'}},
-      expected: {
-        1: {
+      expected: Map().withMutations((map) => {
+        map.set(1, {
           id: 1,
           eventName: 'event1'
-        },
-        2: {
+        })
+        .set(2, {
           id: 2,
           eventName: 'event2'
-        }
-      }
+        })
+      })
     }], (data) => {
     it('should store new booking in an array using id as key - ' + data.id, () => {
         let result = addBookingToBookings(data.bookings, data.action)
@@ -1253,7 +1253,7 @@ describe('addBookingToDays function', () => {
   using([
     {
       id: 1,
-      days: [
+      days: List([
         {
           date: new Date(2017, 9, 9),
           bookingIds: [],
@@ -1266,14 +1266,14 @@ describe('addBookingToDays function', () => {
           date: new Date(2017, 9, 11),
           bookingIds: [],
         }
-      ],
-      bookings: {
-        1: {
+      ]),
+      bookings: Map().withMutations((map) => {
+        map.set(1, {
           id: 1,
           start: new Date(2017, 9, 10, 18, 0),
           end: new Date(2017, 9, 10, 20, 0)
-        }
-      },
+        })
+      }),
       action: {
         type: actionTypes.ADD_BOOKING,
         id: 1,
@@ -1283,7 +1283,7 @@ describe('addBookingToDays function', () => {
           end: new Date(2017, 9, 10, 20, 0)
         }
       },
-      expected: [
+      expected: List([
         {
           date: new Date(2017, 9, 9),
           bookingIds: [],
@@ -1296,11 +1296,11 @@ describe('addBookingToDays function', () => {
           date: new Date(2017, 9, 11),
           bookingIds: [],
         }
-      ]
+      ])
     },
     {
       id: 2,
-      days: [
+      days: List([
         {
           date: new Date(2017, 9, 9),
           bookingIds: [],
@@ -1313,24 +1313,24 @@ describe('addBookingToDays function', () => {
           date: new Date(2017, 9, 11),
           bookingIds: [],
         }
-      ],
-      bookings: {
-        1: {
+      ]),
+      bookings: Map().withMutations((map) => {
+        map.set(1, {
           id: 1,
           start: new Date(2017, 9, 10, 16, 0),
           end: new Date(2017, 9, 10, 20, 0)
-        },
-        2: {
+        })
+        .set(2, {
           id: 2,
           start: new Date(2017, 9, 10, 16, 0),
           end: new Date(2017, 9, 10, 19, 0)
-        },
-        3: {
+        })
+        .set(3, {
           id: 3,
           start: new Date(2017, 9, 10, 16, 0),
           end: new Date(2017, 9, 10, 21, 0)
-        }
-      },
+        })
+      }),
       action: {
         type: actionTypes.ADD_BOOKING,
         id: 3,
@@ -1340,7 +1340,7 @@ describe('addBookingToDays function', () => {
           end: new Date(2017, 9, 10, 21, 0)
         }
       },
-      expected: [
+      expected: List([
         {
           date: new Date(2017, 9, 9),
           bookingIds: [],
@@ -1353,11 +1353,11 @@ describe('addBookingToDays function', () => {
           date: new Date(2017, 9, 11),
           bookingIds: [],
         }
-      ]
+      ])
     },
     {
       id: 3,
-      days: [
+      days: List([
         {
           date: new Date(2017, 9, 9),
           bookingIds: [],
@@ -1370,24 +1370,24 @@ describe('addBookingToDays function', () => {
           date: new Date(2017, 9, 11),
           bookingIds: [],
         }
-      ],
-      bookings: {
-        1: {
-          id: 1,
-          start: new Date(2017, 9, 10, 16, 0),
-          end: new Date(2017, 9, 10, 20, 0)
-        },
-        2: {
-          id: 2,
-          start: new Date(2017, 9, 10, 16, 0),
-          end: new Date(2017, 9, 10, 19, 0)
-        },
-        3: {
-          id: 3,
-          start: new Date(2017, 9, 9, 16, 0),
-          end: new Date(2017, 9, 11, 21, 0)
-        }
-      },
+      ]),
+      bookings: Map().withMutations((map) => {
+          map.set(1, {
+            id: 1,
+            start: new Date(2017, 9, 10, 16, 0),
+            end: new Date(2017, 9, 10, 20, 0)
+          })
+          .set(2, {
+            id: 2,
+            start: new Date(2017, 9, 10, 16, 0),
+            end: new Date(2017, 9, 10, 19, 0)
+          })
+          .set(3, {
+            id: 3,
+            start: new Date(2017, 9, 9, 16, 0),
+            end: new Date(2017, 9, 11, 21, 0)
+          })
+      }),
       action: {
         type: actionTypes.ADD_BOOKING,
         id: 3,
@@ -1397,7 +1397,7 @@ describe('addBookingToDays function', () => {
           end: new Date(2017, 9, 11, 21, 0)
         }
       },
-      expected: [
+      expected: List([
         {
           date: new Date(2017, 9, 9),
           bookingIds: [3],
@@ -1410,11 +1410,11 @@ describe('addBookingToDays function', () => {
           date: new Date(2017, 9, 11),
           bookingIds: [3],
         }
-      ]
+      ])
     },
     {
       id: 4,
-      days: [
+      days: List([
         {
           date: new Date(2017, 9, 8),
           end: new Date(2017, 9, 9),
@@ -1428,24 +1428,24 @@ describe('addBookingToDays function', () => {
           date: new Date(2017, 9, 11),
           bookingIds: [],
         }
-      ],
-      bookings: {
-        1: {
+      ]),
+      bookings: Map().withMutations((map) => {
+        map.set(1, {
           id: 1,
           start: new Date(2017, 9, 10, 16, 0),
           end: new Date(2017, 9, 10, 20, 0)
-        },
-        2: {
+        })
+        .set(2, {
           id: 2,
           start: new Date(2017, 9, 10, 16, 0),
           end: new Date(2017, 9, 10, 19, 0)
-        },
-        3: {
+        })
+        .set(3, {
           id: 3,
           start: new Date(2017, 9, 9, 16, 0),
           end: new Date(2017, 9, 11, 21, 0)
-        }
-      },
+        })
+      }),
       action: {
         type: actionTypes.ADD_BOOKING,
         id: 3,
@@ -1455,7 +1455,7 @@ describe('addBookingToDays function', () => {
           end: new Date(2017, 9, 11, 21, 0)
         }
       },
-      expected: [
+      expected: List([
         {
           date: new Date(2017, 9, 8),
           bookingIds: []
@@ -1472,11 +1472,11 @@ describe('addBookingToDays function', () => {
           date: new Date(2017, 9, 11),
           bookingIds: [3],
         }
-      ]
+      ])
     },
     {
       id: 5,
-      days: [
+      days: List([
         {
           date: new Date(2017, 9, 9),
           bookingIds: [],
@@ -1490,24 +1490,24 @@ describe('addBookingToDays function', () => {
           end: new Date(2017, 9, 20),
           bookingIds: [],
         }
-      ],
-      bookings: {
-        1: {
+      ]),
+      bookings: Map().withMutations((map) => {
+        map.set(1, {
           id: 1,
           start: new Date(2017, 9, 10, 16, 0),
           end: new Date(2017, 9, 10, 20, 0)
-        },
-        2: {
+        })
+        .set(2, {
           id: 2,
           start: new Date(2017, 9, 10, 16, 0),
           end: new Date(2017, 9, 10, 19, 0)
-        },
-        3: {
+        })
+        .set(3, {
           id: 3,
           start: new Date(2017, 9, 8, 16, 0),
           end: new Date(2017, 9, 12, 21, 0)
-        }
-      },
+        })
+      }),
       action: {
         type: actionTypes.ADD_BOOKING,
         id: 3,
@@ -1517,7 +1517,7 @@ describe('addBookingToDays function', () => {
           end: new Date(2017, 9, 12, 21, 0)
         }
       },
-      expected: [
+      expected: List([
         {
           date: new Date(2017, 9, 8),
           bookingIds: [3]
@@ -1543,7 +1543,7 @@ describe('addBookingToDays function', () => {
           end: new Date(2017, 9, 20),
           bookingIds: [],
         }
-      ]
+      ])
     }
   ], (data) => {
     it('should insert booking id into the correct day - ' + data.id, () => {
@@ -1737,28 +1737,28 @@ describe('createDaysIfNotExist', () => {
   using([
     {
       id: 1,
-      days: [],
+      days: List([]),
       booking: {
         id: 1,
         start: new Date(2017, 9, 11, 12, 0),
         end: new Date(2017, 9, 11, 13, 0)
       },
-      expected: [
+      expected: List([
         {
           date: new Date(2017, 9, 11),
           bookingIds: []
         }
-      ]
+      ])
     },
     {
       id: 2,
-      days: [],
+      days: List([]),
       booking: {
         id: 1,
         start: new Date(2017, 9, 11, 12, 0),
         end: new Date(2017, 9, 12, 13, 0)
       },
-      expected: [
+      expected: List([
         {
           date: new Date(2017, 9, 11),
           bookingIds: []
@@ -1767,22 +1767,22 @@ describe('createDaysIfNotExist', () => {
           date: new Date(2017, 9, 12),
           bookingIds: []
         }
-      ]
+      ])
     },
     {
       id: 3,
-      days: [
+      days: List([
         {
           date: new Date(2017, 9, 9),
           bookingIds: []
         }
-      ],
+      ]),
       booking: {
         id: 1,
         start: new Date(2017, 9, 11, 12, 0),
         end: new Date(2017, 9, 11, 13, 0)
       },
-      expected: [
+      expected: List([
         {
           date: new Date(2017, 9, 9),
           bookingIds: []
@@ -1796,22 +1796,22 @@ describe('createDaysIfNotExist', () => {
           date: new Date(2017, 9, 11),
           bookingIds: []
         }
-      ]
+      ])
     },
     {
       id: 4,
-      days: [
+      days: List([
         {
           date: new Date(2017, 9, 13),
           bookingIds: []
         }
-      ],
+      ]),
       booking: {
         id: 1,
         start: new Date(2017, 9, 11, 12, 0),
         end: new Date(2017, 9, 11, 13, 0)
       },
-      expected: [
+      expected: List([
         {
           date: new Date(2017, 9, 11),
           bookingIds: []
@@ -1825,22 +1825,22 @@ describe('createDaysIfNotExist', () => {
           date: new Date(2017, 9, 13),
           bookingIds: []
         }
-      ]
+      ])
     },
     {
       id: 5,
-      days: [
+      days: List([
         {
           date: new Date(2017, 9, 13),
           bookingIds: []
         }
-      ],
+      ]),
       booking: {
         id: 1,
         start: new Date(2017, 9, 10, 12, 0),
         end: new Date(2017, 9, 15, 13, 0)
       },
-      expected: [
+      expected: List([
         {
           date: new Date(2017, 9, 10),
           bookingIds: []
@@ -1865,22 +1865,22 @@ describe('createDaysIfNotExist', () => {
           date: new Date(2017, 9, 15),
           bookingIds: []
         }
-      ]
+      ])
     },
     {
       id: 6,
-      days: [
+      days: List([
         {
           date: new Date(2017, 9, 13),
           end: new Date(2017, 9, 14),
         }
-      ],
+      ]),
       booking: {
         id: 1,
         start: new Date(2017, 9, 10, 12, 0),
         end: new Date(2017, 9, 15, 13, 0)
       },
-      expected: [
+      expected: List([
         {
           date: new Date(2017, 9, 10),
           bookingIds: []
@@ -1905,22 +1905,22 @@ describe('createDaysIfNotExist', () => {
           date: new Date(2017, 9, 15),
           bookingIds: []
         }
-      ]
+      ])
     },
     {
       id: 7,
-      days: [
+      days: List([
         {
           date: new Date(2017, 9, 13),
           end: new Date(2017, 9, 16),
         }
-      ],
+      ]),
       booking: {
         id: 1,
         start: new Date(2017, 9, 10, 11, 0),
         end: new Date(2017, 9, 14, 14, 0)
       },
-      expected: [
+      expected: List([
         {
           date: new Date(2017, 9, 10),
           bookingIds: []
@@ -1946,22 +1946,22 @@ describe('createDaysIfNotExist', () => {
           end: new Date(2017, 9, 16),
           bookingIds: []
         }
-      ]
+      ])
     },
     {
       id: 8,
-      days: [
+      days: List([
         {
           date: new Date(2017, 9, 12),
           end: new Date(2017, 9, 16),
         }
-      ],
+      ]),
       booking: {
         id: 1,
         start: new Date(2017, 9, 14, 14, 0),
         end: new Date(2017, 9, 17, 17, 0)
       },
-      expected: [
+      expected: List([
         {
           date: new Date(2017, 9, 12),
           end: new Date(2017, 9, 13),
@@ -1983,11 +1983,11 @@ describe('createDaysIfNotExist', () => {
           date: new Date(2017, 9, 17),
           bookingIds: []
         }
-      ]
+      ])
     },
     {
       id: 9,
-      days: [
+      days: List([
         {
           date: new Date(2017, 9, 8),
           end: new Date(2017, 9, 9),
@@ -2001,13 +2001,13 @@ describe('createDaysIfNotExist', () => {
           date: new Date(2017, 9, 11),
           bookingIds: [],
         }
-      ],
+      ]),
       booking: {
         id: 3,
         start: new Date(2017, 9, 9, 16, 0),
         end: new Date(2017, 9, 11, 21, 0)
       },
-      expected: [
+      expected: List([
         {
           date: new Date(2017, 9, 8),
           bookingIds: []
@@ -2024,7 +2024,7 @@ describe('createDaysIfNotExist', () => {
           date: new Date(2017, 9, 11),
           bookingIds: [],
         }
-      ]
+      ])
     }
   ], (data) => {
     it('createDaysIfNotExist - ' + data.id, () => {
@@ -2038,7 +2038,7 @@ describe('createDaysIfNotExist', () => {
   })
 
   it ('createDaysIfNotExist tolerates bookings on same day when starting with no days', () => {
-    let days = [];
+    let days = List([]);
     let booking1 = {
       id: 1,
       start: new Date(2017, 8, 14, 18, 0, 0),
@@ -2050,19 +2050,19 @@ describe('createDaysIfNotExist', () => {
       end: new Date(2017, 8, 14, 13, 0, 0)
     }
     let result1 = createDaysIfNotExist(days, booking1);
-    expect(result1).toEqual([
+    expect(result1).toEqual(List([
       {
         date: new Date(2017, 8, 14, 0, 0, 0),
         bookingIds: []
       }
-    ])
+    ]))
 
     let result2 = createDaysIfNotExist(result1, booking2);
-    expect(result2).toEqual([
+    expect(result2).toEqual(List([
       {
         date: new Date(2017, 8, 14, 0, 0, 0),
         bookingIds: []
       }
-    ])
+    ]))
   })
 })

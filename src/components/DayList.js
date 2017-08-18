@@ -6,7 +6,7 @@ import {List, ListItem} from 'material-ui/List';
 const DayListItem = ({muiTheme, bookings, days, focus, search, today }) => {
     let items = null;
     if (search) {
-        items = days.filter((day) => day.bookingIds.length );
+        items = days.filter((day) => day.bookingIds.length);
     }
     else {
         items = days;
@@ -17,7 +17,7 @@ const DayListItem = ({muiTheme, bookings, days, focus, search, today }) => {
     items = items.map((day) => {
         let nestedItems = null;
         let bookingsList = day.bookingIds.map((id) => 
-            bookings[id]
+            bookings.get(id)
         ).filter((booking) => 
             !!booking && !booking.hidden
         );
@@ -139,7 +139,7 @@ const DayListItem = ({muiTheme, bookings, days, focus, search, today }) => {
 
 DayListItem.propTypes = {
     bookings: PropTypes.object.isRequired,
-    days: PropTypes.array.isRequired,
+    days: PropTypes.object.isRequired,
     focus: PropTypes.func.isRequired,
     search: PropTypes.bool.isRequired,
     today: PropTypes.object.isRequired
