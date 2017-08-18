@@ -3,10 +3,6 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2
-  machine:
-    timezone:
-      America/Denver
-      
 jobs:
   build:
     docker:
