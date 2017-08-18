@@ -1,0 +1,42 @@
+html {
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    font-size: 13px;
+    line-height: 20px;
+    margin: 0;
+}
+
+.booking {
+    position: relative;
+    white-space: nowrap;
+}
+
+.booking-times {
+    display: inline-block;
+    width: 25%;
+    min-width: 130px;
+    vertical-align: top;
+}
+
+.booking-info {
+    display: inline-block;
+    width: 74%;
+    vertical-align: top;
+}
+
+.booking-info-occuring {
+    position: absolute;
+    color: rgb(30, 149, 27);
+    font-family: FontAwesome;
+    bottom: 0px;
+    right: 0px;
+}
+
+.date-time-combo .date-picker,
+.date-time-combo .time-picker {
+    display: inline-block;
+    width: 49%;
+    vertical-align: top;
+}
