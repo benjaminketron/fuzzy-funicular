@@ -155,29 +155,29 @@ describe('schedule reducer', () => {
         },
         days: [
           {
-            date: new Date(2016, 10, 10, 0, 0, 0),
+            date: new Date('2016-11-10T07:00:00.000Z'),
             bookingIds: [1, 0]
           },
           {
-            date: new Date(2016, 10, 11, 0, 0, 0),
-            end: new Date(2016, 10, 13, 0, 0, 0),
+            date: new Date('2016-11-11T07:00:00.000Z'),
+            end: new Date('2016-11-13T07:00:00.000Z'),
             bookingIds: []
           },
           {
-            date: new Date(2016, 10, 14, 0, 0, 0),
+            date: new Date('2016-11-14T07:00:00.000Z'),
             bookingIds: [2]
           },
           {
-            date: new Date(2016, 10, 15, 0, 0, 0),
+            date: new Date('2016-11-15T07:00:00.000Z'),
             bookingIds: [4, 3]
           },
           {
-            date: new Date(2016, 10, 16, 0, 0, 0),
-            end: new Date(2016, 10, 22, 0, 0, 0),
+            date: new Date('2016-11-16T07:00:00.000Z'),
+            end: new Date('2016-11-22T07:00:00.000Z'),
             bookingIds: []
           },
           {
-            date: new Date(2016, 10, 23, 0, 0, 0),
+            date: new Date('2016-11-23T07:00:00.000Z'),
             bookingIds: [5]
           }
         ]
