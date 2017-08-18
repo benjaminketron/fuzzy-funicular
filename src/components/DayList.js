@@ -139,7 +139,7 @@ const DayListItem = ({muiTheme, bookings, days, focus, search, today }) => {
 
 DayListItem.propTypes = {
     bookings: PropTypes.object.isRequired,
-    days: PropTypes.object.isRequired,
+    days: PropTypes.array.isRequired,
     focus: PropTypes.func.isRequired,
     search: PropTypes.bool.isRequired,
     today: PropTypes.object.isRequired

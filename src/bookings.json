@@ -83,6 +83,34 @@
             "roomName": "Lincoln Center",
             "start": "2018-03-24T01:30:00.000Z",
             "end": "2018-03-24T03:30:00.000Z"
+        },
+        {
+            "id": 12,
+            "eventName": "Adult beverage and a novel",
+            "roomName": "Horse and Dragon",
+            "start": "2017-08-18T18:00:00.000Z",
+            "end": "2017-08-18T21:00:00.000Z"
+        },
+        {
+            "id": 13,
+            "eventName": "Eclair's dental",
+            "roomName": "Friendship Hospital for Animals",
+            "start": "2017-08-31T13:00:00.000Z",
+            "end": "2017-08-31T20:00:00.000Z"
+        },
+        {
+            "id": 14,
+            "eventName": "Meme's Birthday",
+            "roomName": "   ",
+            "start": "2018-07-07T13:00:00.000Z",
+            "end": "2018-07-07T20:00:00.000Z"
+        },
+        {
+            "id": 15,
+            "eventName": "Fall Semester at CSU",
+            "roomName": "",
+            "start": "2017-08-21T14:00:00.000Z",
+            "end": "2017-12-19T23:00:00.000Z"
         }
     ]
 }
