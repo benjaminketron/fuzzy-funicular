@@ -28,9 +28,18 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
     case actionTypes.INITIALIZE_BOOKINGS:
       bookings = {};
       days = (state.days || []);
-      
+
       for (let b = 0; b < action.bookings.length; b++) {
         let booking = action.bookings[b];
+
+        if (typeof(booking.start) === 'string') {
+          booking.start = new Date(booking.start);
+        }
+
+        if (typeof(booking.end) === 'string') {
+          booking.end = new Date(booking.end);
+        }
+        
         bookings[booking.id] = booking;
         // this could be greatly optimized
         days = addBookingToDays(days, bookings, { booking: booking });

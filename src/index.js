@@ -5,7 +5,6 @@ import { Provider } from 'react-redux'
 import App from './components/App'
 import reducer from './reducers'
 import * as actions from './actions/index.js'
-import bookingsJsonDateParser from './json/bookingsJsonDateParser';
 import scrollTo from 'scroll-to';
 
 // in a real world app this would come from a service
@@ -13,9 +12,6 @@ import bookings from './bookings.json'
 
 let now = new Date();
 let today = now;
-
-// convert dates from strings
-bookingsJsonDateParser(bookings);
 
 const store = createStore(reducer, { 
   schedule: { 
