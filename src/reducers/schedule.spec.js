@@ -188,7 +188,7 @@ describe('schedule reducer', () => {
       state: {
         days: [
           {
-            date: new Date(2017, 8, 15, 0, 0, 0),
+            date: new Date(2017, 8, 15),
             bookingIds: []
           }
         ]
@@ -288,42 +288,42 @@ describe('schedule reducer', () => {
         },
         days: [
           {
-            date: new Date(2016, 10, 10, 0, 0, 0),
+            date: new Date(2016, 10, 10),
             bookingIds: [1, 0]
           },
           {
-            date: new Date(2016, 10, 11, 0, 0, 0),
-            end: new Date(2016, 10, 13, 0, 0, 0),
+            date: new Date(2016, 10, 11),
+            end: new Date(2016, 10, 13),
             bookingIds: []
           },
           {
-            date: new Date(2016, 10, 14, 0, 0, 0),
+            date: new Date(2016, 10, 14),
             bookingIds: [2]
           },
           {
-            date: new Date(2016, 10, 15, 0, 0, 0),
+            date: new Date(2016, 10, 15),
             bookingIds: [4, 3]
           },
           { 
-            date: new Date(2016, 10, 16, 0, 0, 0),
-            end: new Date(2016, 10, 22, 0, 0, 0),
+            date: new Date(2016, 10, 16),
+            end: new Date(2016, 10, 22),
             bookingIds: []
           },
           {
-            date: new Date(2016, 10, 23, 0, 0, 0),
+            date: new Date(2016, 10, 23),
             bookingIds: [5]
           },
           {
-            date: new Date(2016, 10, 24, 0, 0, 0),
+            date: new Date(2016, 10, 24),
             bookingIds: [5]
           },
           { 
-            date: new Date(2016, 10, 25, 0, 0, 0),
-            end: new Date(2017, 8, 14, 0, 0, 0),
+            date: new Date(2016, 10, 25),
+            end: new Date(2017, 8, 14),
             bookingIds: []
           },
           {
-            date: new Date(2017, 8, 15, 0, 0, 0),
+            date: new Date(2017, 8, 15),
             bookingIds: []
           }
         ],
