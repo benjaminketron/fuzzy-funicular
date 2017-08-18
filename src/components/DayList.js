@@ -1,17 +1,7 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import Moment from 'moment';
 import PropTypes from 'prop-types'
-import AppBar from 'material-ui/AppBar';
-import FontIcon from 'material-ui/FontIcon';
-import Calendar from './Calendar';
-import FlatButton from 'material-ui/FlatButton';
-import IconButton from 'material-ui/IconButton';
 import {List, ListItem} from 'material-ui/List';
-import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
-
-import * as actionTypes from '../actions/indexActionTypes'
 
 const DayListItem = ({muiTheme, bookings, days, focus, search, today }) => {
     let items = null;
@@ -146,5 +136,13 @@ const DayListItem = ({muiTheme, bookings, days, focus, search, today }) => {
         </List>
     );
 }
+
+DayListItem.propTypes = {
+    bookings: PropTypes.object.isRequired,
+    days: PropTypes.object.isRequired,
+    focus: PropTypes.func.isRequired,
+    search: PropTypes.bool.isRequired,
+    today: PropTypes.object.isRequired
+  }
 
 export default DayListItem;

@@ -1,19 +1,15 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import Moment from 'moment';
 import PropTypes from 'prop-types'
 import AppBar from 'material-ui/AppBar';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
-import IconButton from 'material-ui/IconButton';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 
 import Calendar from './Calendar';
 import CurrentDayList from '../containers/CurrentDayList';
  
-import * as actionTypes from '../actions/indexActionTypes'
-
 const Schedule = ({muiTheme, calendar, current, search, searchBooking, setCurrent, setMenuOpen, today, toggleAdd, toggleCalendar, toggleSearch, }) => {
     
     const iconStyles = {

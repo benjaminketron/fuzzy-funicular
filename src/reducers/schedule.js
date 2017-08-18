@@ -6,6 +6,7 @@ import { List, Map } from 'immutable'
 // an anit-pattern, but might simplify the code a bit and be worth looking into
 const schedule = (state = { current: null, calendar: false  }, action) => {
   let bookings = null;
+  let updatedBookings = null;
   let days = null;
 
   switch (action.type) {
@@ -23,7 +24,7 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
       else {
         return state;
       }
-      break;    
+      break; // eslint-disable-line 
     case actionTypes.INITIALIZE_BOOKINGS:
       bookings = {};
       days = (state.days || []);
@@ -40,6 +41,7 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
         bookings: bookings,
         days: days,
       }
+      break; // eslint-disable-line 
     case actionTypes.FOCUS:
       if (action.day.focus) {
         return {...state, focusedElement: action.element}    
@@ -47,13 +49,32 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
       else {
         return state;
       }
+      break; // eslint-disable-line 
     case actionTypes.UNFOCUS:
       if (state.focusedElement) {
-        return {...state, focusedElement: null}
+        days = List(state.days);
+        let focusedDays = days.filter((day) => 
+         day.focus 
+        );
+
+        if (focusedDays.size) {
+          focusedDays.forEach((day) => {
+            let index = days.indexOf(day);
+            days = days.remove(index);
+            days = days.insert(index, {...day, focus: false});
+          })
+          days = days.toJS();
+        }
+        else 
+        {
+          days = state.days
+        }
+        return {...state, focusedElement: null, days: days}
       }
       else {
         return state;
       }     
+      break; // eslint-disable-line 
     case actionTypes.SEARCH_BOOKING:
       let searchText = !!action.searchText ? action.searchText.toLowerCase() : '';
 
@@ -65,8 +86,8 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
       let bookingsMap = Map(state.bookings);
       let bookingsToHide = bookingsMap.filter((booking) => {
         return !(
-          (!!booking.eventName ? booking.eventName.toLowerCase() : '').indexOf(searchText) != -1 ||
-          (!!booking.roomName ? booking.roomName.toLowerCase() : '').indexOf(searchText) != -1
+          (!!booking.eventName ? booking.eventName.toLowerCase() : '').indexOf(searchText) !== -1 ||
+          (!!booking.roomName ? booking.roomName.toLowerCase() : '').indexOf(searchText) !== -1
         );
       })
 
@@ -74,7 +95,7 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
         return booking.hidden = true;
       })
 
-      let updatedBookings = {};
+      updatedBookings = {};
 
       bookingsToShow.forEach((booking) => {
         let _booking = {...booking, hidden: false };
@@ -89,6 +110,7 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
       return {...state,
         bookings: Object.assign({}, state.bookings, updatedBookings)
       }
+      break; // eslint-disable-line 
     case actionTypes.SELECT_DAY:
       days = List(state.days || []);
       
@@ -99,7 +121,7 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
       let daysToFocus = days.filter((day) => {
         if (!!day.end) {
         }
-        return day.date.getTime() == action.date.getTime() || 
+        return day.date.getTime() === action.date.getTime() || 
           (!!day.end && day.date.getTime() <= action.date.getTime() && action.date.getTime() <= day.end.getTime());
       })
 
@@ -124,6 +146,7 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
       return {...state,
         days: days.toJS()
       }
+      break; // eslint-disable-line 
     case actionTypes.SELECT_DAY_BOOKING_CLOSEST_TO:
       days = List(state.days || []);
 
@@ -151,13 +174,14 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
       return {...state,
         days: days.toJS()
       }
+      break; // eslint-disable-line 
     case actionTypes.SET_CALENDAR_CURRENT:
       days = List(state.days);
       for (let d = 0; d < days.size; d++) {
         let day = days.get(d);
-        let isDayMatch = day.date.getFullYear() == action.current.getFullYear() &&
-          day.date.getMonth() == action.current.getMonth() &&
-          day.date.getDate() == action.current.getDate();
+        let isDayMatch = day.date.getFullYear() === action.current.getFullYear() &&
+          day.date.getMonth() === action.current.getMonth() &&
+          day.date.getDate() === action.current.getDate();
 
         let isInRange = day.end &&
           day.date.getTime() <= action.current.getTime() &&
@@ -179,33 +203,58 @@ const schedule = (state = { current: null, calendar: false  }, action) => {
         current: action.current,
         days: days.toJS()
       }
+      break; // eslint-disable-line 
     case actionTypes.SET_TODAY:
       return {...state,
         today: action.today
       }
+      break; // eslint-disable-line 
     case actionTypes.TOGGLE_ADD:
       return {...state,
         add: !state.add
       }
+      break; // eslint-disable-line 
     case actionTypes.TOGGLE_CALENDAR:
       return {...state,
         // do not toggle calendar if searching
         calendar: !state.search ? !state.calendar : false
       }
-
+      break; // eslint-disable-line 
     case actionTypes.TOGGLE_SEARCH:
       let search = !state.search;
+
+      bookings = state.bookings;
+
+      updatedBookings = null;
+      for (let key in bookings) {
+        if (key) {
+          let booking = bookings[key];
+          if (booking.hidden) {
+            if (!updatedBookings) {
+              updatedBookings = {}
+            }
+
+            updatedBookings[key] = {...booking, hidden: false }
+          }
+        }
+      }
+
+      if (updatedBookings) {
+        bookings = Object.assign({}, bookings, updatedBookings)
+      }
+
       return {...state,
         search: search,
         // do not show calendar while searching
         calendar: false,
-        searchText: !search ? '' : state.searchText
+        searchText: !search ? '' : state.searchText,
+        bookings: bookings
       }
+      break; // eslint-disable-line 
     default:
       return {...state
       }
-      
-      return state;
+      break; // eslint-disable-line 
   }
 }
 
@@ -317,7 +366,7 @@ export const createDaysIfNotExist = (days, booking) => {
         for (let d = 0; d < days; d++) {
           let date = new Date(booking.start.getFullYear(), booking.start.getMonth(), booking.start.getDate() + d);
           if (!result.contains((day) => {
-            return day.date == date;
+            return day.date === date;
           })) {
             result = result.insert(d, {
               date: date,
@@ -359,7 +408,7 @@ export const createDaysIfNotExist = (days, booking) => {
         for (let d = 1; d < days; d++) {
           let date = new Date(futureDate.getFullYear(), futureDate.getMonth(), futureDate.getDate() + d);
           if (!result.contains((day) => {
-            return day == date;
+            return day === date;
           })) {
             result = result.insert(offset + d, {
               date: date,
@@ -372,18 +421,20 @@ export const createDaysIfNotExist = (days, booking) => {
 
     // if any of the days in between are a range then expand as necessary
     let dateRanges = result.filter((day) => {
-      return !!day.end && (bookingStartDay.getTime() <= day.date.getTime() && day.date.getTime() <= bookingEndDay.getTime() ||
-        bookingStartDay.getTime() <= day.end.getTime() && day.end.getTime() <= bookingEndDay.getTime() ||
+      return !!day.end && (
+        (bookingStartDay.getTime() <= day.date.getTime() && day.date.getTime() <= bookingEndDay.getTime()) ||
+        (bookingStartDay.getTime() <= day.end.getTime() && day.end.getTime() <= bookingEndDay.getTime()) ||
         (
           day.date.getTime() <= bookingStartDay.getTime() && bookingStartDay.getTime() <= day.end.getTime() &&
           day.date.getTime() <= bookingEndDay.getTime() && bookingEndDay.getTime() <= day.end.getTime()
-        ));
+        )
+      );
     })
 
     // collapse any adjacent ranges first
     dateRanges.forEach((day) => {
       let index = dateRanges.indexOf(day);
-      if (index != -1) {
+      if (index !== -1) {
         let previous = null;
         let next = null;
         if (index > 0) {
@@ -477,7 +528,7 @@ export const createDaysIfNotExist = (days, booking) => {
         result = result.remove(index);
 
         // insert right range if necessary
-        if (day.end.getTime() != bookingEndDay.getTime()) {
+        if (day.end.getTime() !== bookingEndDay.getTime()) {
           result = result.insert(index, {
             date: new Date(bookingEndDay.getFullYear(), bookingEndDay.getMonth(), bookingEndDay.getDate() + 1),
             end: day.end,
@@ -495,7 +546,7 @@ export const createDaysIfNotExist = (days, booking) => {
         }
 
         // insert left range if necessary
-        if (day.date.getTime() != bookingStartDay.getTime()) {
+        if (day.date.getTime() !== bookingStartDay.getTime()) {
           result = result.insert(index, {
               date: day.date,
               end: new Date(bookingStartDay.getFullYear(), bookingStartDay.getMonth(), bookingStartDay.getDate() - 1),
@@ -530,7 +581,7 @@ export const addBookingToDay = (day, booking, bookings) => {
     }
   });
 
-  if (index == -1) {
+  if (index === -1) {
     bookingIds = bookingIds.push(booking.id);
   }
   else {

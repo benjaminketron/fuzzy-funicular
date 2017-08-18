@@ -6,10 +6,12 @@ const mainMenu = (state = {}, action) => {
             return {
                 open: action.open
             }
+            break; // eslint-disable-line 
         default:
             return {
                 open: false
             }
+            break; // eslint-disable-line 
     }
 }
 

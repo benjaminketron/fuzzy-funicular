@@ -2,7 +2,6 @@ import React from 'react'
 import { render } from 'react-dom'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import {scroller} from 'react-scroll'; //Imports scroller mixin, can use as scroller.scrollTo()
 import App from './components/App'
 import reducer from './reducers'
 import * as actions from './actions/index.js'
@@ -56,7 +55,7 @@ store.subscribe(scrollToElementInFocus)
 
 // update today every minute
 setInterval(() => {
-  store.dispatch(actions.setToday(new Date))
+  store.dispatch(actions.setToday(new Date()))
 }, 60000)
 
 render(

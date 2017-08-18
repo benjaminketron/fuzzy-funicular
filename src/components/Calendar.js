@@ -232,6 +232,8 @@ class Calendar extends Component {
             this.addSelectedDays(-1);
           }
           break;
+        default:
+          break;
       }
     }
   };
@@ -260,7 +262,6 @@ class Calendar extends Component {
     const {prepareStyles} = this.context.muiTheme;
     const {hideCalendarDate} = this.props;
     const toolbarInteractions = this.getToolbarInteractions();
-    const isLandscape = this.props.mode === 'landscape';
     const {calendarTextColor} = this.context.muiTheme.datePicker;
 
     const styles = {

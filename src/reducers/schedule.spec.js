@@ -372,12 +372,30 @@ describe('schedule reducer', () => {
 
   it('should handle UNFOCUS', () => {
     let state = {
+      days: [
+        {
+          date: new Date(2017, 8, 17),
+          focus: true
+        },
+        {
+          date: new Date(2017, 8, 18)
+        }
+      ],
       focusedElement: {}
     };
     let action = {
       type: actionTypes.UNFOCUS
     };
     let expected = {
+      days: [
+        {
+          date: new Date(2017, 8, 17),
+          focus: false
+        },
+        {
+          date: new Date(2017, 8, 18)
+        }
+      ],
       focusedElement: null
     }
     let result = schedule(state, action);
@@ -1093,12 +1111,28 @@ describe('schedule reducer', () => {
     {
       id: 2,
       state: {
+        bookings: {
+          1: {
+            hidden: true
+          },
+          2: {
+
+          }
+        },
         search: true
       },
       action: {
         type: actionTypes.TOGGLE_SEARCH
       },
       expected: {
+        bookings: {
+          1: {
+            hidden: false
+          },
+          2: {
+
+          }
+        },
         search: false,
         calendar: false,
         searchText: ''

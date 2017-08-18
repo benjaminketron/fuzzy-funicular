@@ -9,8 +9,6 @@ import Paper from 'material-ui/Paper';
 import TimePicker from 'material-ui/TimePicker';
 import TextField from 'material-ui/TextField';
  
-import * as actionTypes from '../actions/indexActionTypes'
-
 const AddBookingDrawer = ({muiTheme, add, booking, toggleAdd, addBooking, changeEventName, changeRoomName, changeStartDate, changeStartTime, changeEndDate, changeEndTime }) => {
     return (
         <Drawer 
